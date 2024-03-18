@@ -22,3 +22,7 @@ webpack.generated.js
 
 # Maven
 .mvn/
+
+# Generated TypeScript
+types.d.ts
+tsconfig.json
