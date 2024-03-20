@@ -11,7 +11,7 @@ import java.util.Map;
 */
 public class Session {
 
-    private static Map<VaadinSession, Session> sessions = new HashMap<>();
+    private final static Map<VaadinSession, Session> sessions = new HashMap<>();
 
     private Role sessionRole;
 
