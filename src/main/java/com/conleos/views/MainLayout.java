@@ -1,6 +1,7 @@
 package com.conleos.views;
 
 
+import com.conleos.views.form.FormView;
 import com.conleos.views.helloworld.HelloWorldView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -101,7 +102,8 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", LineAwesomeIcon.LOCK_SOLID.create(), HelloWorldView.class), //
+                new MenuItemInfo("Hello World", LineAwesomeIcon.LOCK_SOLID.create(), HelloWorldView.class),
+                new MenuItemInfo("Form Test",   LineAwesomeIcon.PAPERCLIP_SOLID.create(), FormView.class),
 
         };
     }
