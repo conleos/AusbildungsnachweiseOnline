@@ -16,7 +16,7 @@ public class Session {
 
     private final static Map<VaadinSession, Session> sessions = new HashMap<>();
 
-    private Role sessionRole;
+    private User user;
 
     /*
     * Used to validate a User login.
@@ -39,27 +39,31 @@ public class Session {
         }
 
         if (user.getPasswordHash().equals(passwordHash)) {
-            return createSession(VaadinSession.getCurrent(), user.getRole());
+            return createSession(VaadinSession.getCurrent(), user);
         }
 
         return null;
     }
 
     /* Returns a new Session, that is mapped to the current VaadinSession. */
-    private static Session createSession(VaadinSession vaadinSession, Role role) {
+    private static Session createSession(VaadinSession vaadinSession, User user) {
         Session session = new Session();
 
-        session.setSessionRole(role);
+        session.setUser(user);
 
         sessions.put(vaadinSession, session);
         return session;
     }
 
-    public void setSessionRole(Role role) {
-        sessionRole = role;
-    }
     public Role getSessionRole() {
-        return sessionRole;
+        return user.getRole();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    private void setUser(User user) {
+        this.user = user;
+    }
 }
