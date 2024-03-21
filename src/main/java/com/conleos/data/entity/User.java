@@ -15,6 +15,15 @@ public class User {
     @Column(name = "passwordHash")
     String passwordHash;
 
+    public User(String username, String passwordHash) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+    }
+
+    protected User() {
+
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
