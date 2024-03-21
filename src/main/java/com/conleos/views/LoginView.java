@@ -1,5 +1,6 @@
 package com.conleos.views;
 
+import com.conleos.common.PasswordHasher;
 import com.conleos.core.Session;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
@@ -34,7 +35,7 @@ public class LoginView extends VerticalLayout {
         login.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         login.addClickShortcut(Key.ENTER);
         login.addClickListener(clickEvent -> {
-            Session session = Session.authenticateUserAndCreateSession(username.getValue(), String.valueOf(password.getValue().hashCode()));
+            Session session = Session.authenticateUserAndCreateSession(username.getValue(), PasswordHasher.hash(password.getValue()));
             if (session != null) {
                 UI.getCurrent().navigate("");
                 //UI.getCurrent().getPage().reload();
