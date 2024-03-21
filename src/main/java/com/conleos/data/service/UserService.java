@@ -19,6 +19,7 @@ public class UserService {
         instance = this;
         this.userRepository = userRepository;
 
+        // By default, if there is no User an Admin user is created!
         if (isUserbaseEmpty()) {
             createUser(new User("admin", PasswordHasher.hash("1234"), Role.Admin));
         }
