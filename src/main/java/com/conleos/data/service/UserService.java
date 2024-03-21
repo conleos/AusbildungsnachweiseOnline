@@ -40,7 +40,10 @@ public class UserService {
     public void createUser(User user) {
         userRepository.save(user);
     }
-
+    public User getUserByID(Long id) {
+        List<User> temp = userRepository.getUserByChannel(id);
+        return temp.isEmpty() ? null : temp.getFirst();
+    }
     public User getUserByUsername(String username) {
         List<User> temp = userRepository.getUserByName(username);
         return temp.isEmpty() ? null : temp.getFirst();
