@@ -15,18 +15,18 @@ public class UserDatasourceConfig {
 
     @Bean
     @ConfigurationProperties("spring.datasource")
-    public DataSourceProperties bikeDataSourceProperties() {
+    public DataSourceProperties userDataSourceProperties() {
         return new DataSourceProperties();
     }
     @Bean
     public DataSource userDS(){
-        return bikeDataSourceProperties()
+        return userDataSourceProperties()
                 .initializeDataSourceBuilder()
                 .build();
     }
 
     @Bean
-    public JdbcTemplate bikeJdbcTemplate(@Qualifier("userDS") DataSource dataSource) {
+    public JdbcTemplate userJdbcTemplate(@Qualifier("userDS") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
