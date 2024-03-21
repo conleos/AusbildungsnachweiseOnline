@@ -19,6 +19,7 @@ public class UserService {
         instance = this;
         this.userRepository = userRepository;
 
+        // By default, if there is no User an Admin user is created!
         if (isUserbaseEmpty()) {
             createUser(new User("admin", PasswordHasher.hash("1234"), Role.Admin));
         }
@@ -39,7 +40,10 @@ public class UserService {
     public void createUser(User user) {
         userRepository.save(user);
     }
-
+    public User getUserByID(Long id) {
+        List<User> temp = userRepository.getUserByChannel(id);
+        return temp.isEmpty() ? null : temp.getFirst();
+    }
     public User getUserByUsername(String username) {
         List<User> temp = userRepository.getUserByName(username);
         return temp.isEmpty() ? null : temp.getFirst();

@@ -11,6 +11,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("Select distinct u.id from User u")
     List<Integer> getAllUsers();
 
+    @Query("Select u from User u where u.id = :_id")
+    List<User> getUserByChannel(@Param("_id") Long _id);
+
     @Query ("Select u from User u where u.username = :name")
     List<User> getUserByName(@Param("name") String name);
 
