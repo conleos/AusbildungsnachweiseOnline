@@ -8,8 +8,10 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Query("Select u from User u")
+    List<User> getAllUsers();
     @Query("Select distinct u.id from User u")
-    List<Integer> getAllUsers();
+    List<Integer> getAllUserChannels();
 
     @Query("Select u from User u where u.id = :_id")
     List<User> getUserByChannel(@Param("_id") Long _id);

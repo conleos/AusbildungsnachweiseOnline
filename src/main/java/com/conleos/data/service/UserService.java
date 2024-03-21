@@ -21,7 +21,9 @@ public class UserService {
 
         // By default, if there is no User an Admin user is created!
         if (isUserbaseEmpty()) {
-            createUser(new User("admin", PasswordHasher.hash("1234"), Role.Admin));
+            User admin = new User("admin", PasswordHasher.hash("1234"), Role.Admin, "John", "Doe");
+            admin.setEmail("admin@mail.com");
+            createUser(admin);
         }
     }
 
@@ -29,8 +31,11 @@ public class UserService {
         return instance;
     }
 
-    public List<Integer> getAllUserIDs() {
+    public List<User> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+    public List<Integer> getAllUserIDs() {
+        return userRepository.getAllUserChannels();
     }
 
     public boolean isUserbaseEmpty() {
