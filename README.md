@@ -3,6 +3,12 @@
 This project can be used as a starting point to create your own Vaadin application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
+## MySQL Database
+This application requires a running MySQL Database instance on your lcoalhost
+- Port: 3306
+- Username: root
+- Password: 1234
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
