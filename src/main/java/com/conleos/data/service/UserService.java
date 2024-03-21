@@ -1,6 +1,7 @@
 package com.conleos.data.service;
 
 import com.conleos.common.PasswordHasher;
+import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class UserService {
         this.userRepository = userRepository;
 
         if (isUserbaseEmpty()) {
-            createUser(new User("admin", PasswordHasher.hash("1234")));
+            createUser(new User("admin", PasswordHasher.hash("1234"), Role.Admin));
         }
     }
 

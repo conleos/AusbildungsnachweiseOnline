@@ -39,7 +39,7 @@ public class Session {
         }
 
         if (user.getPasswordHash().equals(passwordHash)) {
-            return createSession(VaadinSession.getCurrent(), Role.Admin);
+            return createSession(VaadinSession.getCurrent(), user.getRole());
         }
 
         return null;

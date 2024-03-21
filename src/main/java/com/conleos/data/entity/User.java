@@ -1,5 +1,6 @@
 package com.conleos.data.entity;
 
+import com.conleos.common.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,10 +15,13 @@ public class User {
     String username;
     @Column(name = "passwordHash")
     String passwordHash;
+    @Column(name = "role")
+    Role role = Role.Trainee;
 
-    public User(String username, String passwordHash) {
+    public User(String username, String passwordHash, Role role) {
         this.username = username;
         this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     protected User() {
@@ -46,5 +50,13 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
