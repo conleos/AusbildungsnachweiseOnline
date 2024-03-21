@@ -23,7 +23,14 @@ public class Session {
     * returns the Server-side Session object if a valid Session exist for this connection.
     * returns null otherwise. */
     public static Session getSessionFromVaadinSession(VaadinSession vaadinSession) {
-        return sessions.getOrDefault(vaadinSession, null);
+        Session session = sessions.getOrDefault(vaadinSession, null);
+
+        // Refresh User data on request
+        if (session != null) {
+            session.setUser(UserService.getInstance().getUserByID(session.getUser().getId()));
+        }
+
+        return session;
     }
 
     /*
