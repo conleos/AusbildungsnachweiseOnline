@@ -17,11 +17,19 @@ public class User {
     String passwordHash;
     @Column(name = "role")
     Role role = Role.Trainee;
+    @Column(name = "firstname")
+    String firstName;
+    @Column(name = "lastname")
+    String lastName;
+    @Column(name = "email")
+    String email;
 
-    public User(String username, String passwordHash, Role role) {
+    public User(String username, String passwordHash, Role role, String firstName, String lastName) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     protected User() {
@@ -58,5 +66,32 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
     }
 }
