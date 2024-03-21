@@ -1,6 +1,9 @@
 package com.conleos.core;
 
+import com.conleos.common.PasswordHasher;
 import com.conleos.common.Role;
+import com.conleos.data.entity.User;
+import com.conleos.data.service.UserService;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.util.HashMap;
@@ -29,8 +32,13 @@ public class Session {
     * Returns a new Session, that is mapped to the current VaadinSession. */
     public static Session authenticateUserAndCreateSession(String username, String passwordHash) {
 
-        // TODO: Placeholder and testing only !
-        if (username.equals("admin") && passwordHash.equals(String.valueOf(new String("1234").hashCode()))) {
+        User user = UserService.getInstance().getUserByUsername(username);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (user.getPasswordHash().equals(passwordHash)) {
             return createSession(VaadinSession.getCurrent(), Role.Admin);
         }
 
