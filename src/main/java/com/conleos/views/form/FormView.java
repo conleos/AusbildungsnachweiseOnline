@@ -1,6 +1,7 @@
 package com.conleos.views.form;
 
 import com.conleos.views.MainLayout;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
@@ -38,6 +39,7 @@ public class FormView extends VerticalLayout {
         VerticalLayout container = new VerticalLayout();
 
         Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
+
         addBtn.addClickListener(event -> {
             Select<KindOfWork> select = new Select<>();
             select.setLabel("Art");
@@ -47,9 +49,16 @@ public class FormView extends VerticalLayout {
             time.setWidth("60px");
             time.setHeight("60px");
             TextArea area = new TextArea("Beschreibung");
-
-            container.add(new HorizontalLayout(select, time, area));
+            Button delBtn = new Button(VaadinIcon.CLOSE.create());
+            delBtn.addClickListener(eventDel -> {
+                Component parent = delBtn.getParent().get();
+                if (parent instanceof HorizontalLayout) {
+                    container.remove(parent);
+                }
+            });
+            container.add(new HorizontalLayout(select, time, area,delBtn));
         });
+
         add(new Span(dayLabel), container, addBtn);
     }
 
