@@ -3,7 +3,7 @@ package com.conleos.views.home;
 import com.conleos.core.Session;
 import com.conleos.views.MainLayout;
 import com.conleos.views.admin.AdminView;
-import com.conleos.views.form.FormView;
+import com.conleos.views.dashboard.DashboardView;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
@@ -24,8 +24,8 @@ public class HomeView extends Div implements BeforeEnterObserver {
 
         switch (session.getSessionRole()) {
             case Admin -> beforeEnterEvent.rerouteTo(AdminView.class);
-            case Instructor -> beforeEnterEvent.rerouteTo(FormView.class);
-            case Trainee -> beforeEnterEvent.rerouteTo(FormView.class);
+            case Instructor -> beforeEnterEvent.rerouteTo(DashboardView.class);
+            case Trainee -> beforeEnterEvent.rerouteTo(DashboardView.class);
         }
     }
 }
