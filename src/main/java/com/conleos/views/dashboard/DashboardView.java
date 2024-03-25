@@ -8,6 +8,7 @@ import com.conleos.data.service.UserService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -38,6 +39,7 @@ public class DashboardView extends VerticalLayout {
 
     private Component createBanner(User trainee) {
         Avatar avatar = new Avatar(trainee.getFullName());
+        avatar.addThemeVariants(AvatarVariant.LUMO_LARGE);
         avatar.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername())).toString());
 
         Button btn = new Button(new HorizontalLayout(avatar, new Span(trainee.getFullName())));
