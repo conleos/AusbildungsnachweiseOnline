@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query ("Select u from User u where u.username = :name")
     List<User> getUserByName(@Param("name") String name);
 
+    @Query ("Select u from User u where u.assignee = :_assignee")
+    List<User> getUsersByAssignee(@Param("_assignee") User _assignee);
+
 }

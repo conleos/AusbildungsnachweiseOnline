@@ -5,6 +5,7 @@ import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,5 +53,8 @@ public class UserService {
     public User getUserByUsername(String username) {
         List<User> temp = userRepository.getUserByName(username);
         return temp.isEmpty() ? null : temp.getFirst();
+    }
+    public List<User> getUsersByAssignee(User assignee) {
+        return userRepository.getUsersByAssignee(assignee);
     }
 }

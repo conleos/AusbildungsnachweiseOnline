@@ -45,11 +45,11 @@ public class DashboardView extends VerticalLayout {
         VerticalLayout layout = new VerticalLayout();
         layout.setAlignItems(Alignment.CENTER);
 
-        layout.add(createBanner(user));
-        layout.add(createBanner(user));
-        layout.add(createBanner(user));
-        layout.add(createBanner(user));
-        layout.add(createBanner(user));
+        List<User> trainees = UserService.getInstance().getUsersByAssignee(user);
+
+        for (User It : trainees) {
+            layout.add(createBanner(It));
+        }
 
         return layout;
     }
