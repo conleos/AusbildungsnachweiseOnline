@@ -21,7 +21,7 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import java.util.List;
 
-@PageTitle("Hello World")
+@PageTitle("Admin")
 @Route(value = "admin", layout = MainLayout.class)
 @RouteAlias(value = "manage", layout = MainLayout.class)
 public class AdminView extends HorizontalLayout {
