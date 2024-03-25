@@ -23,7 +23,7 @@ public class UserService {
         if (isUserbaseEmpty()) {
             User admin = new User("admin", PasswordHasher.hash("1234"), Role.Admin, "John", "Doe");
             admin.setEmail("admin@mail.com");
-            createUser(admin);
+            saveUser(admin);
         }
     }
 
@@ -42,7 +42,7 @@ public class UserService {
         return getAllUserIDs().size() == 0;
     }
 
-    public void createUser(User user) {
+    public void saveUser(User user) {
         userRepository.save(user);
     }
     public User getUserByID(Long id) {

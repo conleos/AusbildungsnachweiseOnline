@@ -13,10 +13,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.util.List;
+
 public class CreateUserDialog extends Dialog {
 
     public CreateUserDialog() {
         setHeaderTitle("Add a new User");
+
+        List<User> assignees = UserService.getInstance().getAllUsers();
+        assignees.removeIf(user -> user.getRole() == Role.Trainee);
 
         setWidth("45%");
 
@@ -35,17 +40,27 @@ public class CreateUserDialog extends Dialog {
         TextField email = new TextField("Email");
         email.setWidthFull();
 
+        ComboBox<User> assigneeSelect = new ComboBox<>("Assigned to");
+        assigneeSelect.setPlaceholder("Select an Instructor");
+        assigneeSelect.setItems(assignees);
+        assigneeSelect.setItemLabelGenerator(User::getUsername);
+        assigneeSelect.setEnabled(false);
+
         ComboBox<Role> roleSelect = new ComboBox<>("Role");
         roleSelect.setPlaceholder("Select a Role");
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
+        roleSelect.addValueChangeListener(event -> {
+            assigneeSelect.setEnabled(roleSelect.getValue().equals(Role.Trainee));
+        });
 
-        dialogLayout.add(username, password, firstName, lastName, email, roleSelect);
+        dialogLayout.add(username, password, firstName, lastName, email, roleSelect, assigneeSelect);
 
         Button saveButton = new Button("Create", e -> {
             User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue());
             user.setEmail(email.getValue());
-            UserService.getInstance().createUser(user);
+            user.setAssignee(assigneeSelect.getValue());
+            UserService.getInstance().saveUser(user);
             close();
             UI.getCurrent().getPage().reload();
         });

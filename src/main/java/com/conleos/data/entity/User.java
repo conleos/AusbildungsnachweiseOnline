@@ -24,6 +24,9 @@ public class User {
     @Column(name = "email")
     String email;
 
+    @ManyToOne
+    User assignee;
+
     public User(String username, String passwordHash, Role role, String firstName, String lastName) {
         this.username = username;
         this.passwordHash = passwordHash;
@@ -93,5 +96,13 @@ public class User {
 
     public String getFullName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 }
