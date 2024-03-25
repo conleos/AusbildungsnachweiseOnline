@@ -43,8 +43,12 @@ public class FormView extends VerticalLayout {
             select.setLabel("Art");
             select.setItems(KindOfWork.PracticalWork, KindOfWork.Schooling);
             select.setValue(KindOfWork.PracticalWork);
+            TextArea time = new TextArea("Zeit");
+            time.setWidth("60px");
+            time.setHeight("60px");
             TextArea area = new TextArea("Beschreibung");
-            container.add(new HorizontalLayout(select, area));
+
+            container.add(new HorizontalLayout(select, time, area));
         });
         add(new Span(dayLabel), container, addBtn);
     }
