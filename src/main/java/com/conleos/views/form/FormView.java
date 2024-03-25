@@ -27,9 +27,15 @@ public class FormView extends VerticalLayout {
     }
 
     private void createContent() {
+        Select<Integer> kw = new Select<>();
+        kw.setLabel("Kalenderwoche");
+        kw.setItems(new Kw().calendarWeeks);
+        kw.setValue(1);
+        add(kw);
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         for (int i = 0; i < 5; i++) {
             createFormContentForDay(beginOfWeek.plusDays(i));
+
         }
     }
 
