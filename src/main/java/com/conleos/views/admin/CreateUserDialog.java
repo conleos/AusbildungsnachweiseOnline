@@ -36,6 +36,7 @@ public class CreateUserDialog extends Dialog {
         email.setWidthFull();
 
         ComboBox<Role> roleSelect = new ComboBox<>("Role");
+        roleSelect.setPlaceholder("Select a Role");
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
 
