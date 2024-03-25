@@ -1,5 +1,7 @@
 package com.conleos.views.admin;
 
+import com.conleos.common.ColorGenerator;
+import com.conleos.common.HtmlColor;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
@@ -60,7 +62,7 @@ public class AdminView extends HorizontalLayout {
     private static Renderer<User> createInfoRenderer() {
         return LitRenderer.<User> of(
                         "<vaadin-horizontal-layout style=\"align-items: center;\" theme=\"spacing\">"
-                                + "<vaadin-avatar img=\"${item.pictureUrl}\" name=\"${item.fullName}\" alt=\"User avatar\"></vaadin-avatar>"
+                                + "<vaadin-avatar img=\"${item.pictureUrl}\" name=\"${item.fullName}\" alt=\"User avatar\" style=\"background-color: ${item.color};\"></vaadin-avatar>"
                                 + "  <vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
                                 + "    <span> ${item.fullName} </span>"
                                 + "    <span style=\"font-size: var(--lumo-font-size-s); color: var(--lumo-secondary-text-color);\">"
@@ -69,11 +71,15 @@ public class AdminView extends HorizontalLayout {
                                 + "</vaadin-horizontal-layout>")
                 .withProperty("pictureUrl", AdminView::getPictureURL)
                 .withProperty("fullName", User::getFullName)
-                .withProperty("email", User::getEmail);
+                .withProperty("email", User::getEmail)
+                .withProperty("color", AdminView::getUserColor);
     }
 
     private static Object getPictureURL(User user) {
         return "";
+    }
+    private static Object getUserColor(User user) {
+        return HtmlColor.from(ColorGenerator.fromRandomString(user.getUsername())).toString();
     }
     private static final SerializableBiConsumer<Span, User> statusComponentUpdater = (span, user) -> {
         switch (user.getRole()) {

@@ -1,5 +1,7 @@
 package com.conleos.views.dashboard;
 
+import com.conleos.common.ColorGenerator;
+import com.conleos.common.HtmlColor;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
@@ -13,6 +15,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+
+import java.awt.*;
 import java.util.List;
 
 @PageTitle("Dashboard")
@@ -33,7 +37,10 @@ public class DashboardView extends VerticalLayout {
     }
 
     private Component createBanner(User trainee) {
-        Button btn = new Button(new HorizontalLayout(new Avatar(trainee.getFullName()), new Span(trainee.getFullName())));
+        Avatar avatar = new Avatar(trainee.getFullName());
+        avatar.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername())).toString());
+
+        Button btn = new Button(new HorizontalLayout(avatar, new Span(trainee.getFullName())));
         btn.setWidth("90%");
         btn.setHeight("135px");
         return btn;
