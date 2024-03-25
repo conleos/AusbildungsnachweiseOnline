@@ -7,6 +7,7 @@ import com.conleos.data.service.UserService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -51,6 +52,8 @@ public class AdminView extends HorizontalLayout {
                 .setAutoWidth(true);
         grid.addColumn(createStatusComponentRenderer()).setHeader("Role")
                 .setAutoWidth(true);
+        grid.addColumn(createAssigneeComponentRenderer()).setHeader("Assigned to")
+                .setAutoWidth(true);
         grid.setItems(users);
         add(grid);
     }
@@ -83,6 +86,22 @@ public class AdminView extends HorizontalLayout {
 
     private static ComponentRenderer<Span, User> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
+    }
+    private static final SerializableBiConsumer<ComboBox<User>, User> assigneeComponentUpdater = (comboBox, user) -> {
+        List<User> assignees = UserService.getInstance().getAllUsers();
+        assignees.removeIf(it -> it.getRole() == Role.Trainee);
+
+        comboBox.setEnabled(user.getRole().equals(Role.Trainee));
+        comboBox.setItems(assignees);
+        comboBox.setItemLabelGenerator(User::getUsername);
+        comboBox.setValue(user.getAssignee());
+        comboBox.addValueChangeListener(event -> {
+            user.setAssignee(event.getValue());
+            UserService.getInstance().saveUser(user);
+        });
+    };
+    private static ComponentRenderer<ComboBox<User>, User> createAssigneeComponentRenderer() {
+        return new ComponentRenderer<>(ComboBox<User>::new, assigneeComponentUpdater);
     }
 
 }
