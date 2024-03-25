@@ -13,7 +13,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.cglib.core.Local;
-
+import java.time.Year;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -27,11 +27,23 @@ public class FormView extends VerticalLayout {
     }
 
     private void createContent() {
+        Select<Integer> nr = new Select<>();
+        nr.setLabel("Nachweis Nr.:");
+        nr.setItems(new nachweisSelect().nachweisNr);
+        nr.setValue(1);
+        HorizontalLayout yearWeek = new HorizontalLayout();
+        Select<Year> year = new Select<>();
+        year.setLabel("Jahr");
+        year.setItems(new YearSelect().years);
+        year.setValue(Year.now());
         Select<Integer> kw = new Select<>();
         kw.setLabel("Kalenderwoche");
         kw.setItems(new Kw().calendarWeeks);
         kw.setValue(1);
-        add(kw);
+        yearWeek.add(year,kw);
+
+        add(nr,yearWeek);
+
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         for (int i = 0; i < 5; i++) {
             createFormContentForDay(beginOfWeek.plusDays(i));
