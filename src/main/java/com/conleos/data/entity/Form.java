@@ -14,8 +14,16 @@ public class Form {
     @ManyToOne
     User owner;
 
-    public Form(User owner) {
+    @Column(name = "nr")
+    int nr;
+
+    @Column(name = "description")
+    String description;
+
+    public Form(User owner,int nr,String description) {
         this.owner = owner;
+        this.description = description;
+        this.nr = nr;
     }
     protected Form() {
 

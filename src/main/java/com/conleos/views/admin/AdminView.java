@@ -83,9 +83,9 @@ public class AdminView extends HorizontalLayout {
     }
     private static final SerializableBiConsumer<Span, User> statusComponentUpdater = (span, user) -> {
         switch (user.getRole()) {
-            case Role.Admin -> span.getElement().setAttribute("theme", "badge error");
-            case Role.Instructor -> span.getElement().setAttribute("theme", "badge success");
-            case Role.Trainee -> span.getElement().setAttribute("theme", "badge contrast");
+            case Admin -> span.getElement().setAttribute("theme", "badge error");
+            case Instructor -> span.getElement().setAttribute("theme", "badge success");
+            case Trainee -> span.getElement().setAttribute("theme", "badge contrast");
         }
         span.setText(user.getRole().toString());
     };
