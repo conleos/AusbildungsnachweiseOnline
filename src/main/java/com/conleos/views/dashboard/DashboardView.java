@@ -57,6 +57,11 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
 
     private Component createTraineeContent(User user) {
         LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        if (user.getStartDate() == null) {
+            Span span = new Span("Oops! Someone forgot to set your 'Begin of Work' Date!");
+            span.getElement().getThemeList().add("badge error");
+            return span;
+        }
         LocalDate beginOfWork = user.getStartDate().with(DayOfWeek.MONDAY);
 
         if (beginOfCurrentWeek.isBefore(beginOfWork)) {

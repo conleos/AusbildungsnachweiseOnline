@@ -4,7 +4,9 @@ public enum KindOfWork {
 
 
     PracticalWork("Betrieb"),
-    Schooling("Schule");
+    Schooling("Schule"),
+    Vacation("Urlaub");
+
 
     private String label;
     private KindOfWork(String label) {

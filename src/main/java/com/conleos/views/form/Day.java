@@ -11,10 +11,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class Day {
         String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
 
         VerticalLayout container = new VerticalLayout();
+        container.setWidthFull();
 
         Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
         VerticalLayout day = new VerticalLayout();
@@ -44,25 +47,21 @@ public class Day {
         addBtn.addClickListener(event -> {
             Select<KindOfWork> select = new Select<>();
             select.setLabel("Art");
-            select.setItems(KindOfWork.PracticalWork, KindOfWork.Schooling);
+            select.setItems(KindOfWork.values());
             select.setValue(KindOfWork.PracticalWork);
-            TextArea time = new TextArea("Zeit");
-            timeSumList.add(time);
-            time.setWidth("60px");
-            time.setHeight("60px");
-            time.addValueChangeListener(timeChange -> {
-                timeSumDay = 0;
-                for (TextArea t : timeSumList) {
-                    System.out.println(t.getValue());
-                    System.out.println(timeSumDay);
-                    timeSumDay += Double.parseDouble(t.getValue());
 
+            TimePicker timeBegin = new TimePicker("Von -");
+            timeBegin.setValue(LocalTime.of(8, 0));
+            timeBegin.addValueChangeListener(timeChange -> {
 
-                }
-                timeSum.setValue(String.valueOf(timeSumDay));
+            });
+            TimePicker timeEnd = new TimePicker("- Bis");
+            timeEnd.setValue(LocalTime.of(16, 0));
+            timeEnd.addValueChangeListener(timeChange -> {
 
             });
             TextArea area = new TextArea("Beschreibung");
+            area.setWidthFull();
             descriptions.add(area);
             Button delBtn = new Button(VaadinIcon.CLOSE.create());
             delBtn.addClickListener(eventDel -> {
@@ -71,7 +70,11 @@ public class Day {
                     container.remove(parent);
                 }
             });
-            container.add(new HorizontalLayout(select, time, area,delBtn));
+            VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd);
+            block.setWidth("225px");
+            HorizontalLayout layout = new HorizontalLayout(block, area, delBtn);
+            layout.setWidthFull();
+            container.add(layout);
         });
 
         day.add(new Span(dayLabel), container, addBtn, timeSum);
