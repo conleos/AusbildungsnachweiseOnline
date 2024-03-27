@@ -10,6 +10,7 @@ import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -55,6 +56,8 @@ public class AdminView extends HorizontalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader("Role")
                 .setAutoWidth(true);
         grid.addColumn(createAssigneeComponentRenderer()).setHeader("Assigned to")
+                .setAutoWidth(true);
+        grid.addColumn(createStartDateComponentRenderer()).setHeader("Begin of Work")
                 .setAutoWidth(true);
         grid.setItems(users);
         add(grid);
@@ -108,6 +111,17 @@ public class AdminView extends HorizontalLayout {
     };
     private static ComponentRenderer<ComboBox<User>, User> createAssigneeComponentRenderer() {
         return new ComponentRenderer<>(ComboBox<User>::new, assigneeComponentUpdater);
+    }
+    private static final SerializableBiConsumer<DatePicker, User> startDateComponentUpdater = (datePicker, user) -> {
+        datePicker.setEnabled(user.getRole().equals(Role.Trainee));
+        datePicker.setValue(user.getStartDate());
+        datePicker.addValueChangeListener(event -> {
+            user.setStartDate(event.getValue());
+            UserService.getInstance().saveUser(user);
+        });
+    };
+    private static ComponentRenderer<DatePicker, User> createStartDateComponentRenderer() {
+        return new ComponentRenderer<>(DatePicker::new, startDateComponentUpdater);
     }
 
 }
