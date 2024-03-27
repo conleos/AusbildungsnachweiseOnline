@@ -83,7 +83,7 @@ public class FormView extends VerticalLayout {
         saveBtn.addClickListener(save -> {
             for (TextArea description : descriptions) {
                 Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-                Form form = new Form(session.getUser(),nr.getValue(),description.getValue());
+                Form form = new Form(session.getUser());
                 FormService.getInstance().saveForm(form);
             }
         });
