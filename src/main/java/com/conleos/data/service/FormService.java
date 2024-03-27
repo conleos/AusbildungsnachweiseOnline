@@ -8,6 +8,7 @@ import com.conleos.data.repository.FormRepository;
 import com.conleos.data.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -41,5 +42,9 @@ public class FormService {
     }
     public List<Form> getFormsByOwner(User owner) {
         return formRepository.getFormsByOwner(owner);
+    }
+    public Form getFormByDate(LocalDate date) {
+        List<Form> temp = formRepository.getFormsByDate(date);
+        return temp.isEmpty() ? null : temp.getFirst();
     }
 }

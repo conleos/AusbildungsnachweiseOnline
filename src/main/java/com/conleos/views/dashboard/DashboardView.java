@@ -4,7 +4,9 @@ import com.conleos.common.ColorGenerator;
 import com.conleos.common.HtmlColor;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
+import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
+import com.conleos.data.service.FormService;
 import com.conleos.data.service.UserService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -73,8 +75,14 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
         VerticalLayout layout = new VerticalLayout();
         for (LocalDate It = beginOfWork; It.isBefore(beginOfCurrentWeek) || It.equals(beginOfCurrentWeek); It = It.plusWeeks(1)) {
             Button btn = new Button(It.toString());
+            LocalDate finalIt = It;
             btn.addClickListener(event -> {
-                // TODO: Create form and navigate
+                Form form = FormService.getInstance().getFormByDate(finalIt);
+                if (form == null) {
+                    form = new Form(user, finalIt);
+                }
+                FormService.getInstance().saveForm(form);
+                UI.getCurrent().navigate("/form/" + form.getId());
             });
             layout.add(btn);
         }

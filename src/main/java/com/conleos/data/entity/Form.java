@@ -5,6 +5,7 @@ import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Struct;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -53,10 +54,13 @@ public class Form {
     @ManyToOne
     User owner;
 
+    LocalDate mondayOfThatWeek;
+
     @OneToMany
     List<FormResult> results;
 
-    public Form(User owner) {
+    public Form(User owner, LocalDate date) {
+        mondayOfThatWeek = date;
         this.owner = owner;
     }
     protected Form() {

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface FormRepository extends JpaRepository<Form, Long> {
@@ -19,5 +20,8 @@ public interface FormRepository extends JpaRepository<Form, Long> {
 
     @Query ("Select f from Form f where f.owner = :_owner")
     List<Form> getFormsByOwner(@Param("_owner") User _owner);
+
+    @Query ("Select f from Form f where f.mondayOfThatWeek = :_date")
+    List<Form> getFormsByDate(@Param("_date") LocalDate _date);
 
 }

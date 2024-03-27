@@ -104,7 +104,6 @@ public class MainLayout extends AppLayout {
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
                 new MenuItemInfo("Home", LineAwesomeIcon.HOME_SOLID.create(), HomeView.class),
-                new MenuItemInfo("Form Test",   LineAwesomeIcon.PAPERCLIP_SOLID.create(), FormView.class),
                 new MenuItemInfo("Admin",       LineAwesomeIcon.HAMMER_SOLID.create(), AdminView.class),
 
         };
