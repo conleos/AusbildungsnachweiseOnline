@@ -10,10 +10,12 @@ import java.util.List;
 public class Form {
 
     @Entity
-    public static class FormEntry {
+    public class FormEntry {
 
         @Id
         private Long id;
+
+        LocalDate date;
 
         String description;
 
@@ -25,6 +27,14 @@ public class Form {
 
         public Long getId() {
             return id;
+        }
+
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
         }
 
         public String getDescription() {
