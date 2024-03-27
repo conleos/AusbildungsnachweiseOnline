@@ -1,9 +1,7 @@
 package com.conleos.data.entity;
 
-import com.conleos.common.Role;
 import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Struct;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.List;
 public class Form {
 
     @Entity
-    public static class FormResult {
+    public static class FormEntry {
 
         @Id
         private Long id;
@@ -57,7 +55,7 @@ public class Form {
     LocalDate mondayOfThatWeek;
 
     @OneToMany
-    List<FormResult> results;
+    List<FormEntry> entries;
 
     public Form(User owner, LocalDate date) {
         mondayOfThatWeek = date;
@@ -83,14 +81,14 @@ public class Form {
         this.owner = owner;
     }
 
-    public List<FormResult> getResults() {
-        return results;
+    public List<FormEntry> getEntries() {
+        return entries;
     }
 
-    public void setResults(List<FormResult> results) {
-        this.results = results;
+    public void setEntries(List<FormEntry> entries) {
+        this.entries = entries;
     }
-    public void addResult(FormResult result) {
-        this.results.add(result);
+    public void addEntry(FormEntry entry) {
+        this.entries.add(entry);
     }
 }
