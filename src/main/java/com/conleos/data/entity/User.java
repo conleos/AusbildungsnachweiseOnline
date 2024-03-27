@@ -3,6 +3,8 @@ package com.conleos.data.entity;
 import com.conleos.common.Role;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 public class User {
 
@@ -24,8 +26,11 @@ public class User {
     @Column(name = "email")
     String email;
 
+    // Trainee data only
     @ManyToOne
     User assignee;
+    @Column(name = "startDate")
+    LocalDate startDate;
 
     public User(String username, String passwordHash, Role role, String firstName, String lastName) {
         this.username = username;
@@ -104,5 +109,13 @@ public class User {
 
     public void setAssignee(User assignee) {
         this.assignee = assignee;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }
