@@ -81,9 +81,6 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         Button saveBtn = new Button("Save");
         saveBtn.addClickListener(save -> {
             for (Day day : days) {
-
-                Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-                Form form = new Form(session.getUser());
                 FormService.getInstance().saveForm(form);
             }
         });
