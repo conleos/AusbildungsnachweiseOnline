@@ -19,6 +19,8 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.awt.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +56,21 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
     }
 
     private Component createTraineeContent(User user) {
-        return new Span(user.getFullName());
+        LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate beginOfWork = user.getStartDate().with(DayOfWeek.MONDAY);
+
+        if (beginOfCurrentWeek.isBefore(beginOfWork)) {
+            Span span = new Span("Work begins " + user.getStartDate().toString());
+            span.getElement().getThemeList().add("badge error");
+            return span;
+        }
+
+        VerticalLayout layout = new VerticalLayout();
+        for (LocalDate It = beginOfWork; It.isBefore(beginOfCurrentWeek) || It.equals(beginOfCurrentWeek); It = It.plusWeeks(1)) {
+            layout.add(new Button(It.toString()));
+        }
+
+        return layout;
     }
 
     @Override
