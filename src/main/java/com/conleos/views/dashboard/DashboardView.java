@@ -72,7 +72,11 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
 
         VerticalLayout layout = new VerticalLayout();
         for (LocalDate It = beginOfWork; It.isBefore(beginOfCurrentWeek) || It.equals(beginOfCurrentWeek); It = It.plusWeeks(1)) {
-            layout.add(new Button(It.toString()));
+            Button btn = new Button(It.toString());
+            btn.addClickListener(event -> {
+                // TODO: Create form and navigate
+            });
+            layout.add(btn);
         }
 
         return layout;

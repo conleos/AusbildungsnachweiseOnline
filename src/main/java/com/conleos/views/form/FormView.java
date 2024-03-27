@@ -15,12 +15,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.BoxSizing;
@@ -48,16 +46,16 @@ import java.util.stream.Collectors;
 
 @PageTitle("Edit your Form")
 @Route(value = "form", layout = MainLayout.class)
-public class FormView extends VerticalLayout {
+public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
 
     ArrayList<Day> days = new ArrayList<>();
     Select<Integer> nr = new Select<>();
 
     public FormView() {
-        createContent();
+
     }
 
-    private void createContent() {
+    private void createContent(Form form) {
 
         Header header = new Header();
         header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
@@ -93,5 +91,37 @@ public class FormView extends VerticalLayout {
     }
 
 
+    @Override
+    public void setParameter(BeforeEvent event, Long parameter) {
+        Form form = FormService.getInstance().getFormByID(parameter);
 
+        if (form == null) {
+            add(new Span("Form not found!"));
+            return;
+        }
+
+        User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
+
+        switch (user.getRole()) {
+            case Admin -> {
+                createContent(form);
+            }
+            case Trainee -> {
+                if (form.getOwner().getId() == user.getId()) {
+                    createContent(form);
+                } else {
+                    add(new Span("access denied!"));
+                }
+            }
+            case Instructor -> {
+                if (form.getOwner().getAssignee().getId() == user.getId()) {
+                    createContent(form);
+                } else {
+                    add(new Span("access denied!"));
+                }
+            }
+        }
+
+
+    }
 }
