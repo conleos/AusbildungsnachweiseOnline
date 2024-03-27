@@ -8,11 +8,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CreateUserDialog extends Dialog {
@@ -46,20 +48,26 @@ public class CreateUserDialog extends Dialog {
         assigneeSelect.setItemLabelGenerator(User::getUsername);
         assigneeSelect.setEnabled(false);
 
+        DatePicker startTimeSelector = new DatePicker("Begin of Work");
+        startTimeSelector.setValue(LocalDate.now());
+        startTimeSelector.setEnabled(false);
+
         ComboBox<Role> roleSelect = new ComboBox<>("Role");
         roleSelect.setPlaceholder("Select a Role");
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
         roleSelect.addValueChangeListener(event -> {
             assigneeSelect.setEnabled(roleSelect.getValue().equals(Role.Trainee));
+            startTimeSelector.setEnabled(roleSelect.getValue().equals(Role.Trainee));
         });
 
-        dialogLayout.add(username, password, firstName, lastName, email, roleSelect, assigneeSelect);
+        dialogLayout.add(username, password, firstName, lastName, email, roleSelect, assigneeSelect, startTimeSelector);
 
         Button saveButton = new Button("Create", e -> {
             User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue());
             user.setEmail(email.getValue());
             user.setAssignee(assigneeSelect.getValue());
+            user.setStartDate(startTimeSelector.getValue());
             UserService.getInstance().saveUser(user);
             close();
             UI.getCurrent().getPage().reload();
