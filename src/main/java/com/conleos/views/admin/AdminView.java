@@ -33,7 +33,7 @@ public class AdminView extends HorizontalLayout {
     public AdminView(UserService service) {
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
-        if (session.getSessionRole().equals(Role.Trainee)) {
+        if (!session.getSessionRole().equals(Role.Admin)) {
             add(new Span("Access denied!"));
             return;
         }
