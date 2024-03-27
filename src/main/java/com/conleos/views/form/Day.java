@@ -22,8 +22,9 @@ import java.util.List;
 public class Day {
 
     List<TextArea> descriptions = new ArrayList<>();
-    List<Integer> timeSum = new ArrayList<>();
+    List<TextArea> timeSumList = new ArrayList<>();
     LocalDate date;
+    double timeSumDay = 0;
     public Day (int i) {
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         this.date = beginOfWeek.plusDays(i);
@@ -46,11 +47,20 @@ public class Day {
             select.setItems(KindOfWork.PracticalWork, KindOfWork.Schooling);
             select.setValue(KindOfWork.PracticalWork);
             TextArea time = new TextArea("Zeit");
+            timeSumList.add(time);
             time.setWidth("60px");
             time.setHeight("60px");
             time.addValueChangeListener(timeChange -> {
+                timeSumDay = 0;
+                for (TextArea t : timeSumList) {
+                    System.out.println(t.getValue());
+                    System.out.println(timeSumDay);
+                    timeSumDay += Double.parseDouble(t.getValue());
 
-                //timeSum.setValue(String.valueOf(sum));
+
+                }
+                timeSum.setValue(String.valueOf(timeSumDay));
+
             });
             TextArea area = new TextArea("Beschreibung");
             descriptions.add(area);
