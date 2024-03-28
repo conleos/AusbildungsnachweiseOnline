@@ -4,6 +4,7 @@ import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,9 @@ public class Form {
         private Long id;
 
         LocalDate date;
+
+        LocalTime begin;
+        LocalTime end;
 
         String description;
 
@@ -35,6 +39,22 @@ public class Form {
 
         public void setDate(LocalDate date) {
             this.date = date;
+        }
+
+        public LocalTime getBegin() {
+            return begin;
+        }
+
+        public void setBegin(LocalTime begin) {
+            this.begin = begin;
+        }
+
+        public LocalTime getEnd() {
+            return end;
+        }
+
+        public void setEnd(LocalTime end) {
+            this.end = end;
         }
 
         public String getDescription() {
