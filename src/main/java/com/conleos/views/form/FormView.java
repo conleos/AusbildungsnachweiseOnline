@@ -71,18 +71,19 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         Hr hr = new Hr();
         add(header,nr,hr,h2);
 
-
         for (int i = 0; i < 5; i++) {
             Day day = new Day(i);
             days.add(day);
-            add(day.createFormContentForDay());
+            add(day.createFormContentForDay(form));
         }
 
         Button saveBtn = new Button("Save");
         saveBtn.addClickListener(save -> {
+            form.removeAllEntries();
             for (Day day : days) {
-                FormService.getInstance().saveForm(form);
+                form.addEntries(day.getEntries(form));
             }
+            FormService.getInstance().saveForm(form);
         });
         add(saveBtn);
     }

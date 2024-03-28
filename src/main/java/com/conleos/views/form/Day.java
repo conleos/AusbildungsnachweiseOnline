@@ -1,5 +1,6 @@
 package com.conleos.views.form;
 
+import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -22,17 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day {
-
-    List<TextArea> descriptions = new ArrayList<>();
-    List<TextArea> timeSumList = new ArrayList<>();
     LocalDate date;
-    double timeSumDay = 0;
+    List<DayEntry> entries = new ArrayList<>();
+
     public Day (int i) {
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         this.date = beginOfWeek.plusDays(i);
     }
 
-    public VerticalLayout createFormContentForDay() {
+    public VerticalLayout createFormContentForDay(Form form) {
         String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
 
         VerticalLayout container = new VerticalLayout();
@@ -45,40 +44,30 @@ public class Day {
         timeSum.setLabel("Zeit gesamt:");
 
         addBtn.addClickListener(event -> {
-            Select<KindOfWork> select = new Select<>();
-            select.setLabel("Art");
-            select.setItems(KindOfWork.values());
-            select.setValue(KindOfWork.PracticalWork);
-
-            TimePicker timeBegin = new TimePicker("Von -");
-            timeBegin.setValue(LocalTime.of(8, 0));
-            timeBegin.addValueChangeListener(timeChange -> {
-
-            });
-            TimePicker timeEnd = new TimePicker("- Bis");
-            timeEnd.setValue(LocalTime.of(16, 0));
-            timeEnd.addValueChangeListener(timeChange -> {
-
-            });
-            TextArea area = new TextArea("Beschreibung");
-            area.setWidthFull();
-            descriptions.add(area);
-            Button delBtn = new Button(VaadinIcon.CLOSE.create());
-            delBtn.addClickListener(eventDel -> {
-                Component parent = delBtn.getParent().get();
-                if (parent instanceof HorizontalLayout) {
-                    container.remove(parent);
-                }
-            });
-            VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd);
-            block.setWidth("225px");
-            HorizontalLayout layout = new HorizontalLayout(block, area, delBtn);
-            layout.setWidthFull();
-            container.add(layout);
+            DayEntry dayEntry = new DayEntry(this, container, null);
+            entries.add(dayEntry);
+            container.add(dayEntry);
         });
+
+        // Init the Container with Content from Database
+        List<Form.FormEntry> initEntries = form.getEntriesByDate(date);
+        for (Form.FormEntry entry : initEntries) {
+            DayEntry dayEntry = new DayEntry(this, container, entry);
+            entries.add(dayEntry);
+            container.add(dayEntry);
+        }
 
         day.add(new Span(dayLabel), container, addBtn, timeSum);
         return day;
     }
 
+    public List<Form.FormEntry> getEntries(Form form) {
+        List<Form.FormEntry> result = new ArrayList<>();
+
+        for (DayEntry It : entries) {
+            result.add(It.createFormEntry(form));
+        }
+
+        return result;
+    }
 }

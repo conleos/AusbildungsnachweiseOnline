@@ -5,15 +5,17 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Form {
 
     @Entity
-    public class FormEntry {
+    public static class FormEntry {
 
         @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
         LocalDate date;
@@ -84,7 +86,7 @@ public class Form {
 
     LocalDate mondayOfThatWeek;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<FormEntry> entries;
 
     public Form(User owner, LocalDate date) {
@@ -120,5 +122,24 @@ public class Form {
     }
     public void addEntry(FormEntry entry) {
         this.entries.add(entry);
+    }
+    public void removeAllEntries() {
+        this.entries.clear();
+    }
+    public void addEntries(List<FormEntry> entries) {
+        for (FormEntry entry : entries) {
+            addEntry(entry);
+        }
+    }
+    public List<FormEntry> getEntriesByDate(LocalDate date) {
+        List<FormEntry> result = new ArrayList<>();
+
+        for (FormEntry entry : entries) {
+            if (entry.getDate().equals(date)) {
+                result.add(entry);
+            }
+        }
+
+        return result;
     }
 }
