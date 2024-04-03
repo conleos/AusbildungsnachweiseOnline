@@ -1,5 +1,24 @@
 @import url('./main-layout.css');
-@import url('@fontsource/inter/index.css');    html {
---lumo-font-family: Inter;
+@import url('@fontsource/inter/index.css');
 
-    }
+html {
+        font-family: 'Inter', sans-serif; /* Change 'Your Font Family' to the desired font */
+}
+
+vaadin-button {
+    background: white;
+    color: #970011;
+    border: 1px solid #970011;
+}
+
+.headline {
+    color: white;
+    background: #970011;
+    width: 100%;
+    text-align: center;
+    padding: 50px 0;
+}
+
+.outer-box {
+    padding: 0;
+}

@@ -20,6 +20,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
+
 import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -73,6 +76,13 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
         }
 
         VerticalLayout layout = new VerticalLayout();
+        layout.addClassNames("outer-box");
+        VerticalLayout weeks = new VerticalLayout();
+        weeks.addClassNames(Border.ALL,AlignItems.CENTER);
+        H1 h1 = new H1("Deine Ausbildungsnachweise");
+        h1.addClassNames("headline");
+        layout.add(h1,weeks);
+
         for (LocalDate It = beginOfWork; It.isBefore(beginOfCurrentWeek) || It.equals(beginOfCurrentWeek); It = It.plusWeeks(1)) {
             Button btn = new Button(It.toString());
             LocalDate finalIt = It;
@@ -84,8 +94,11 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
                 FormService.getInstance().saveForm(form);
                 UI.getCurrent().navigate("/form/" + form.getId());
             });
-            layout.add(btn);
+
+
+            weeks.add(btn);
         }
+
 
         return layout;
     }
@@ -98,6 +111,8 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
         //
         // Usage: localhost:8080/dashboard?user=12345
         // This shows the dashbaord of user 12345, if privileged
+
+        this.addClassNames("outer-box");
 
         QueryParameters params = event.getLocation().getQueryParameters();
         List<String> userParams = params.getParameters().getOrDefault("user", null);
