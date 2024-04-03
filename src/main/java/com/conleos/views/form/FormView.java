@@ -44,8 +44,9 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
 
         Header header = new Header();
         header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
-
+        this.addClassNames("outer-box");
         H1 h1 = new H1("Ausbildungsnachweis");
+        h1.addClassNames("headline");
 
         header.add(h1);
 
@@ -54,7 +55,11 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         nr.setValue(1);
         H2 h2 = new H2("Aufgaben:");
         Hr hr = new Hr();
-        add(header,nr,hr,h2);
+        VerticalLayout sitehHeader = new VerticalLayout();
+        sitehHeader.addClassNames("outer-box");
+        sitehHeader.addClassNames(AlignItems.CENTER);
+        sitehHeader.add(header,nr,hr,h2);
+        add(sitehHeader);
 
         for (int i = 0; i < 5; i++) {
             Day day = new Day(i);
@@ -63,6 +68,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         }
 
         Button saveBtn = new Button("Save");
+        saveBtn.addClassNames(Margin.AUTO,Margin.Bottom.MEDIUM,Margin.Top.MEDIUM,"saveButton");
         saveBtn.addClickListener(save -> {
             form.removeAllEntries();
             for (Day day : days) {

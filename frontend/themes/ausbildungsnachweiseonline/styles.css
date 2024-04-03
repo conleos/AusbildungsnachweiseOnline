@@ -11,6 +11,11 @@ vaadin-button {
     border: 1px solid #970011;
 }
 
+.saveButton {
+    background-color: #970011;
+    color: white;
+}
+
 .headline {
     color: white;
     background: #970011;
