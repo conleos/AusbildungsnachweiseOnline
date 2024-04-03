@@ -13,7 +13,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class Day {
         this.date = beginOfWeek.plusDays(i);
     }
 
-    public VerticalLayout createFormContentForDay(Form form) {
+    public VerticalLayout createFormContentForDay(Form form,int i) {
         String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
 
         VerticalLayout container = new VerticalLayout();
@@ -39,7 +39,7 @@ public class Day {
 
         Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
         VerticalLayout day = new VerticalLayout();
-        day.setClassName(LumoUtility.Border.ALL);
+        day.setClassName(Border.ALL);
         TextField timeSum = new TextField();
         timeSum.setLabel("Zeit gesamt:");
 
@@ -58,6 +58,10 @@ public class Day {
         }
 
         day.add(new Span(dayLabel), container, addBtn, timeSum);
+        day.addClassName("day");
+        if(i%2==0) {
+            day.addClassNames("grey-background");
+        }
         return day;
     }
 

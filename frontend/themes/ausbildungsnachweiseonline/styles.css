@@ -1,8 +1,8 @@
 @import url('./main-layout.css');
 @import url('@fontsource/inter/index.css');
 
-html {
-        font-family: 'Inter', sans-serif; /* Change 'Your Font Family' to the desired font */
+* {
+        font-family: 'Inter', sans-serif !important; /* Change 'Your Font Family' to the desired font */
 }
 
 vaadin-button {
@@ -26,4 +26,12 @@ vaadin-button {
 
 .outer-box {
     padding: 0;
+}
+
+.grey-background {
+    background-color: rgb(245,245,245);
+}
+
+.day {
+    padding: 50px;
 }

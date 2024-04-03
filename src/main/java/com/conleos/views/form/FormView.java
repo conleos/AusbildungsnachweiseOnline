@@ -20,6 +20,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 
 import java.time.Year;
 import java.time.DayOfWeek;
@@ -64,7 +65,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         for (int i = 0; i < 5; i++) {
             Day day = new Day(i);
             days.add(day);
-            add(day.createFormContentForDay(form));
+            add(day.createFormContentForDay(form,i));
         }
 
         Button saveBtn = new Button("Save");
