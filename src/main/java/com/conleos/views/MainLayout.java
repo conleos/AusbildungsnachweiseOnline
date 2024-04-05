@@ -6,6 +6,8 @@ import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.views.admin.AdminView;
 import com.conleos.views.home.HomeView;
+import com.conleos.views.profile.PreferencesView;
+import com.conleos.views.profile.ProfileView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -68,6 +70,8 @@ public class MainLayout extends AppLayout {
 
         nav.addItem(new SideNavItem("Home", HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
         nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
+        nav.addItem(new SideNavItem("Profile", ProfileView.class, LineAwesomeIcon.STAR.create()));
+        nav.addItem(new SideNavItem("Preferences", PreferencesView.class, LineAwesomeIcon.COGS_SOLID.create()));
 
         return nav;
     }
@@ -90,9 +94,13 @@ public class MainLayout extends AppLayout {
         MenuBar menu = new MenuBar();
         menu.setOpenOnHover(true);
         SubMenu subMenu = menu.addItem(container).getSubMenu();
-        subMenu.addItem("Profile");
+        subMenu.addItem("Profile", event -> {
+            UI.getCurrent().navigate(ProfileView.class);
+        });
         subMenu.addItem("Account");
-        subMenu.addItem("Preferences");
+        subMenu.addItem("Preferences", event -> {
+            UI.getCurrent().navigate(PreferencesView.class);
+        });
         subMenu.add(new Hr());
         subMenu.addItem("Sign out", event -> {
             Session.logOut(VaadinSession.getCurrent());
