@@ -150,7 +150,7 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
                 // Only Assigned Trainees can be viewed
                 case Instructor -> {
                     User other = UserService.getInstance().getUserByID(otherUserID);
-                    if (other.getRole().equals(Role.Trainee) && other.getAssignee().getId() == session.getUser().getId()) {
+                    if (other.getRole().equals(Role.Trainee) && other.getAssignee().getId().equals(session.getUser().getId())) {
                         add(createTraineeContent(other));
                     } else {
                         add(new Span("no privilege"));
@@ -158,7 +158,7 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
                 }
 
                 // Only if otherUser is ourself
-                case Trainee -> add(session.getUser().getId() == otherUserID ? createTraineeContent(session.getUser()) : new Span("no privilege"));
+                case Trainee -> add(session.getUser().getId().equals(otherUserID) ? createTraineeContent(session.getUser()) : new Span("no privilege"));
             }
         }
 

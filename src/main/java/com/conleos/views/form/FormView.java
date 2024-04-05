@@ -97,14 +97,14 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
                 createContent(form);
             }
             case Trainee -> {
-                if (form.getOwner().getId() == user.getId()) {
+                if (form.getOwner().getId().equals(user.getId())) {
                     createContent(form);
                 } else {
                     add(new Span("access denied!"));
                 }
             }
             case Instructor -> {
-                if (form.getOwner().getAssignee().getId() == user.getId()) {
+                if (form.getOwner().getAssignee().getId().equals(user.getId())) {
                     createContent(form);
                 } else {
                     add(new Span("access denied!"));
