@@ -26,4 +26,3 @@ webpack.generated.js
 # Generated TypeScript
 types.d.ts
 tsconfig.json
-vite.config.ts
