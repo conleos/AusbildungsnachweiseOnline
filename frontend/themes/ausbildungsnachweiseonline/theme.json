@@ -4,6 +4,9 @@
     "@fontsource/inter" : {
       "*.css" : "@fontsource/inter",
       "files/*" : "@fontsource/inter/files"
+    },"@fontsource/abel" : {
+      "*.css" : "@fontsource/abel",
+      "files/*" : "@fontsource/abel/files"
     }
   }
 }

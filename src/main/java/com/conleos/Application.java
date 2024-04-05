@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @NpmPackage(value = "@fontsource/inter", version = "4.5.0")
+@NpmPackage(value = "@fontsource/abel", version = "4.5.0")
 @Theme(value = "ausbildungsnachweiseonline")
 @Push
 public class Application implements AppShellConfigurator {
