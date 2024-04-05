@@ -8,6 +8,8 @@ import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
@@ -21,6 +23,7 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 public class MainLayout extends AppLayout {
 
     private H2 viewTitle;
+    private HorizontalLayout viewHeaderContainer;
 
     public MainLayout() {
         setPrimarySection(Section.DRAWER);
@@ -35,7 +38,11 @@ public class MainLayout extends AppLayout {
         viewTitle = new H2();
         viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-        addToNavbar(true, toggle, viewTitle);
+        viewHeaderContainer = new HorizontalLayout();
+        viewHeaderContainer.setAlignItems(FlexComponent.Alignment.CENTER);
+        viewHeaderContainer.getStyle().set("margin-left", "16px");
+
+        addToNavbar(true, toggle, viewTitle, viewHeaderContainer);
     }
 
     private void addDrawerContent() {
@@ -67,6 +74,11 @@ public class MainLayout extends AppLayout {
     protected void afterNavigation() {
         super.afterNavigation();
         viewTitle.setText(getCurrentPageTitle());
+
+        if (getContent() instanceof HasHeaderContent) {
+            viewHeaderContainer.add(((HasHeaderContent)getContent()).createHeaderContent());
+        }
+
     }
 
     private String getCurrentPageTitle() {

@@ -6,6 +6,7 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -28,7 +29,9 @@ import java.util.List;
 @PageTitle("Admin")
 @Route(value = "admin", layout = MainLayout.class)
 @RouteAlias(value = "manage", layout = MainLayout.class)
-public class AdminView extends HorizontalLayout {
+public class AdminView extends HorizontalLayout implements HasHeaderContent {
+
+    private CreateUserDialog createUserDialog;
 
     public AdminView(UserService service) {
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
@@ -38,9 +41,8 @@ public class AdminView extends HorizontalLayout {
             return;
         }
 
-        CreateUserDialog createUserDialog = new CreateUserDialog();
-        Button showDialog = new Button("Add a new User", e -> createUserDialog.open());
-        add(createUserDialog, showDialog);
+        createUserDialog = new CreateUserDialog();
+        //add(createUserDialog);
 
         List<User> users = service.getAllUsers();
 
@@ -124,4 +126,8 @@ public class AdminView extends HorizontalLayout {
         return new ComponentRenderer<>(DatePicker::new, startDateComponentUpdater);
     }
 
+    @Override
+    public Component[] createHeaderContent() {
+        return new Component[]{new Button("Add a new User", e -> createUserDialog.open())};
+    }
 }
