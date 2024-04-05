@@ -1,0 +1,60 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'release-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: "21"
+        distribution: 'adopt'
+        architecture: "x64"
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-jar
+        path: target/*.jar
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: release-jar
+        path: target/
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Ausbildungsnachweise Online ${{ github.ref_name }}
+        body: This is the generated release for **${{ github.ref_name }}**
+        draft: false
+        files: "target/*.jar"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Release Information
+      run: echo "Release ${{ steps.create_release.outputs.upload_url }}"
