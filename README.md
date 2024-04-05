@@ -1,10 +1,7 @@
-# AusbildungsnachweiseOnline
-
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+![Ausbildungsnachweise Online](.github/AusbildungsnachweiseOnline.png)
 
 ## MySQL Database
-This application requires a running MySQL Database instance on your lcoalhost
+This application requires a running MySQL Database instance on your localhost
 - Port: 3306
 - Username: root
 - Password: 1234
@@ -28,16 +25,7 @@ ready to be deployed. The file can be found in the `target` folder after the bui
 Once the JAR file is built, you can run it using
 `java -jar target/ausbildungsnachweiseonline-1.0-SNAPSHOT.jar`
 
-## Project structure
-
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/docs/components/app-layout).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
-- `themes` folder in `frontend/` contains the custom CSS styles.
-
-## Useful links
+## Useful Vaadin links
 
 - Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
 - Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
