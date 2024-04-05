@@ -1,8 +1,18 @@
 @import url('./main-layout.css');
 @import url('@fontsource/inter/index.css');
+@import url('@fontsource/abel/index.css');
+
+@font-face {
+    font-family: "Inter";
+    src: url("./fonts/Inter-Regular.ttf") format("tff");
+}
+@font-face {
+    font-family: "Abel";
+    src: url("./fonts/Abel-Regular.ttf") format("tff");
+}
 
 * {
-        font-family: 'Inter', sans-serif !important; /* Change 'Your Font Family' to the desired font */
+        font-family: "Abel", sans-serif !important; /* Change 'Your Font Family' to the desired font */
 }
 
 vaadin-button {

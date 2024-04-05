@@ -3,6 +3,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@fontsource/abel": "4.5.0",
     "@fontsource/inter": "4.5.0",
     "@polymer/polymer": "3.5.1",
     "@vaadin/a11y-base": "24.3.8",
@@ -92,6 +93,7 @@
   },
   "vaadin": {
     "dependencies": {
+      "@fontsource/abel": "4.5.0",
       "@fontsource/inter": "4.5.0",
       "@polymer/polymer": "3.5.1",
       "@vaadin/a11y-base": "24.3.8",
@@ -179,7 +181,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "5db3af228d867d47c3aec5c23d6094b7b3ac6c9511640d7702b0a1b23df141d6"
+    "hash": "03d5d1869ddbb70b43c933fa2bf8823f9c4d03f1820b0457e1cd31092da133b4"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -249,6 +251,7 @@
     "@polymer/polymer": "$@polymer/polymer",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "date-fns": "$date-fns",
+    "@fontsource/abel": "$@fontsource/abel",
     "@fontsource/inter": "$@fontsource/inter"
   }
 }
