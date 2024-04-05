@@ -42,7 +42,7 @@ public class AdminView extends HorizontalLayout implements HasHeaderContent {
         }
 
         createUserDialog = new CreateUserDialog();
-        //add(createUserDialog);
+        add(createUserDialog);
 
         List<User> users = service.getAllUsers();
 
