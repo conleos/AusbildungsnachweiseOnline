@@ -1,19 +1,26 @@
 package com.conleos.views;
 
+import com.conleos.common.ColorGenerator;
+import com.conleos.common.HtmlColor;
+import com.conleos.core.Session;
+import com.conleos.data.entity.User;
 import com.conleos.views.admin.AdminView;
 import com.conleos.views.home.HomeView;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.avatar.AvatarVariant;
+import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
@@ -42,7 +49,7 @@ public class MainLayout extends AppLayout {
         viewHeaderContainer.setAlignItems(FlexComponent.Alignment.CENTER);
         viewHeaderContainer.getStyle().set("margin-left", "16px");
 
-        addToNavbar(true, toggle, viewTitle, viewHeaderContainer);
+        addToNavbar(true, toggle, viewTitle, viewHeaderContainer, createAvatar());
     }
 
     private void addDrawerContent() {
@@ -68,6 +75,27 @@ public class MainLayout extends AppLayout {
         Footer layout = new Footer();
 
         return layout;
+    }
+
+    private Component createAvatar() {
+        User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
+
+        Avatar avatar = new Avatar(user.getFullName());
+        avatar.addThemeVariants(AvatarVariant.LUMO_XSMALL);
+        avatar.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString(user.getUsername())).toString());
+        HorizontalLayout container = new HorizontalLayout(avatar, new Span(user.getFullName()));
+        container.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        MenuBar menu = new MenuBar();
+        menu.setOpenOnHover(true);
+        SubMenu subMenu = menu.addItem(container).getSubMenu();
+        subMenu.addItem("Profile");
+        subMenu.addItem("Account");
+        subMenu.addItem("Preferences");
+        subMenu.add(new Hr());
+        subMenu.addItem("Sign out");
+
+        return menu;
     }
 
     @Override
