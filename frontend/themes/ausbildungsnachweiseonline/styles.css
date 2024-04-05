@@ -12,7 +12,7 @@
 }
 
 * {
-        font-family: "Abel", sans-serif !important; /* Change 'Your Font Family' to the desired font */
+        font-family: 'Abel', sans-serif !important; /* Change 'Your Font Family' to the desired font */
 }
 
 vaadin-button {
