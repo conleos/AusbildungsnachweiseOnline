@@ -1,7 +1,9 @@
 package com.conleos.views;
 
 
-import com.conleos.views.helloworld.HelloWorldView;
+import com.conleos.views.admin.AdminView;
+import com.conleos.views.form.FormView;
+import com.conleos.views.home.HomeView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
@@ -78,7 +80,7 @@ public class MainLayout extends AppLayout {
         Div layout = new Div();
         layout.addClassNames(Display.FLEX, AlignItems.CENTER, Padding.Horizontal.LARGE);
 
-        H1 appName = new H1("AusbildungsnachweiseOnline");
+        H1 appName = new H1("Ausbildungsnachweise Online");
         appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
         layout.add(appName);
 
@@ -101,7 +103,8 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", LineAwesomeIcon.LOCK_SOLID.create(), HelloWorldView.class), //
+                new MenuItemInfo("Home", LineAwesomeIcon.HOME_SOLID.create(), HomeView.class),
+                new MenuItemInfo("Admin",       LineAwesomeIcon.HAMMER_SOLID.create(), AdminView.class),
 
         };
     }
