@@ -7,6 +7,7 @@ import com.conleos.data.entity.User;
 import com.conleos.views.admin.AdminView;
 import com.conleos.views.home.HomeView;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -93,7 +94,10 @@ public class MainLayout extends AppLayout {
         subMenu.addItem("Account");
         subMenu.addItem("Preferences");
         subMenu.add(new Hr());
-        subMenu.addItem("Sign out");
+        subMenu.addItem("Sign out", event -> {
+            Session.logOut(VaadinSession.getCurrent());
+            UI.getCurrent().getPage().reload();
+        });
 
         return menu;
     }

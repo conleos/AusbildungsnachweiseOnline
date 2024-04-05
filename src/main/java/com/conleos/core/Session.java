@@ -73,4 +73,8 @@ public class Session {
     private void setUser(User user) {
         this.user = user;
     }
+
+    public static void logOut(VaadinSession vaadinSession) {
+        sessions.remove(vaadinSession);
+    }
 }
