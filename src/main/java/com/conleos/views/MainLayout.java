@@ -107,6 +107,7 @@ public class MainLayout extends AppLayout {
         super.afterNavigation();
         viewTitle.setText(getCurrentPageTitle());
 
+        viewHeaderContainer.removeAll();
         if (getContent() instanceof HasHeaderContent) {
             viewHeaderContainer.add(((HasHeaderContent)getContent()).createHeaderContent());
         }
