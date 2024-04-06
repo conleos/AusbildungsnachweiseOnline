@@ -107,6 +107,8 @@ public class MainLayout extends AppLayout {
             UI.getCurrent().getPage().reload();
         });
 
+        menu.addClassNames("avatar-box");
+
         return menu;
     }
 

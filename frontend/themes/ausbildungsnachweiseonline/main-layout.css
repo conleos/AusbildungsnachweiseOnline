@@ -47,3 +47,8 @@ vaadin-side-nav-item vaadin-icon {
   display: none;
 }
 
+.avatar-box {
+  position: absolute;
+  right: 16px;
+  top: 8px;
+}
