@@ -60,3 +60,7 @@ vaadin-message-input {
 vaadin-message-input vaadin-button {
     width: 100px;
 }
+
+.current-user-message {
+    padding-left: 50px;
+}

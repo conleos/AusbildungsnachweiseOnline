@@ -7,9 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.conleos.common.ColorGenerator;
+import com.conleos.common.HtmlColor;
 import com.conleos.data.entity.Form;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Comment;
+import com.conleos.data.entity.User;
 import com.conleos.data.repository.CommentRepository;
 import com.conleos.data.service.CommentService;
 import com.vaadin.flow.component.html.Div;
@@ -38,7 +41,8 @@ public class CommentView extends Div {
         input.addSubmitListener(submitEvent -> {
             MessageListItem newMessage = new MessageListItem(
                     submitEvent.getValue(), Instant.now(), Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getFullName());
-            newMessage.setUserColorIndex(2);
+            newMessage.setUserColorIndex(6);
+            newMessage.addClassNames("current-user-message");
             List<MessageListItem> items = new ArrayList<>(list.getItems());
             items.add(newMessage);
             Comment comment = new Comment();
@@ -56,7 +60,14 @@ public class CommentView extends Div {
             List<MessageListItem> oldItems = new ArrayList<>();
             for (Comment c : comments) {
                 MessageListItem message = new MessageListItem(c.getComment(), Instant.parse(c.getTime()), c.getUserId().getFullName());
-                message.setUserColorIndex((int) (Math.random() * 50));
+
+
+                if (message.getUserName().equals(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getFullName())) {
+                    message.addClassNames("current-user-message");
+                    message.setUserColorIndex(6);
+                } else {
+                    message.setUserColorIndex(50);
+                }
                 oldItems.add(message);
             }
             list.setItems(oldItems);
@@ -67,6 +78,7 @@ public class CommentView extends Div {
             chatLayout.setWidth("100%");
             chatLayout.expand(list);
             chatLayout.addClassName(LumoUtility.Border.TOP);
+
 
 
 
