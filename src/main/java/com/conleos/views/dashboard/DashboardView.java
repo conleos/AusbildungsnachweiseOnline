@@ -1,7 +1,5 @@
 package com.conleos.views.dashboard;
 
-import com.conleos.common.ColorGenerator;
-import com.conleos.common.HtmlColor;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
@@ -11,53 +9,23 @@ import com.conleos.data.service.UserService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
-
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
-
-import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @PageTitle("Dashboard")
 @Route(value = "dashboard", layout = MainLayout.class)
-public class DashboardView extends VerticalLayout implements BeforeEnterObserver {
-
-    private Component createBanner(User trainee) {
-        Avatar avatar = new Avatar(trainee.getFullName());
-        avatar.addThemeVariants(AvatarVariant.LUMO_LARGE);
-        avatar.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername())).toString());
-
-        Button btn = new Button(new HorizontalLayout(avatar, new Span(trainee.getFullName())));
-        btn.setWidth("90%");
-        btn.setHeight("135px");
-        btn.addClickListener(event -> {
-            UI.getCurrent().navigate("dashboard?user=" + trainee.getId());
-        });
-        return btn;
-    }
+public class DashboardView extends Div implements BeforeEnterObserver {
 
     private Component createInstructorContent(User user) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setAlignItems(Alignment.CENTER);
-
-        List<User> trainees = UserService.getInstance().getUsersByAssignee(user);
-
-        for (User It : trainees) {
-            layout.add(createBanner(It));
-        }
-
-        return layout;
+        return new InstructorDashboard(user);
     }
 
     private Component createTraineeContent(User user) {
@@ -125,7 +93,7 @@ public class DashboardView extends VerticalLayout implements BeforeEnterObserver
 
         // Create page content
         removeAll();
-        setAlignItems(Alignment.CENTER);
+        setSizeFull();
 
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
