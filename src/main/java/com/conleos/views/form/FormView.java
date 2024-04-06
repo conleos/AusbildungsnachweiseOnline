@@ -5,30 +5,17 @@ import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
 import com.conleos.views.MainLayout;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 
-import java.time.Year;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @PageTitle("Edit your Form")
 @Route(value = "form", layout = MainLayout.class)
@@ -77,7 +64,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
             }
             FormService.getInstance().saveForm(form);
         });
-        add(saveBtn);
+        add(saveBtn,new CommentView(form));
+
     }
 
 
