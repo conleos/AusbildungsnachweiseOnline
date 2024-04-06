@@ -48,3 +48,20 @@ vaadin-button {
 .day {
     padding: 50px;
 }
+
+.chat {
+    width: 100%;
+}
+
+vaadin-message-input {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+vaadin-message-input vaadin-button {
+    width: 100px;
+}
+
+.current-user-message {
+    padding-left: 50px;
+}
