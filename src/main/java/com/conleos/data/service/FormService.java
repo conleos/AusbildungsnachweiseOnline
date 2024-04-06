@@ -43,8 +43,8 @@ public class FormService {
     public List<Form> getFormsByOwner(User owner) {
         return formRepository.getFormsByOwner(owner);
     }
-    public Form getFormByDate(LocalDate date) {
-        List<Form> temp = formRepository.getFormsByDate(date);
+    public Form getFormByDateAndUser(LocalDate date, User user) {
+        List<Form> temp = formRepository.getFormsByDateAndUser(date, user);
         return temp.isEmpty() ? null : temp.getFirst();
     }
 }

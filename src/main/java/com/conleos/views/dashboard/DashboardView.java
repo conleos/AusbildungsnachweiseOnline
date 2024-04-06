@@ -29,46 +29,7 @@ public class DashboardView extends Div implements BeforeEnterObserver {
     }
 
     private Component createTraineeContent(User user) {
-        LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
-        if (user.getStartDate() == null) {
-            Span span = new Span("Oops! Someone forgot to set your 'Begin of Work' Date!");
-            span.getElement().getThemeList().add("badge error");
-            return span;
-        }
-        LocalDate beginOfWork = user.getStartDate().with(DayOfWeek.MONDAY);
-
-        if (beginOfCurrentWeek.isBefore(beginOfWork)) {
-            Span span = new Span("Work begins " + user.getStartDate().toString());
-            span.getElement().getThemeList().add("badge error");
-            return span;
-        }
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.addClassNames("outer-box");
-        VerticalLayout weeks = new VerticalLayout();
-        weeks.addClassNames(Border.ALL,AlignItems.CENTER);
-        H1 h1 = new H1("Deine Ausbildungsnachweise");
-        h1.addClassNames("headline");
-        layout.add(h1,weeks);
-
-        for (LocalDate It = beginOfWork; It.isBefore(beginOfCurrentWeek) || It.equals(beginOfCurrentWeek); It = It.plusWeeks(1)) {
-            Button btn = new Button(It.toString());
-            LocalDate finalIt = It;
-            btn.addClickListener(event -> {
-                Form form = FormService.getInstance().getFormByDate(finalIt);
-                if (form == null) {
-                    form = new Form(user, finalIt);
-                }
-                FormService.getInstance().saveForm(form);
-                UI.getCurrent().navigate("/form/" + form.getId());
-            });
-
-
-            weeks.add(btn);
-        }
-
-
-        return layout;
+        return new TraineeDashboard(user);
     }
 
     @Override

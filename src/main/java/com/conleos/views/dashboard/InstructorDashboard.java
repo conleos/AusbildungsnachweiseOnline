@@ -44,7 +44,7 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
     }
 
     private void constructUI() {
-        addClassNames("dashboard-instructor-view");
+        addClassNames("dashboard-view");
         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
 
         HorizontalLayout container = new HorizontalLayout();
@@ -93,7 +93,6 @@ class UserCard extends ListItem {
         //div.addClassNames("striped-background");
         HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername()).darker().darker());
         HtmlColor backgroundColor2 = HtmlColor.from(backgroundColor.toAWTColor().darker());
-
         div.getStyle().set("background-image", "repeating-linear-gradient(45deg, "+backgroundColor+", "+backgroundColor+" 10px, "+backgroundColor2+" 10px, "+backgroundColor2+" 20px)");
 
         Span header = new Span();
