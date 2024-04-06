@@ -1,5 +1,5 @@
 @import url('./main-layout.css');
-@import url('./views/dashboard-instructor-view.css');
+@import url('views/dashboard-view.css');
 @import url('@fontsource/inter/index.css');
 @import url('@fontsource/abel/index.css');
 
