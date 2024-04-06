@@ -70,8 +70,8 @@ public class MainLayout extends AppLayout {
 
         nav.addItem(new SideNavItem("Home", HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
         nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
-        nav.addItem(new SideNavItem("Profile", ProfileView.class, LineAwesomeIcon.STAR.create()));
-        nav.addItem(new SideNavItem("Preferences", PreferencesView.class, LineAwesomeIcon.COGS_SOLID.create()));
+        nav.addItem(new SideNavItem("Profile", ProfileView.class, LineAwesomeIcon.USER.create()));
+        nav.addItem(new SideNavItem("Preferences", PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
 
         return nav;
     }
