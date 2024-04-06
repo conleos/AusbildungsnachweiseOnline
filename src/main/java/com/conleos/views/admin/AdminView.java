@@ -13,6 +13,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -34,6 +35,8 @@ public class AdminView extends HorizontalLayout implements HasHeaderContent {
     private CreateUserDialog createUserDialog;
 
     public AdminView(UserService service) {
+        addClassName("data-grid-view");
+        setSizeFull();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
         if (!session.getSessionRole().equals(Role.Admin)) {
@@ -49,12 +52,14 @@ public class AdminView extends HorizontalLayout implements HasHeaderContent {
         // https://vaadin.com/docs/latest/components/grid
         Grid<User> grid = new Grid<>(User.class, false);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_COLUMN_BORDERS);
+        grid.setHeight("100%");
         grid.addColumn(createInfoRenderer()).setHeader("Info")
                 .setAutoWidth(true).setFlexGrow(0);
         grid.addColumn(User::getUsername).setHeader("Username")
                 .setAutoWidth(true);
-        grid.addColumn(User::getPasswordHash).setHeader("Password Hash")
-                .setAutoWidth(true);
+        /*grid.addColumn(User::getPasswordHash).setHeader("Password Hash")
+                .setAutoWidth(true);*/
         grid.addColumn(createStatusComponentRenderer()).setHeader("Role")
                 .setAutoWidth(true);
         grid.addColumn(createAssigneeComponentRenderer()).setHeader("Assigned to")
