@@ -19,13 +19,22 @@ import com.vaadin.flow.component.messages.MessageListItem;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.springframework.stereotype.Service;
+
+import javax.swing.border.Border;
 
 public class CommentView extends Div {
 
+    private VerticalLayout chatLayout;
+
     public CommentView(Form form) {
         MessageList list = new MessageList();
+        list.setWidth("100%");
         MessageInput input = new MessageInput();
+        input.setWidth("100%");
         input.addSubmitListener(submitEvent -> {
             MessageListItem newMessage = new MessageListItem(
                     submitEvent.getValue(), Instant.now(), Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getFullName());
@@ -53,12 +62,17 @@ public class CommentView extends Div {
             list.setItems(oldItems);
         }
 
-            VerticalLayout chatLayout = new VerticalLayout(list, input);
+            chatLayout = new VerticalLayout(list, input);
             chatLayout.setHeight("500px");
-            chatLayout.setWidth("400px");
+            chatLayout.setWidth("100%");
             chatLayout.expand(list);
-            add(chatLayout);
+            chatLayout.addClassName(LumoUtility.Border.TOP);
 
 
+
+    }
+
+    public VerticalLayout getChatLayout() {
+        return chatLayout;
     }
 }

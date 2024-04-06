@@ -3,6 +3,7 @@ package com.conleos.views.form;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
+import com.conleos.data.repository.CommentRepository;
 import com.conleos.data.service.FormService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
@@ -64,7 +65,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
             }
             FormService.getInstance().saveForm(form);
         });
-        add(saveBtn,new CommentView(form));
+        CommentView comment = new CommentView(form);
+        add(saveBtn, comment.getChatLayout());
 
     }
 
