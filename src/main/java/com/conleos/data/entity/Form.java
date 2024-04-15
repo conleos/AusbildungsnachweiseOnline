@@ -114,6 +114,9 @@ public class Form {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+    public LocalDate getMondayDate() {
+        return mondayOfThatWeek;
+    }
 
     public List<FormEntry> getEntries() {
         return entries;

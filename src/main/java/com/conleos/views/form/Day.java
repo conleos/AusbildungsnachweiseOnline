@@ -31,8 +31,8 @@ public class Day {
         this.date = beginOfWeek.plusDays(i);
     }
 
-    public VerticalLayout createFormContentForDay(Form form,int i) {
-        String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
+    public VerticalLayout createFormContentForDay(Form form, int i) {
+        String dayLabel = getLocalDayName();
 
         VerticalLayout container = new VerticalLayout();
         container.setWidthFull();
@@ -73,5 +73,9 @@ public class Day {
         }
 
         return result;
+    }
+
+    public String getLocalDayName() {
+        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
     }
 }

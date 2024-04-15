@@ -5,60 +5,55 @@ import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.CommentRepository;
 import com.conleos.data.service.FormService;
+import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @PageTitle("Edit your Form")
 @Route(value = "form", layout = MainLayout.class)
-public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
+public class FormView extends VerticalLayout implements HasUrlParameter<Long>, HasHeaderContent {
 
     ArrayList<Day> days = new ArrayList<>();
     Select<Integer> nr = new Select<>();
+
+    private LocalDate dateOfForm;
 
     public FormView() {
 
     }
 
     private void createContent(Form form) {
+        dateOfForm = form.getMondayDate();
 
-        Header header = new Header();
-        header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
-        this.addClassNames("outer-box");
-        H1 h1 = new H1("Ausbildungsnachweis");
-        h1.addClassNames("headline");
-
-        header.add(h1);
-
-        nr.setLabel("Nachweis Nr.:");
-        nr.setItems(new nachweisSelect().nachweisNr);
-        nr.setValue(1);
-        H2 h2 = new H2("Aufgaben:");
-        Hr hr = new Hr();
-        VerticalLayout sitehHeader = new VerticalLayout();
-        sitehHeader.addClassNames("outer-box");
-        sitehHeader.addClassNames(AlignItems.CENTER);
-        sitehHeader.add(header,nr,hr,h2);
-        add(sitehHeader);
-
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.setWidthFull();
         for (int i = 0; i < 5; i++) {
             Day day = new Day(i);
             days.add(day);
-            add(day.createFormContentForDay(form,i));
+            tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName())), day.createFormContentForDay(form, i));
         }
+        CommentView comment = new CommentView(form);
+        tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span("Chat")), comment.getChatLayout());
+        add(tabSheet);
 
         Button saveBtn = new Button("Save");
-        saveBtn.addClassNames(Margin.AUTO,Margin.Bottom.MEDIUM,Margin.Top.MEDIUM,"saveButton");
+        saveBtn.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
         saveBtn.addClickListener(save -> {
             form.removeAllEntries();
             for (Day day : days) {
@@ -69,8 +64,9 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
             // Notify User
             Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
         });
-        CommentView comment = new CommentView(form);
-        add(saveBtn, comment.getChatLayout());
+
+
+        add(saveBtn);
 
     }
 
@@ -107,5 +103,12 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long> {
         }
 
 
+    }
+
+    @Override
+    public Component[] createHeaderContent() {
+        return new Component[]{
+                new DateBasedNavigator(dateOfForm)
+        };
     }
 }

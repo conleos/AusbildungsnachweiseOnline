@@ -4,6 +4,7 @@ import com.conleos.common.ColorGenerator;
 import com.conleos.common.HtmlColor;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
@@ -26,13 +27,14 @@ import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InstructorDashboard extends Main implements HasComponents, HasStyle {
 
     private OrderedList itemContainer;
 
-    public InstructorDashboard(User instructor) {
+    public InstructorDashboard(ArrayList<Component> headerComponents, User instructor) {
         constructUI();
 
         List<User> trainees = UserService.getInstance().getUsersByAssignee(instructor);
