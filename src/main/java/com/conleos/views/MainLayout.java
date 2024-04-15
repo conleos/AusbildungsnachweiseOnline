@@ -2,6 +2,7 @@ package com.conleos.views;
 
 import com.conleos.common.ColorGenerator;
 import com.conleos.common.HtmlColor;
+import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.views.admin.AdminView;
@@ -67,9 +68,12 @@ public class MainLayout extends AppLayout {
 
     private SideNav createNavigation() {
         SideNav nav = new SideNav();
+        Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
         nav.addItem(new SideNavItem("Home", HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
-        nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
+        if (session.getSessionRole().equals(Role.Admin)) {
+            nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
+        }
         nav.addItem(new SideNavItem("Profile", ProfileView.class, LineAwesomeIcon.USER.create()));
         nav.addItem(new SideNavItem("Preferences", PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
 
