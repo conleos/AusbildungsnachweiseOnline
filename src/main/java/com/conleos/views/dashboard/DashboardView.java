@@ -6,6 +6,7 @@ import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
 import com.conleos.data.service.UserService;
+import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -18,18 +19,22 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Dashboard")
 @Route(value = "dashboard", layout = MainLayout.class)
-public class DashboardView extends Div implements BeforeEnterObserver {
+public class DashboardView extends Div implements BeforeEnterObserver, HasHeaderContent {
+
+    private ArrayList<Component> headerComponents = new ArrayList<>();
 
     private Component createInstructorContent(User user) {
-        return new InstructorDashboard(user);
+        return new InstructorDashboard(headerComponents, user);
     }
 
     private Component createTraineeContent(User user) {
-        return new TraineeDashboard(user);
+        return new TraineeDashboard(headerComponents, user);
     }
 
     @Override
@@ -91,6 +96,10 @@ public class DashboardView extends Div implements BeforeEnterObserver {
             }
         }
 
+    }
 
+    @Override
+    public Component[] createHeaderContent() {
+        return headerComponents.toArray(new Component[0]);
     }
 }
