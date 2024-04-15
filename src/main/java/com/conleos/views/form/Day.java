@@ -78,4 +78,8 @@ public class Day {
     public String getLocalDayName() {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
 }

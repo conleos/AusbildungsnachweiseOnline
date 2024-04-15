@@ -1,5 +1,6 @@
 package com.conleos.views.form;
 
+import com.conleos.data.entity.User;
 import com.vaadin.flow.component.datepicker.DatePicker;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 * */
 public class DateBasedNavigator extends DatePicker {
 
-    public DateBasedNavigator(LocalDate date) {
+    public DateBasedNavigator(User trainee, LocalDate date) {
         setValue(date);
         setLabel("Navigate by Date");
         addValueChangeListener(event -> {

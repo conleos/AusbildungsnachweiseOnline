@@ -32,21 +32,23 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     ArrayList<Day> days = new ArrayList<>();
     Select<Integer> nr = new Select<>();
 
-    private LocalDate dateOfForm;
+    private Form form;
 
     public FormView() {
 
     }
 
     private void createContent(Form form) {
-        dateOfForm = form.getMondayDate();
+        this.form = form;
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
         for (int i = 0; i < 5; i++) {
             Day day = new Day(i);
             days.add(day);
-            tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName())), day.createFormContentForDay(form, i));
+            Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
+            tab.setTooltipText(day.getDate().toString());
+            tabSheet.add(tab, day.createFormContentForDay(form, i));
         }
         CommentView comment = new CommentView(form);
         tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span("Chat")), comment.getChatLayout());
@@ -108,7 +110,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     @Override
     public Component[] createHeaderContent() {
         return new Component[]{
-                new DateBasedNavigator(dateOfForm)
+                new DateBasedNavigator(form.getOwner(), form.getMondayDate())
         };
     }
 }
