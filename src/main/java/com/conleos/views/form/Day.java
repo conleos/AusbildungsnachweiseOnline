@@ -28,6 +28,7 @@ import java.util.List;
 public class Day {
     LocalDate date;
     List<DayEntry> entries = new ArrayList<>();
+    VerticalLayout container = new VerticalLayout();
 
     public Day (int i) {
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
@@ -36,7 +37,7 @@ public class Day {
 
     public VerticalLayout createFormContentForDay(Form form, int i) {
         String dayLabel = getLocalDayName();
-        VerticalLayout container = new VerticalLayout();
+        //VerticalLayout container = new VerticalLayout();
         container.setWidthFull();
 
         Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
@@ -46,7 +47,7 @@ public class Day {
         timeSum.setLabel("Zeit gesamt:");
 
         addBtn.addClickListener(event -> {
-            DayEntry dayEntry = new DayEntry(this, container, null);
+            DayEntry dayEntry = new DayEntry(this, container, null,entries);
             entries.add(dayEntry);
             container.add(dayEntry);
         });
@@ -54,7 +55,7 @@ public class Day {
         // Init the Container with Content from Database
         List<Form.FormEntry> initEntries = form.getEntriesByDate(date);
         for (Form.FormEntry entry : initEntries) {
-            DayEntry dayEntry = new DayEntry(this, container, entry);
+            DayEntry dayEntry = new DayEntry(this, container, entry, entries);
             entries.add(dayEntry);
             container.add(dayEntry);
         }
@@ -75,14 +76,12 @@ public class Day {
 
     public List<Form.FormEntry> getEntries(Form form) {
         List<Form.FormEntry> result = new ArrayList<>();
-
         for (DayEntry It : entries) {
             result.add(It.createFormEntry(form));
         }
 
         return result;
     }
-
     public String getLocalDayName() {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
     }

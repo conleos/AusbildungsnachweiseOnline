@@ -14,6 +14,7 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class DayEntry extends HorizontalLayout {
 
@@ -27,7 +28,7 @@ public class DayEntry extends HorizontalLayout {
     /*
     * FormEntry is optional
     * */
-    public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry) {
+    public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry, List<DayEntry> entries) {
         this.day = day;
         select = new Select<>();
         select.setLabel("Art");
@@ -40,7 +41,7 @@ public class DayEntry extends HorizontalLayout {
 
         });
         timeEnd = new TimePicker("- Bis");
-        timeEnd.setValue(LocalTime.of(16, 0));
+        timeEnd.setValue(LocalTime.of(16,0));
         timeEnd.addValueChangeListener(timeChange -> {
 
         });
@@ -51,6 +52,7 @@ public class DayEntry extends HorizontalLayout {
             Component parent = delBtn.getParent().get();
             if (parent instanceof HorizontalLayout) {
                 container.remove(parent);
+                entries.remove(parent);
             }
         });
         VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd);
