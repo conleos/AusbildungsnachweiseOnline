@@ -1,13 +1,17 @@
 package com.conleos.views.profile;
 
+import com.conleos.common.PasswordHasher;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -39,19 +43,24 @@ public class ProfileView extends VerticalLayout {
 
         Dialog dialog = new Dialog();
 
-        dialog.setHeaderTitle(
-                String.format("Change Password", user.getFullName()));
-
-        dialog.add("Are you sure you want to change your password?");
+        H2 changeHeader = new H2("Change Password");
+        Text sure = new Text("Are you sure you want to change your password?");
         TextField oldPasswordField = new TextField("Old Password");
         TextField newPasswordField = new TextField("New Password");
+        Text wrong = new Text("The old password is not correct!");
         VerticalLayout input = new VerticalLayout();
-        input.add(oldPasswordField,newPasswordField);
+        input.add(changeHeader,sure,oldPasswordField,newPasswordField);
         dialog.add(input);
         Button changeButton = new Button("Change");
         changeButton.addClickListener(clickEvent -> {
+            if (PasswordHasher.hash(oldPasswordField.getValue()).equals(user.getPasswordHash())) {
+                System.out.println(PasswordHasher.hash(newPasswordField.getValue()));
+                UserService.getInstance().setNewPassword(PasswordHasher.hash(newPasswordField.getValue()), user.getId());
+                dialog.close();
+           } else {
+                input.add(wrong);
+            }
 
-            dialog.close();
         });
         changeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
                 ButtonVariant.LUMO_ERROR);

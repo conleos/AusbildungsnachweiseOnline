@@ -52,3 +52,7 @@ vaadin-side-nav-item vaadin-icon {
   right: 16px;
   top: 8px;
 }
+[part="overlay"] {
+  font-family: Abel, sans-serif !important;
+}
+

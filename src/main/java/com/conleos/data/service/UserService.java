@@ -57,4 +57,8 @@ public class UserService {
     public List<User> getUsersByAssignee(User assignee) {
         return userRepository.getUsersByAssignee(assignee);
     }
+
+    public void setNewPassword(String password, Long id) {
+        userRepository.setNewPassword(password,id);
+    }
 }
