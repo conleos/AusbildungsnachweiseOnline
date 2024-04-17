@@ -1,5 +1,7 @@
 package com.conleos.views.form;
 
+import com.conleos.common.Role;
+import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -9,8 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.timepicker.TimePicker;
+import com.vaadin.flow.server.VaadinSession;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class DayEntry extends HorizontalLayout {
 
@@ -24,7 +28,7 @@ public class DayEntry extends HorizontalLayout {
     /*
     * FormEntry is optional
     * */
-    public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry) {
+    public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry, List<DayEntry> entries) {
         this.day = day;
         select = new Select<>();
         select.setLabel("Art");
@@ -37,7 +41,7 @@ public class DayEntry extends HorizontalLayout {
 
         });
         timeEnd = new TimePicker("- Bis");
-        timeEnd.setValue(LocalTime.of(16, 0));
+        timeEnd.setValue(LocalTime.of(16,0));
         timeEnd.addValueChangeListener(timeChange -> {
 
         });
@@ -48,6 +52,7 @@ public class DayEntry extends HorizontalLayout {
             Component parent = delBtn.getParent().get();
             if (parent instanceof HorizontalLayout) {
                 container.remove(parent);
+                entries.remove(parent);
             }
         });
         VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd);
@@ -61,6 +66,15 @@ public class DayEntry extends HorizontalLayout {
             area.setValue(entry.getDescription());
             timeBegin.setValue(entry.getBegin());
             timeEnd.setValue(entry.getEnd());
+        }
+
+        Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
+        if (!session.getSessionRole().equals(Role.Trainee)) {
+            select.setReadOnly(true);
+            area.setReadOnly(true);
+            timeBegin.setReadOnly(true);
+            timeEnd.setReadOnly(true);
+            delBtn.setEnabled(false);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.conleos.views.form;
 
+import com.conleos.common.Role;
+import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
@@ -13,6 +15,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 import java.time.DayOfWeek;
@@ -25,6 +28,7 @@ import java.util.List;
 public class Day {
     LocalDate date;
     List<DayEntry> entries = new ArrayList<>();
+    VerticalLayout container = new VerticalLayout();
 
     public Day (int i) {
         LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
@@ -33,8 +37,7 @@ public class Day {
 
     public VerticalLayout createFormContentForDay(Form form, int i) {
         String dayLabel = getLocalDayName();
-
-        VerticalLayout container = new VerticalLayout();
+        //VerticalLayout container = new VerticalLayout();
         container.setWidthFull();
 
         Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
@@ -44,7 +47,7 @@ public class Day {
         timeSum.setLabel("Zeit gesamt:");
 
         addBtn.addClickListener(event -> {
-            DayEntry dayEntry = new DayEntry(this, container, null);
+            DayEntry dayEntry = new DayEntry(this, container, null,entries);
             entries.add(dayEntry);
             container.add(dayEntry);
         });
@@ -52,9 +55,15 @@ public class Day {
         // Init the Container with Content from Database
         List<Form.FormEntry> initEntries = form.getEntriesByDate(date);
         for (Form.FormEntry entry : initEntries) {
-            DayEntry dayEntry = new DayEntry(this, container, entry);
+            DayEntry dayEntry = new DayEntry(this, container, entry, entries);
             entries.add(dayEntry);
             container.add(dayEntry);
+        }
+
+        Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
+        if (!session.getSessionRole().equals(Role.Trainee)) {
+            timeSum.setReadOnly(true);
+            addBtn.setEnabled(false);
         }
 
         day.add(new Span(dayLabel), container, addBtn, timeSum);
@@ -67,18 +76,15 @@ public class Day {
 
     public List<Form.FormEntry> getEntries(Form form) {
         List<Form.FormEntry> result = new ArrayList<>();
-
         for (DayEntry It : entries) {
             result.add(It.createFormEntry(form));
         }
 
         return result;
     }
-
     public String getLocalDayName() {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
     }
-
     public LocalDate getDate() {
         return date;
     }
