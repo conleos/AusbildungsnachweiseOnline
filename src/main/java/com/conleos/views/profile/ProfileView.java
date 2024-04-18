@@ -26,23 +26,18 @@ public class ProfileView extends VerticalLayout {
 
     public ProfileView(UserService service) {
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-
         add(createContent(session.getUser()));
 
     }
 
     private static Component createContent(User user) {
-
         TextField firstName = new TextField("First Name");
         firstName.setValue(user.getFirstName());
         firstName.setEnabled(false);
-
         TextField lastName = new TextField("Last Name");
         lastName.setValue(user.getLastName());
         lastName.setEnabled(false);
-
         Dialog dialog = new Dialog();
-
         H2 changeHeader = new H2("Change Password");
         Text sure = new Text("Are you sure you want to change your password?");
         TextField oldPasswordField = new TextField("Old Password");
@@ -60,19 +55,15 @@ public class ProfileView extends VerticalLayout {
            } else {
                 input.add(wrong);
             }
-
         });
         changeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
                 ButtonVariant.LUMO_ERROR);
         changeButton.getStyle().set("margin-right", "auto");
         dialog.getFooter().add(changeButton);
-
         Button cancelButton = new Button("Cancel", (e) -> dialog.close());
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         dialog.getFooter().add(cancelButton);
-
         Button change = new Button("Change Password", e -> dialog.open());
-
         return new VerticalLayout(firstName, lastName, dialog, change);
     }
 

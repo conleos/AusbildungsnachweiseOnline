@@ -47,6 +47,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
 
     private CreateUserDialog createUserDialog;
     private final Dialog dialog = new Dialog();
+    private final Dialog adminPwDialog = new Dialog();
     private Long gridUserId;
     private Boolean notificationActive = false;
 
@@ -54,12 +55,10 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         addClassName("data-grid-view");
         setSizeFull();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-
         if (!session.getSessionRole().equals(Role.Admin)) {
             add(new Span("Access denied!"));
             return;
         }
-
         createUserDialog = new CreateUserDialog();
         add(createUserDialog);
 
@@ -83,7 +82,6 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
                 .setAutoWidth(true);
         grid.setItems(users);
         add(grid);
-
         grid.addSelectionListener(selection -> {
                     Optional<User> optionalUser = selection.getFirstSelectedItem();
                     if (optionalUser.isPresent()) {
@@ -92,8 +90,6 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
                         gridUserId = null;
                     }
         });
-
-
 
         H2 changeHeader = new H2("Change Password");
         Text sure = new Text("Are you sure you want to change user password?");
@@ -184,23 +180,39 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         Button changePassword = new Button("Change Password");
         changePassword.addClickListener(event -> {
             if (gridUserId != null) {
-                dialog.open();
+                H2 changeHeader = new H2("Admin Access");
+                Text sure = new Text("Please enter your Admin Password");
+                TextField adminPasswordField = new TextField("Password");
+                VerticalLayout input = new VerticalLayout();
+                input.add(changeHeader,sure,adminPasswordField);
+                adminPwDialog.add(input);
+                Button submitButton = new Button("Submit");
+                submitButton.addClickListener(clickEvent -> {
+                    if (PasswordHasher.hash(adminPasswordField.getValue()).equals(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getPasswordHash())) {
+                        dialog.open();
+                        adminPwDialog.close();
+                    }
+                });
+                submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                        ButtonVariant.LUMO_ERROR);
+                submitButton.getStyle().set("margin-right", "auto");
+                adminPwDialog.getFooter().add(submitButton);
+                Button cancelButton = new Button("Cancel", (e) -> adminPwDialog.close());
+                cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+                adminPwDialog.getFooter().add(cancelButton);
+                adminPwDialog.open();
             }   else if (!notificationActive){
                 Notification notification = new Notification();
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-
                 Div text = new Div(new Text("No user chosen!"));
-
                 Button closeButton = new Button(new Icon("lumo", "cross"));
                 closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
                 closeButton.setAriaLabel("Close");
                 closeButton.addClickListener(e -> {
                     notification.close();
                 });
-
                 HorizontalLayout layout = new HorizontalLayout(text, closeButton);
                 layout.setAlignItems(Alignment.CENTER);
-
                 notification.add(layout);
                 notification.open();
                 notificationActive = true;
