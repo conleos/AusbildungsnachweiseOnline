@@ -1,6 +1,7 @@
 package com.conleos.views.dashboard;
 
 import com.conleos.common.ColorGenerator;
+import com.conleos.common.FormUtil;
 import com.conleos.common.HtmlColor;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
@@ -61,7 +62,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
             cards.add(new FormCard(It, trainee, formNumber++));
         }
 
-        // TODO: Sorting of cards right here
+        // TODO: Sorting and filtering of cards right here
 
         for (FormCard card : cards) {
             itemContainer.add(card);
@@ -128,9 +129,7 @@ class FormCard extends ListItem {
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
         description.addClassName(Margin.Vertical.MEDIUM);
 
-        Span badge = new Span();
-        badge.getElement().setAttribute("theme", "badge");
-        badge.setText("In Progress");
+        Span badge = FormUtil.createFormBadge(FormService.getInstance().getFormByDateAndUser(date, trainee));
 
         add(div, header, subtitle, description, badge);
 
