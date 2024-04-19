@@ -1,7 +1,6 @@
 package com.conleos.common;
 
 import com.conleos.data.entity.Form;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
 
 public class FormUtil {
