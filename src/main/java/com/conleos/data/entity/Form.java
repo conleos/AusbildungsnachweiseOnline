@@ -91,6 +91,8 @@ public class Form {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<FormEntry> entries;
 
+    FormStatus status = FormStatus.InProgress;
+
     public Form(User owner, LocalDate date) {
         mondayOfThatWeek = date;
         this.owner = owner;
@@ -116,6 +118,13 @@ public class Form {
     }
     public LocalDate getMondayDate() {
         return mondayOfThatWeek;
+    }
+    public FormStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FormStatus status) {
+        this.status = status;
     }
 
     public List<FormEntry> getEntries() {
