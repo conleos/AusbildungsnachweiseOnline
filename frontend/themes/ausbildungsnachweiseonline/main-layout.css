@@ -52,3 +52,14 @@ vaadin-side-nav-item vaadin-icon {
   right: 16px;
   top: 8px;
 }
+[part="overlay"] {
+  font-family: Abel, sans-serif !important;
+}
+
+vaadin-notification-container {
+  align-items: center;
+}
+
+vaadin-notification-card {
+  min-width: 300px;
+}

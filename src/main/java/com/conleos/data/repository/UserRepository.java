@@ -1,9 +1,13 @@
 package com.conleos.data.repository;
 
 import com.conleos.data.entity.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -21,5 +25,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query ("Select u from User u where u.assignee = :_assignee")
     List<User> getUsersByAssignee(@Param("_assignee") User _assignee);
+
+    @Transactional
+    @Modifying
+    @Query ("Update User u Set u.passwordHash = :_password where u.id = :_id")
+    void setNewPassword(@Param("_password") String _password, @Param("_id") Long _id);
 
 }
