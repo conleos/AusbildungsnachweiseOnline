@@ -34,6 +34,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     private Form form;
     private Button saveButton;
     private Button signButton;
+    private Button rejectButton;
 
     public FormView() {
 
@@ -91,6 +92,14 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
                 signButton.addClickListener(save -> {
                     form.setStatus(FormStatus.Signed);
+                    FormService.getInstance().saveForm(form);
+                    UI.getCurrent().getPage().reload();
+                });
+                rejectButton = new Button("Reject", VaadinIcon.STOP.create());
+                rejectButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                rejectButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+                rejectButton.addClickListener(save -> {
+                    form.setStatus(FormStatus.Rejected);
                     FormService.getInstance().saveForm(form);
                     UI.getCurrent().getPage().reload();
                 });
@@ -157,7 +166,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         return new Component[]{
                 new DateBasedNavigator(form.getOwner(), form.getMondayDate()),
                 saveButton,
-                signButton
+                signButton,
+                rejectButton != null ? rejectButton : new Span("") // Cannot be NULL
         };
     }
 }
