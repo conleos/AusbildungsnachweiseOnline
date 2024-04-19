@@ -1,19 +1,20 @@
 package com.conleos.views.form;
 
+import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
+import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
-import com.conleos.data.repository.CommentRepository;
 import com.conleos.data.service.FormService;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.*;
@@ -22,7 +23,6 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 @PageTitle("Edit your Form")
@@ -30,9 +30,11 @@ import java.util.ArrayList;
 public class FormView extends VerticalLayout implements HasUrlParameter<Long>, HasHeaderContent {
 
     ArrayList<Day> days = new ArrayList<>();
-    Select<Integer> nr = new Select<>();
 
     private Form form;
+    private Button saveButton;
+    private Button signButton;
+    private Button rejectButton;
 
     public FormView() {
 
@@ -54,9 +56,9 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span("Chat")), comment.getChatLayout());
         add(tabSheet);
 
-        Button saveBtn = new Button("Save");
-        saveBtn.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
-        saveBtn.addClickListener(save -> {
+        saveButton = new Button("Save", VaadinIcon.DISC.create());
+        saveButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+        saveButton.addClickListener(save -> {
             form.removeAllEntries();
             for (Day day : days) {
                 form.addEntries(day.getEntries(form));
@@ -67,8 +69,60 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
             Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
         });
 
+        if (form.getStatus().equals(FormStatus.InProgress) || form.getStatus().equals(FormStatus.Rejected)) {
+            signButton = new Button("Request Review", VaadinIcon.PENCIL.create());
+            signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+            signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+            signButton.addClickListener(save -> {
+                form.setStatus(FormStatus.InReview);
+                FormService.getInstance().saveForm(form);
+                UI.getCurrent().getPage().reload();
+            });
+            signButton.setEnabled(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee));
+        } else if (form.getStatus().equals(FormStatus.InReview)) {
+            User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
+            if (user.getRole().equals(Role.Trainee)) {
+                signButton = new Button("In Review", VaadinIcon.HOURGLASS.create());
+                signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+                signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+                signButton.setEnabled(false);
+            } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
+                signButton = new Button("Sign", VaadinIcon.PENCIL.create());
+                signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+                signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+                signButton.addClickListener(save -> {
+                    form.setStatus(FormStatus.Signed);
+                    FormService.getInstance().saveForm(form);
+                    UI.getCurrent().getPage().reload();
+                });
+                rejectButton = new Button("Reject", VaadinIcon.STOP.create());
+                rejectButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                rejectButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+                rejectButton.addClickListener(save -> {
+                    form.setStatus(FormStatus.Rejected);
+                    FormService.getInstance().saveForm(form);
+                    UI.getCurrent().getPage().reload();
+                });
+            }
+        } else if (form.getStatus().equals(FormStatus.Signed)) {
+            User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
+            if (user.getRole().equals(Role.Trainee)) {
+                signButton = new Button("Signed", VaadinIcon.CHECK.create());
+                signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+                signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+            } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
+                signButton = new Button("Revoke", VaadinIcon.BACKWARDS.create());
+                signButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
+                signButton.addClickListener(save -> {
+                    form.setStatus(FormStatus.Rejected);
+                    FormService.getInstance().saveForm(form);
+                    UI.getCurrent().getPage().reload();
+                });
+            }
+        }
 
-        add(saveBtn);
+
 
     }
 
@@ -110,7 +164,10 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     @Override
     public Component[] createHeaderContent() {
         return new Component[]{
-                new DateBasedNavigator(form.getOwner(), form.getMondayDate())
+                new DateBasedNavigator(form.getOwner(), form.getMondayDate()),
+                saveButton,
+                signButton,
+                rejectButton != null ? rejectButton : new Span("") // Cannot be NULL
         };
     }
 }

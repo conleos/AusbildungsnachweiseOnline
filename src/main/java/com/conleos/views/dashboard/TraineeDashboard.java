@@ -1,19 +1,16 @@
 package com.conleos.views.dashboard;
 
 import com.conleos.common.ColorGenerator;
+import com.conleos.common.FormUtil;
 import com.conleos.common.HtmlColor;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
-import com.conleos.data.service.UserService;
 import com.conleos.views.form.DateBasedNavigator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.avatar.AvatarVariant;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -61,7 +58,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
             cards.add(new FormCard(It, trainee, formNumber++));
         }
 
-        // TODO: Sorting of cards right here
+        // TODO: Sorting and filtering of cards right here
 
         for (FormCard card : cards) {
             itemContainer.add(card);
@@ -128,9 +125,7 @@ class FormCard extends ListItem {
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
         description.addClassName(Margin.Vertical.MEDIUM);
 
-        Span badge = new Span();
-        badge.getElement().setAttribute("theme", "badge");
-        badge.setText("In Progress");
+        Span badge = FormUtil.createFormBadge(FormService.getInstance().getFormByDateAndUser(date, trainee));
 
         add(div, header, subtitle, description, badge);
 
