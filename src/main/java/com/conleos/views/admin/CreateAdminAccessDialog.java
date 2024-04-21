@@ -36,7 +36,7 @@ public class CreateAdminAccessDialog extends Dialog {
         changePwDialog = new CreateAdminChangePwDialog(gridUserId);
         H2 changeHeader = new H2("Admin Access");
         Text sure = new Text("Please enter your Admin Password");
-        TextField adminPasswordField = new TextField("Password");
+        PasswordField adminPasswordField = new PasswordField("Password");
         VerticalLayout input = new VerticalLayout();
         input.add(changeHeader,sure,adminPasswordField);
         add(input);

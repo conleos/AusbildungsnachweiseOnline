@@ -15,6 +15,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -27,7 +28,7 @@ public class CreateAdminChangePwDialog extends Dialog {
 
         H2 changeHeader = new H2("Change Password");
         Text sure = new Text("Are you sure you want to change user password?");
-        TextField newPasswordField = new TextField("New Password");
+        PasswordField newPasswordField = new PasswordField("New Password");
         VerticalLayout input = new VerticalLayout();
         input.add(changeHeader,sure,newPasswordField);
         add(input);

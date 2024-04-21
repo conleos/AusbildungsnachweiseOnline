@@ -47,10 +47,10 @@ import java.util.Optional;
 public class AdminView extends VerticalLayout implements HasHeaderContent {
 
     private CreateUserDialog createUserDialog;
-    Notification notification = new Notification();
     private Long gridUserId;
     private String gridUserRole;
-
+    private final CreateErrorNotification otherAdminPassword = new CreateErrorNotification("You can't change password of another admin!");
+    private final CreateErrorNotification noUserChosen = new CreateErrorNotification("No user chosen!");
 
     public AdminView(UserService service) {
         addClassName("data-grid-view");
@@ -84,6 +84,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         grid.setItems(users);
         add(grid);
         grid.addSelectionListener(selection -> {
+            noUserChosen.close();
+            otherAdminPassword.close();
                     Optional<User> optionalUser = selection.getFirstSelectedItem();
                     if (optionalUser.isPresent()) {
                         gridUserId = optionalUser.get().getId();
@@ -93,20 +95,6 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
                         gridUserRole = null;
                     }
         });
-
-
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        Div text = new Div(new Text("No user chosen!"));
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel("Close");
-        closeButton.addClickListener(e -> {
-            notification.close();
-        });
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        notification.add(layout);
-        notification.open();
 
 
     }
@@ -181,10 +169,10 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
                 CreateAdminAccessDialog access = new CreateAdminAccessDialog(gridUserId);
                 access.open();
-            } else if(gridUserRole.equals("Admin")) {
-                notification.open();
+            } else if(gridUserId != null && gridUserRole.equals("Admin")) {
+                otherAdminPassword.open();
             } else {
-                notification.open();
+                noUserChosen.open();
             }
         });
         headerComponents[0] = newUser;
