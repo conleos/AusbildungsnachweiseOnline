@@ -13,6 +13,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -40,8 +41,8 @@ public class ProfileView extends VerticalLayout {
         Dialog dialog = new Dialog();
         H2 changeHeader = new H2("Change Password");
         Text sure = new Text("Are you sure you want to change your password?");
-        TextField oldPasswordField = new TextField("Old Password");
-        TextField newPasswordField = new TextField("New Password");
+        PasswordField oldPasswordField = new PasswordField("Old Password");
+        PasswordField newPasswordField = new PasswordField("New Password");
         Text wrong = new Text("The old password is not correct!");
         VerticalLayout input = new VerticalLayout();
         input.add(changeHeader,sure,oldPasswordField,newPasswordField);
