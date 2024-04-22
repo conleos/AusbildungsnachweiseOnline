@@ -24,6 +24,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @PageTitle("Edit your Form")
 @Route(value = "form", layout = MainLayout.class)
@@ -59,11 +60,40 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         saveButton = new Button("Save", VaadinIcon.DISC.create());
         saveButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
         saveButton.addClickListener(save -> {
+            List<Form.FormEntry> oldForm = new ArrayList<Form.FormEntry>();
+            for (int lo=0; lo<form.getEntries().size() ; lo++){
+                oldForm.add(form.getEntries().get(lo));
+            }
+
             form.removeAllEntries();
             for (Day day : days) {
                 form.addEntries(day.getEntries(form));
             }
             FormService.getInstance().saveForm(form);
+
+            List<Form.FormEntry> newForm = new ArrayList<Form.FormEntry>();
+            for (int lo=0; lo<form.getEntries().size(); lo++){
+                newForm.add(form.getEntries().get(lo));
+            }
+
+            boolean changed = false;
+            if(oldForm.size()==newForm.size()){
+                for(int fo=0; fo<oldForm.size(); fo++){
+                    if(compareForm(oldForm, newForm, fo)){
+                        changed = true;
+                    }
+                }
+            }
+            else {
+                changed = true;
+            }
+            if(changed){
+                form.setStatus(FormStatus.Rejected);
+            }
+
+            FormService.getInstance().saveForm(form);
+
+            UI.getCurrent().getPage().reload();
 
             // Notify User
             Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
@@ -126,6 +156,26 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
     }
 
+    /**
+     *
+     * @param of first list of Form.FormEntry
+     * @param nf second list of Form.FormEntry
+     * @param current current step in both lists
+     * @return false if lists are identical; true if they differ
+     */
+    private boolean compareForm(List<Form.FormEntry> of, List<Form.FormEntry> nf, int current){
+        if(
+                of.get(current).getDate().isEqual(nf.get(current).getDate()) &&
+                (of.get(current).getBegin().compareTo(nf.get(current).getBegin()) == 0) &&
+                (of.get(current).getEnd().compareTo(nf.get(current).getEnd()) == 0) &&
+                (of.get(current).getDescription().contentEquals(nf.get(current).getDescription())) &&
+                (of.get(current).getKindOfWork().compareTo(nf.get(current).getKindOfWork()) == 0)
+        ){
+            return false;
+
+        }
+        return true;
+    }
 
     @Override
     public void setParameter(BeforeEvent event, Long parameter) {
