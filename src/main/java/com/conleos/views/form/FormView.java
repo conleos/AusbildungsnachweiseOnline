@@ -159,9 +159,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
 
         switch (user.getRole()) {
-            case Admin -> {
-                createContent(form);
-            }
+            case Admin -> createContent(form);
             case Trainee -> {
                 if (form.getOwner().getId().equals(user.getId())) {
                     createContent(form);
@@ -176,6 +174,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                     add(new Span("access denied!"));
                 }
             }
+            default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
         }
 
 
@@ -201,11 +200,9 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
      * @return input list of Day and returns it as a list of FormEntry
      */
     private List<Form.FormEntry> daysToList(List<Day> days){
-        List<Form.FormEntry> ret = new ArrayList<Form.FormEntry>();
+        List<Form.FormEntry> ret = new ArrayList<>();
         for (Day day : days){
-            for(int i=0; i<day.getEntries(form).size(); i++){
-                ret.add(day.getEntries(form).get(i));
-            }
+            ret.addAll(day.getEntries(form));
         }
         return ret;
     }
@@ -237,11 +234,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
      * @return input a form and returns it as a list
      */
     private List<Form.FormEntry> formToList(Form form){
-        List<Form.FormEntry> ret = new ArrayList<Form.FormEntry>();
-        for (int lo=0; lo<form.getEntries().size() ; lo++){
-            ret.add(form.getEntries().get(lo));
-        }
-        return ret;
+        return new ArrayList<>(form.getEntries());
     }
     /**
      *
@@ -249,8 +242,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
      * @return false if the beginning is after the end or vice versa; true if all the times are set correct
      */
     private boolean beginAndEndTimeRight(List<Form.FormEntry> forms){
-        for(int i=0; i<forms.size(); i++){
-            if(forms.get(i).getEnd().isBefore(forms.get(i).getBegin())){
+        for (Form.FormEntry formEntry : forms) {
+            if (formEntry.getEnd().isBefore(formEntry.getBegin())) {
                 return false;
             }
         }
@@ -270,9 +263,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                             (forms.get(i).getBegin().equals(forms.get(j).getBegin()) || forms.get(i).getEnd().equals(forms.get(j).getEnd())) ||
                             (forms.get(i).getEnd().isBefore(forms.get(j).getEnd()) && forms.get(i).getEnd().isAfter(forms.get(j).getBegin())) ||
                             (forms.get(i).getBegin().isAfter(forms.get(j).getBegin()) && forms.get(i).getBegin().isBefore(forms.get(j).getEnd()))
-                    ){
-                        return true;
-                    }
+                    ) return true;
                 }
             }
         }
@@ -286,17 +277,12 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
      * @param current current step in both lists
      * @return HELP METHOD; false if lists are identical; true if they differ
      */
+    // TODO: Maybe it should return true if they are identical ?
     private boolean compareForm(List<Form.FormEntry> of, List<Form.FormEntry> nf, int current){
-        if(
-                of.get(current).getDate().isEqual(nf.get(current).getDate()) &&
-                        (of.get(current).getBegin().compareTo(nf.get(current).getBegin()) == 0) &&
-                        (of.get(current).getEnd().compareTo(nf.get(current).getEnd()) == 0) &&
-                        (of.get(current).getDescription().contentEquals(nf.get(current).getDescription())) &&
-                        (of.get(current).getKindOfWork().compareTo(nf.get(current).getKindOfWork()) == 0)
-        ){
-            return false;
-
-        }
-        return true;
+        return !of.get(current).getDate().isEqual(nf.get(current).getDate()) ||
+                (!of.get(current).getBegin().equals(nf.get(current).getBegin())) ||
+                (!of.get(current).getEnd().equals(nf.get(current).getEnd())) ||
+                (!of.get(current).getDescription().contentEquals(nf.get(current).getDescription())) ||
+                (of.get(current).getKindOfWork().compareTo(nf.get(current).getKindOfWork()) != 0);
     }
 }
