@@ -1,5 +1,8 @@
 package com.conleos.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
@@ -8,6 +11,8 @@ import java.util.Base64;
 import java.util.Random;
 
 public class PasswordHasher {
+
+    private static final Logger logger = LoggerFactory.getLogger(PasswordHasher.class);
 
     private static final String FIXED_SALT = "df1f2d3f4d77ac66e9c5a6c3d8f921b6";
     private static final int ITERATION_COUNT = 65536;
@@ -33,7 +38,7 @@ public class PasswordHasher {
 
             return enc.encodeToString(hash);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return null;
