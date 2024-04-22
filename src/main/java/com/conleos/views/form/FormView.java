@@ -60,43 +60,57 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         saveButton = new Button("Save", VaadinIcon.DISC.create());
         saveButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
         saveButton.addClickListener(save -> {
-            List<Form.FormEntry> oldForm = new ArrayList<Form.FormEntry>();
-            for (int lo=0; lo<form.getEntries().size() ; lo++){
-                oldForm.add(form.getEntries().get(lo));
-            }
-
-            form.removeAllEntries();
-            for (Day day : days) {
-                form.addEntries(day.getEntries(form));
-            }
-            FormService.getInstance().saveForm(form);
-
-            List<Form.FormEntry> newForm = new ArrayList<Form.FormEntry>();
-            for (int lo=0; lo<form.getEntries().size(); lo++){
-                newForm.add(form.getEntries().get(lo));
-            }
-
-            boolean changed = false;
-            if(oldForm.size()==newForm.size()){
-                for(int fo=0; fo<oldForm.size(); fo++){
-                    if(compareForm(oldForm, newForm, fo)){
-                        changed = true;
-                    }
+            List<Form.FormEntry> checkTimes = new ArrayList<Form.FormEntry>();
+            for (Day day : days){
+                for(int i=0; i<day.getEntries(form).size(); i++){
+                    checkTimes.add(day.getEntries(form).get(i));
                 }
             }
-            else {
-                changed = true;
+            if(!sameTimeSlot(checkTimes) && beginAndEndTimeRight(checkTimes)){
+                List<Form.FormEntry> oldForm = new ArrayList<Form.FormEntry>();
+                for (int lo=0; lo<form.getEntries().size() ; lo++){
+                    oldForm.add(form.getEntries().get(lo));
+                }
+
+                form.removeAllEntries();
+                for (Day day : days) {
+                    form.addEntries(day.getEntries(form));
+                }
+                FormService.getInstance().saveForm(form);
+
+                List<Form.FormEntry> newForm = new ArrayList<Form.FormEntry>();
+                for (int lo=0; lo<form.getEntries().size(); lo++){
+                    newForm.add(form.getEntries().get(lo));
+                }
+
+                boolean changed = false;
+                if(oldForm.size()==newForm.size()){
+                    for(int fo=0; fo<oldForm.size(); fo++){
+                        if(compareForm(oldForm, newForm, fo)){
+                            changed = true;
+                        }
+                    }
+                }
+                else {
+                    changed = true;
+                }
+                if(changed){
+                    form.setStatus(FormStatus.Rejected);
+                }
+
+                FormService.getInstance().saveForm(form);
+
+                UI.getCurrent().getPage().reload();
+
+                // Notify User
+                Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
             }
-            if(changed){
-                form.setStatus(FormStatus.Rejected);
+            else if(!beginAndEndTimeRight(checkTimes)){
+                Notification.show("The end-time cannot be before the begin-time", 4000, Notification.Position.BOTTOM_START);
             }
-
-            FormService.getInstance().saveForm(form);
-
-            UI.getCurrent().getPage().reload();
-
-            // Notify User
-            Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
+            else{
+                Notification.show("Some Timeslots are double used", 4000, Notification.Position.BOTTOM_START);
+            }
         });
 
         if (form.getStatus().equals(FormStatus.InProgress) || form.getStatus().equals(FormStatus.Rejected)) {
@@ -154,6 +168,41 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
 
 
+    }
+
+    /**
+     *
+     * @param forms
+     * @return false if the beginning is after the end or vice versa; true if all the times are set correct
+     */
+    private boolean beginAndEndTimeRight(List<Form.FormEntry> forms){
+        for(int i=0; i<forms.size(); i++){
+            if(forms.get(i).getEnd().isBefore(forms.get(i).getBegin())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param forms
+     * @return true if there are double entries at a certain timeslot; false if not
+     */
+    private boolean sameTimeSlot(List<Form.FormEntry> forms){
+        for(int i=0; i<forms.size(); i++){
+            for(int j=i+1; j<forms.size(); j++){
+                if(forms.get(i).getDate().isEqual(forms.get(j).getDate())){
+                    if(
+                            (forms.get(i).getBegin().equals(forms.get(j).getBegin())) ||
+                            (forms.get(i).getEnd().equals(forms.get(j).getEnd()))
+                    ){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
