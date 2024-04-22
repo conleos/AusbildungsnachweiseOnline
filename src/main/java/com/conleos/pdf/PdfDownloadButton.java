@@ -1,0 +1,34 @@
+package com.conleos.pdf;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.StreamResource;
+
+import java.io.ByteArrayInputStream;
+
+public class PdfDownloadButton {
+
+    public static Component create() {
+        VerticalLayout container = new VerticalLayout();
+
+        Anchor anchor = new Anchor(new StreamResource("file.txt", () -> {
+            // Here you can generate the file content dynamically
+            String fileContent = "This content was generated on the server.";
+            return new ByteArrayInputStream(fileContent.getBytes());
+        }), "Download");
+        anchor.getElement().getStyle().set("display", "none");
+        anchor.getElement().setAttribute("download", true);
+
+        Button button = new Button("Download", VaadinIcon.DOWNLOAD.create());
+        button.addClickListener(event -> {
+            anchor.getElement().callJsFunction("click");
+        });
+        container.add(anchor, button);
+
+        return container;
+    }
+
+}

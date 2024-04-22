@@ -6,6 +6,7 @@ import com.conleos.common.HtmlColor;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.conleos.pdf.PdfDownloadButton;
 import com.conleos.views.form.DateBasedNavigator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -33,6 +34,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
     public TraineeDashboard(ArrayList<Component> headerComponents, User trainee) {
 
         headerComponents.add(new DateBasedNavigator(trainee, LocalDate.now()));
+        headerComponents.add(PdfDownloadButton.create());
 
         LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         if (trainee.getStartDate() == null) {
