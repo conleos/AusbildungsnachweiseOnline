@@ -14,10 +14,9 @@ public class PdfDownloadButton {
     public static Component create() {
         VerticalLayout container = new VerticalLayout();
 
-        Anchor anchor = new Anchor(new StreamResource("file.txt", () -> {
+        Anchor anchor = new Anchor(new StreamResource("test.pdf", () -> {
             // Here you can generate the file content dynamically
-            String fileContent = "This content was generated on the server.";
-            return new ByteArrayInputStream(fileContent.getBytes());
+            return new ByteArrayInputStream(PdfGenerator.generateSamplePdf().toByteArray());
         }), "Download");
         anchor.getElement().getStyle().set("display", "none");
         anchor.getElement().setAttribute("download", true);
