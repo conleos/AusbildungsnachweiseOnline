@@ -18,7 +18,7 @@ public interface FormRepository extends JpaRepository<Form, Long> {
     @Query("Select f from Form f where f.id = :_id")
     List<Form> getFormByChannel(@Param("_id") Long _id);
 
-    @Query ("Select f from Form f where f.owner = :_owner")
+    @Query ("Select f from Form f where f.owner = :_owner order by f.mondayOfThatWeek")
     List<Form> getFormsByOwner(@Param("_owner") User _owner);
 
     @Query ("Select f from Form f where f.mondayOfThatWeek = :_date and f.owner = :_user")

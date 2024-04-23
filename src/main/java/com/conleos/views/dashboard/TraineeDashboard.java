@@ -34,7 +34,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
     public TraineeDashboard(ArrayList<Component> headerComponents, User trainee) {
 
         headerComponents.add(new DateBasedNavigator(trainee, LocalDate.now()));
-        headerComponents.add(PdfDownloadButton.create());
+        headerComponents.add(PdfDownloadButton.create(trainee));
 
         LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         if (trainee.getStartDate() == null) {

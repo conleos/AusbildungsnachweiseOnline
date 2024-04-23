@@ -23,9 +23,8 @@ public class Day {
     List<DayEntry> entries = new ArrayList<>();
     VerticalLayout container = new VerticalLayout();
 
-    public Day (int i) {
-        LocalDate beginOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
-        this.date = beginOfWeek.plusDays(i);
+    public Day (LocalDate date) {
+        this.date = date;
     }
 
     public VerticalLayout createFormContentForDay(Form form, int i) {

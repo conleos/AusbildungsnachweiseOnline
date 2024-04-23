@@ -1,5 +1,6 @@
 package com.conleos.pdf;
 
+import com.conleos.data.entity.User;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -11,12 +12,12 @@ import java.io.ByteArrayInputStream;
 
 public class PdfDownloadButton {
 
-    public static Component create() {
+    public static Component create(User trainee) {
         VerticalLayout container = new VerticalLayout();
 
         Anchor anchor = new Anchor(new StreamResource("test.pdf", () -> {
             // Here you can generate the file content dynamically
-            return new ByteArrayInputStream(PdfGenerator.generateSamplePdf().toByteArray());
+            return new ByteArrayInputStream(PdfGenerator.generateNachweisPdf(trainee).toByteArray());
         }), "Download");
         anchor.getElement().getStyle().set("display", "none");
         anchor.getElement().setAttribute("download", true);

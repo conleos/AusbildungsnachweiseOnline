@@ -47,7 +47,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
         for (int i = 0; i < 5; i++) {
-            Day day = new Day(i);
+            Day day = new Day(form.getMondayDate().plusDays(i));
             days.add(day);
             Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
             tab.setTooltipText(day.getDate().toString());
