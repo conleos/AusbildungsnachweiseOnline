@@ -60,9 +60,9 @@ public class Day {
 
         day.add(new Span(dayLabel), container, addBtn, timeSum);
         day.addClassName("day");
-        if(i%2==0) {
-            day.addClassNames("grey-background");
-        }
+        //if(i%2==0) {
+        //    day.addClassNames("grey-background");
+        //}
         return day;
     }
 
