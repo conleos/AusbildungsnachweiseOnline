@@ -74,7 +74,6 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                         form.setStatus(FormStatus.InReview);
                     }
                     FormService.getInstance().saveForm(form);
-                    UI.getCurrent().getPage().reload();
                     Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
                 }
                 else{
@@ -95,6 +94,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
             signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
             signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
             signButton.addClickListener(save -> {
+                saveButton.click();
                 form.setStatus(FormStatus.InReview);
                 FormService.getInstance().saveForm(form);
                 UI.getCurrent().getPage().reload();
@@ -182,12 +182,21 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
     @Override
     public Component[] createHeaderContent() {
-        return new Component[]{
-                new DateBasedNavigator(form.getOwner(), form.getMondayDate()),
-                saveButton,
-                signButton,
-                rejectButton != null ? rejectButton : new Span("") // Cannot be NULL
-        };
+        ArrayList<Component> content = new ArrayList<>();
+
+        content.add(new DateBasedNavigator(form));
+
+        if (saveButton != null) {
+            content.add(saveButton);
+        }
+        if (signButton != null) {
+            content.add(signButton);
+        }
+        if (rejectButton != null) {
+            content.add(rejectButton);
+        }
+
+        return content.toArray(new Component[0]);
     }
 
 

@@ -9,6 +9,7 @@ import com.conleos.data.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +35,14 @@ public class FormService {
     }
 
     public void saveForm(Form form) {
-        formRepository.save(form);
+        List<Form.FormEntry> temp = form.getEntries();
+        form.setEntries(new ArrayList<>());
+        formRepository.saveAndFlush(form);
+
+        for (Form.FormEntry entry : temp) {
+            form.getEntries().add(new Form.FormEntry(entry));
+        }
+        formRepository.saveAndFlush(form);
     }
     public Form getFormByID(Long id) {
         List<Form> temp = formRepository.getFormByChannel(id);
