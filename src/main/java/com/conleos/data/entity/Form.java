@@ -27,6 +27,17 @@ public class Form {
 
         KindOfWork kindOfWork;
 
+        public FormEntry() {
+
+        }
+        public FormEntry(FormEntry other) {
+            this.date = other.date;
+            this.begin = other.begin;
+            this.end = other.end;
+            this.description = other.description;
+            this.kindOfWork = other.kindOfWork;
+        }
+
         public void setId(Long id) {
             this.id = id;
         }
@@ -88,7 +99,7 @@ public class Form {
 
     LocalDate mondayOfThatWeek;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     List<FormEntry> entries;
 
     FormStatus status = FormStatus.InProgress;
