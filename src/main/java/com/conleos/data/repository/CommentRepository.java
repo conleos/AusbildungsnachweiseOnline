@@ -11,6 +11,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("Select f from Comment f")
     List<Comment> getAllComments();
+
     @Query("Select f from Comment f where f.form.id = :formId")
     List<Comment> getCommentsByFormId(@Param("formId") Long formId);
 

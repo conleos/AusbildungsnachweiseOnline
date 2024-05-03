@@ -30,6 +30,7 @@ public class FormService {
     public List<Form> getAllForms() {
         return formRepository.getAllForms();
     }
+
     public List<Integer> getAllFormIDs() {
         return formRepository.getAllFormChannels();
     }
@@ -44,13 +45,16 @@ public class FormService {
         }
         formRepository.saveAndFlush(form);
     }
+
     public Form getFormByID(Long id) {
         List<Form> temp = formRepository.getFormByChannel(id);
         return temp.isEmpty() ? null : temp.getFirst();
     }
+
     public List<Form> getFormsByOwner(User owner) {
         return formRepository.getFormsByOwner(owner);
     }
+
     public Form getFormByDateAndUser(LocalDate date, User user) {
         List<Form> temp = formRepository.getFormsByDateAndUser(date, user);
         return temp.isEmpty() ? null : temp.getFirst();

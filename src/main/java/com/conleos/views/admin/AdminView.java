@@ -74,20 +74,21 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         grid.addSelectionListener(selection -> {
             noUserChosen.close();
             otherAdminPassword.close();
-                    Optional<User> optionalUser = selection.getFirstSelectedItem();
-                    if (optionalUser.isPresent()) {
-                        gridUserId = optionalUser.get().getId();
-                        gridUserRole = optionalUser.get().getRole().toString();
-                    } else {
-                        gridUserId = null;
-                        gridUserRole = null;
-                    }
+            Optional<User> optionalUser = selection.getFirstSelectedItem();
+            if (optionalUser.isPresent()) {
+                gridUserId = optionalUser.get().getId();
+                gridUserRole = optionalUser.get().getRole().toString();
+            } else {
+                gridUserId = null;
+                gridUserRole = null;
+            }
         });
 
 
     }
+
     private static Renderer<User> createInfoRenderer() {
-        return LitRenderer.<User> of(
+        return LitRenderer.<User>of(
                         "<vaadin-horizontal-layout style=\"align-items: center;\" theme=\"spacing\">"
                                 + "<vaadin-avatar img=\"${item.pictureUrl}\" name=\"${item.fullName}\" alt=\"User avatar\" style=\"background-color: ${item.color};\"></vaadin-avatar>"
                                 + "  <vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
@@ -105,9 +106,11 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private static Object getPictureURL(User user) {
         return "";
     }
+
     private static Object getUserColor(User user) {
         return HtmlColor.from(ColorGenerator.fromRandomString(user.getUsername())).toString();
     }
+
     private static final SerializableBiConsumer<Span, User> statusComponentUpdater = (span, user) -> {
         switch (user.getRole()) {
             case Admin -> span.getElement().setAttribute("theme", "badge error");
@@ -120,6 +123,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private static ComponentRenderer<Span, User> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
+
     private static final SerializableBiConsumer<MultiSelectComboBox<Long>, User> assigneeComponentUpdater = (comboBox, user) -> {
         List<Long> assignees = UserService.getInstance().getAllUsers().stream().filter(it -> !it.getRole().equals(Role.Trainee)).map(User::getId).toList();
 
@@ -132,9 +136,11 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             UserService.getInstance().saveUser(user);
         });
     };
+
     private static ComponentRenderer<MultiSelectComboBox<Long>, User> createAssigneeComponentRenderer() {
         return new ComponentRenderer<>(MultiSelectComboBox::new, assigneeComponentUpdater);
     }
+
     private static final SerializableBiConsumer<DatePicker, User> startDateComponentUpdater = (datePicker, user) -> {
         datePicker.setEnabled(user.getRole().equals(Role.Trainee));
         datePicker.setValue(user.getStartDate());
@@ -143,6 +149,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             UserService.getInstance().saveUser(user);
         });
     };
+
     private static ComponentRenderer<DatePicker, User> createStartDateComponentRenderer() {
         return new ComponentRenderer<>(DatePicker::new, startDateComponentUpdater);
     }
@@ -156,7 +163,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
                 CreateAdminAccessDialog access = new CreateAdminAccessDialog(gridUserId);
                 access.open();
-            } else if(gridUserId != null && gridUserRole.equals("Admin")) {
+            } else if (gridUserId != null && gridUserRole.equals("Admin")) {
                 otherAdminPassword.open();
             } else {
                 noUserChosen.open();

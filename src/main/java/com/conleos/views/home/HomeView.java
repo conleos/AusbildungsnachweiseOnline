@@ -24,8 +24,7 @@ public class HomeView extends Div implements BeforeEnterObserver {
 
         switch (session.getSessionRole()) {
             case Admin -> beforeEnterEvent.rerouteTo(AdminView.class);
-            case Instructor -> beforeEnterEvent.rerouteTo(DashboardView.class);
-            case Trainee -> beforeEnterEvent.rerouteTo(DashboardView.class);
+            case Instructor, Trainee -> beforeEnterEvent.rerouteTo(DashboardView.class);
         }
     }
 }

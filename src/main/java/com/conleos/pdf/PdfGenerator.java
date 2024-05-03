@@ -98,6 +98,7 @@ public class PdfGenerator {
         }
 
     }
+
     private static PdfPCell createCell(String text, int alignment) {
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(alignment);

@@ -78,6 +78,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -113,6 +114,7 @@ public class User {
     public void setAssignees(List<User> assignees) {
         this.assigneeIDs = new ArrayList<>(assignees.stream().map(User::getId).toList());
     }
+
     public void addAssignee(User assignee) {
         this.assigneeIDs.add(assignee.getId());
     }

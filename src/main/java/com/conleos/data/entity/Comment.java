@@ -13,14 +13,14 @@ public class Comment {
     @JoinColumn(name = "formId_FK", referencedColumnName = "id")
     Form form;
 
-    @Column(name="comment")
+    @Column(name = "comment")
     String comment;
 
     @ManyToOne
     @JoinColumn(name = "userId_FK", referencedColumnName = "id")
     User userId;
 
-    @Column(name="time")
+    @Column(name = "time")
     String time;
 
     public Long getId() {

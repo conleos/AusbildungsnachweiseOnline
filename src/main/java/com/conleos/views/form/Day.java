@@ -23,7 +23,7 @@ public class Day {
     List<DayEntry> entries = new ArrayList<>();
     VerticalLayout container = new VerticalLayout();
 
-    public Day (LocalDate date) {
+    public Day(LocalDate date) {
         this.date = date;
     }
 
@@ -39,7 +39,7 @@ public class Day {
         timeSum.setLabel("Zeit gesamt:");
 
         addBtn.addClickListener(event -> {
-            DayEntry dayEntry = new DayEntry(this, container, null,entries);
+            DayEntry dayEntry = new DayEntry(this, container, null, entries);
             entries.add(dayEntry);
             container.add(dayEntry);
         });
@@ -74,9 +74,11 @@ public class Day {
 
         return result;
     }
+
     public String getLocalDayName() {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale());
     }
+
     public LocalDate getDate() {
         return date;
     }
