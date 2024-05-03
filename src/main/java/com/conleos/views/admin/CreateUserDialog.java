@@ -4,6 +4,7 @@ import com.conleos.common.PasswordHasher;
 import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.conleos.data.validation.UserDataValidation;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -11,6 +12,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -70,9 +72,16 @@ public class CreateUserDialog extends Dialog {
             user.setEmail(email.getValue());
             user.setAssignees(new ArrayList<>(assigneeSelect.getValue()));
             user.setStartDate(startTimeSelector.getValue());
-            UserService.getInstance().saveUser(user);
-            close();
-            UI.getCurrent().getPage().reload();
+
+            UserDataValidation.Result result = UserDataValidation.validateNewUserData(user);
+            if (result.isValid) {
+                UserService.getInstance().saveUser(user);
+                close();
+                UI.getCurrent().getPage().reload();
+            } else {
+                Notification.show(result.errorMsg, 4000, Notification.Position.BOTTOM_START);
+            }
+
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Button cancelButton = new Button("Cancel", e -> close());
