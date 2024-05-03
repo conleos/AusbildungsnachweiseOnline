@@ -65,7 +65,7 @@ public class DashboardView extends Div implements BeforeEnterObserver, HasHeader
 
         if (otherUserID == -1) {
             switch (session.getSessionRole()) {
-                case Admin -> add(new Span("no content"));
+                case Admin -> add(createInstructorContent(session.getUser()));
                 case Instructor -> add(createInstructorContent(session.getUser()));
                 case Trainee -> add(createTraineeContent(session.getUser()));
             }
