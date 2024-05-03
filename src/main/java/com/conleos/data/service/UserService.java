@@ -4,13 +4,10 @@ import com.conleos.common.PasswordHasher;
 import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.UserRepository;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
@@ -37,6 +34,7 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
+
     public List<Integer> getAllUserIDs() {
         return userRepository.getAllUserChannels();
     }
@@ -48,19 +46,22 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
+
     public User getUserByID(Long id) {
         List<User> temp = userRepository.getUserByChannel(id);
         return temp.isEmpty() ? null : temp.getFirst();
     }
+
     public User getUserByUsername(String username) {
         List<User> temp = userRepository.getUserByName(username);
         return temp.isEmpty() ? null : temp.getFirst();
     }
+
     public List<User> getUsersByAssignee(User assignee) {
-        return new ArrayList<User>(userRepository.getUsersByAssignee(assignee.getId()).stream().map(this::getUserByID).toList());
+        return new ArrayList<>(userRepository.getUsersByAssignee(assignee.getId()).stream().map(this::getUserByID).toList());
     }
 
     public void setNewPassword(String password, Long id) {
-        userRepository.setNewPassword(password,id);
+        userRepository.setNewPassword(password, id);
     }
 }
