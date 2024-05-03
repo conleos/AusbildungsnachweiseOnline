@@ -26,7 +26,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +94,7 @@ class UserCard extends ListItem {
         //div.addClassNames("striped-background");
         HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername()).darker().darker());
         HtmlColor backgroundColor2 = HtmlColor.from(backgroundColor.toAWTColor().darker());
-        div.getStyle().set("background-image", "repeating-linear-gradient(45deg, "+backgroundColor+", "+backgroundColor+" 10px, "+backgroundColor2+" 10px, "+backgroundColor2+" 20px)");
+        div.getStyle().set("background-image", "repeating-linear-gradient(45deg, " + backgroundColor + ", " + backgroundColor + " 10px, " + backgroundColor2 + " 10px, " + backgroundColor2 + " 20px)");
 
         Span header = new Span();
         header.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.FontWeight.SEMIBOLD);

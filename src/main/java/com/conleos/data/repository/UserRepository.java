@@ -14,21 +14,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("Select u from User u")
     List<User> getAllUsers();
+
     @Query("Select distinct u.id from User u")
     List<Integer> getAllUserChannels();
 
     @Query("Select u from User u where u.id = :_id")
     List<User> getUserByChannel(@Param("_id") Long _id);
 
-    @Query ("Select u from User u where u.username = :name")
+    @Query("Select u from User u where u.username = :name")
     List<User> getUserByName(@Param("name") String name);
 
-    @Query ("Select u from User u where u.assignee = :_assignee")
-    List<User> getUsersByAssignee(@Param("_assignee") User _assignee);
+    @Query("Select u.id from User u where :_assignee MEMBER OF u.assigneeIDs")
+    List<Long> getUsersByAssignee(@Param("_assignee") Long _assignee);
 
     @Transactional
     @Modifying
-    @Query ("Update User u Set u.passwordHash = :_password where u.id = :_id")
+    @Query("Update User u Set u.passwordHash = :_password where u.id = :_id")
     void setNewPassword(@Param("_password") String _password, @Param("_id") Long _id);
 
 }

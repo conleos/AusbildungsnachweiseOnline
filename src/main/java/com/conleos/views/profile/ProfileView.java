@@ -45,7 +45,7 @@ public class ProfileView extends VerticalLayout {
         PasswordField newPasswordField = new PasswordField("New Password");
         Text wrong = new Text("The old password is not correct!");
         VerticalLayout input = new VerticalLayout();
-        input.add(changeHeader,sure,oldPasswordField,newPasswordField);
+        input.add(changeHeader, sure, oldPasswordField, newPasswordField);
         dialog.add(input);
         Button changeButton = new Button("Change");
         changeButton.addClickListener(clickEvent -> {
@@ -53,12 +53,11 @@ public class ProfileView extends VerticalLayout {
                 System.out.println(PasswordHasher.hash(newPasswordField.getValue()));
                 UserService.getInstance().setNewPassword(PasswordHasher.hash(newPasswordField.getValue()), user.getId());
                 dialog.close();
-           } else {
+            } else {
                 input.add(wrong);
             }
         });
-        changeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                ButtonVariant.LUMO_ERROR);
+        changeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         changeButton.getStyle().set("margin-right", "auto");
         dialog.getFooter().add(changeButton);
         Button cancelButton = new Button("Cancel", (e) -> dialog.close());

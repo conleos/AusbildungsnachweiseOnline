@@ -1,5 +1,6 @@
 package com.conleos.data.entity;
 
+import com.conleos.data.service.UserService;
 import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
 
@@ -30,6 +31,7 @@ public class Form {
         public FormEntry() {
 
         }
+
         public FormEntry(FormEntry other) {
             this.date = other.date;
             this.begin = other.begin;
@@ -88,7 +90,6 @@ public class Form {
     }
 
 
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -104,10 +105,13 @@ public class Form {
 
     FormStatus status = FormStatus.InProgress;
 
+    Long userWhoSignedOrRejected;
+
     public Form(User owner, LocalDate date) {
         mondayOfThatWeek = date;
         this.owner = owner;
     }
+
     protected Form() {
 
     }
@@ -127,9 +131,11 @@ public class Form {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
     public LocalDate getMondayDate() {
         return mondayOfThatWeek;
     }
+
     public FormStatus getStatus() {
         return status;
     }
@@ -145,17 +151,21 @@ public class Form {
     public void setEntries(List<FormEntry> entries) {
         this.entries = entries;
     }
+
     public void addEntry(FormEntry entry) {
         this.entries.add(entry);
     }
+
     public void removeAllEntries() {
         this.entries.clear();
     }
+
     public void addEntries(List<FormEntry> entries) {
         for (FormEntry entry : entries) {
             addEntry(entry);
         }
     }
+
     public List<FormEntry> getEntriesByDate(LocalDate date) {
         List<FormEntry> result = new ArrayList<>();
 
@@ -166,5 +176,13 @@ public class Form {
         }
 
         return result;
+    }
+
+    public User getUserWhoSignedOrRejected() {
+        return UserService.getInstance().getUserByID(this.userWhoSignedOrRejected);
+    }
+
+    public void setUserWhoSignedOrRejected(User userWhoSignedOrRejected) {
+        this.userWhoSignedOrRejected = userWhoSignedOrRejected == null ? -1 : userWhoSignedOrRejected.getId();
     }
 }

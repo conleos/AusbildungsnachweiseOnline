@@ -73,13 +73,11 @@ public class CommentView extends Div {
             list.setItems(oldItems);
         }
 
-            chatLayout = new VerticalLayout(list, input);
-            chatLayout.setHeight("500px");
-            chatLayout.setWidth("100%");
-            chatLayout.expand(list);
-            chatLayout.addClassName(LumoUtility.Border.TOP);
-
-
+        chatLayout = new VerticalLayout(list, input);
+        chatLayout.setHeight("500px");
+        chatLayout.setWidth("100%");
+        chatLayout.expand(list);
+        chatLayout.addClassName(LumoUtility.Border.TOP);
 
 
     }

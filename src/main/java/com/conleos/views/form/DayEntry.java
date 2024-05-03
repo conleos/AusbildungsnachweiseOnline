@@ -26,8 +26,8 @@ public class DayEntry extends HorizontalLayout {
     Day day;
 
     /*
-    * FormEntry is optional
-    * */
+     * FormEntry is optional
+     * */
     public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry, List<DayEntry> entries) {
         this.day = day;
         select = new Select<>();
@@ -41,7 +41,7 @@ public class DayEntry extends HorizontalLayout {
 
         });
         timeEnd = new TimePicker("- Bis");
-        timeEnd.setValue(LocalTime.of(16,0));
+        timeEnd.setValue(LocalTime.of(16, 0));
         timeEnd.addValueChangeListener(timeChange -> {
 
         });

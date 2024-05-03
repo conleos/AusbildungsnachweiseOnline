@@ -31,6 +31,7 @@ public class CreateAdminAccessDialog extends Dialog {
 
     Long gridUserId;
     private final CreateAdminChangePwDialog changePwDialog;
+
     public CreateAdminAccessDialog(Long i) {
         this.gridUserId = i;
         changePwDialog = new CreateAdminChangePwDialog(gridUserId);
@@ -38,7 +39,7 @@ public class CreateAdminAccessDialog extends Dialog {
         Text sure = new Text("Please enter your Admin Password");
         PasswordField adminPasswordField = new PasswordField("Password");
         VerticalLayout input = new VerticalLayout();
-        input.add(changeHeader,sure,adminPasswordField);
+        input.add(changeHeader, sure, adminPasswordField);
         add(input);
         Button submitButton = new Button("Submit");
         submitButton.addClickListener(clickEvent -> {

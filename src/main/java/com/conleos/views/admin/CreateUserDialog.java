@@ -8,6 +8,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateUserDialog extends Dialog {
@@ -42,8 +44,8 @@ public class CreateUserDialog extends Dialog {
         TextField email = new TextField("Email");
         email.setWidthFull();
 
-        ComboBox<User> assigneeSelect = new ComboBox<>("Assigned to");
-        assigneeSelect.setPlaceholder("Select an Instructor");
+        MultiSelectComboBox<User> assigneeSelect = new MultiSelectComboBox<>("Assigned to");
+        assigneeSelect.setPlaceholder("Select Instructors");
         assigneeSelect.setItems(assignees);
         assigneeSelect.setItemLabelGenerator(User::getUsername);
         assigneeSelect.setEnabled(false);
@@ -66,7 +68,7 @@ public class CreateUserDialog extends Dialog {
         Button saveButton = new Button("Create", e -> {
             User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue());
             user.setEmail(email.getValue());
-            user.setAssignee(assigneeSelect.getValue());
+            user.setAssignees(new ArrayList<>(assigneeSelect.getValue()));
             user.setStartDate(startTimeSelector.getValue());
             UserService.getInstance().saveUser(user);
             close();

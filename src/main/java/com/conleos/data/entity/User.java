@@ -1,9 +1,12 @@
 package com.conleos.data.entity;
 
 import com.conleos.common.Role;
+import com.conleos.data.service.UserService;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -27,8 +30,8 @@ public class User {
     String email;
 
     // Trainee data only
-    @ManyToOne
-    User assignee;
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<Long> assigneeIDs = new ArrayList<>();
     @Column(name = "startDate")
     LocalDate startDate;
 
@@ -75,6 +78,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -103,12 +107,16 @@ public class User {
         return getFirstName() + " " + getLastName();
     }
 
-    public User getAssignee() {
-        return assignee;
+    public List<User> getAssignees() {
+        return new ArrayList<>(assigneeIDs.stream().map(aLong -> UserService.getInstance().getUserByID(aLong)).toList());
     }
 
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
+    public void setAssignees(List<User> assignees) {
+        this.assigneeIDs = new ArrayList<>(assignees.stream().map(User::getId).toList());
+    }
+
+    public void addAssignee(User assignee) {
+        this.assigneeIDs.add(assignee.getId());
     }
 
     public LocalDate getStartDate() {
@@ -117,5 +125,21 @@ public class User {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User other) {
+            return this.getId().equals(other.getId());
+        }
+        return false;
+    }
+
+    public List<Long> getAssigneeIds() {
+        return this.assigneeIDs;
+    }
+
+    public void setAssigneeIds(List<Long> assigneeIDs) {
+        this.assigneeIDs = assigneeIDs;
     }
 }

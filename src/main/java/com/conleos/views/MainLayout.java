@@ -70,7 +70,7 @@ public class MainLayout extends AppLayout {
         SideNav nav = new SideNav();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
-        nav.addItem(new SideNavItem("Home", HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
+        nav.addItem(new SideNavItem("Home", HomeView.class, LineAwesomeIcon.GLOBE_SOLID.create()));
         if (session.getSessionRole().equals(Role.Admin)) {
             nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
         }
@@ -123,7 +123,7 @@ public class MainLayout extends AppLayout {
 
         viewHeaderContainer.removeAll();
         if (getContent() instanceof HasHeaderContent) {
-            viewHeaderContainer.add(((HasHeaderContent)getContent()).createHeaderContent());
+            viewHeaderContainer.add(((HasHeaderContent) getContent()).createHeaderContent());
         }
 
     }

@@ -22,6 +22,7 @@ import com.vaadin.flow.server.VaadinSession;
 public class CreateAdminChangePwDialog extends Dialog {
 
     Long gridUserId;
+
     public CreateAdminChangePwDialog(Long i) {
 
         this.gridUserId = i;
@@ -30,11 +31,11 @@ public class CreateAdminChangePwDialog extends Dialog {
         Text sure = new Text("Are you sure you want to change user password?");
         PasswordField newPasswordField = new PasswordField("New Password");
         VerticalLayout input = new VerticalLayout();
-        input.add(changeHeader,sure,newPasswordField);
+        input.add(changeHeader, sure, newPasswordField);
         add(input);
         Button changeButton = new Button("Change");
         changeButton.addClickListener(clickEvent -> {
-            UserService.getInstance().setNewPassword(PasswordHasher.hash(newPasswordField.getValue()),gridUserId);
+            UserService.getInstance().setNewPassword(PasswordHasher.hash(newPasswordField.getValue()), gridUserId);
             close();
         });
         changeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
