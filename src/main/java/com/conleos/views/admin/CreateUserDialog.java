@@ -79,7 +79,7 @@ public class CreateUserDialog extends Dialog {
                 close();
                 UI.getCurrent().getPage().reload();
             } else {
-                Notification.show(result.erroMsg, 4000, Notification.Position.BOTTOM_START);
+                Notification.show(result.errorMsg, 4000, Notification.Position.BOTTOM_START);
             }
 
         });

@@ -7,16 +7,16 @@ public class UserDataValidation {
 
     public static class Result {
         public boolean isValid;
-        public String erroMsg;
+        public String errorMsg;
 
         public Result() {
             isValid = true;
-            erroMsg = null;
+            errorMsg = null;
         }
 
         public Result(String error) {
             isValid = false;
-            erroMsg = error;
+            errorMsg = error;
         }
     }
 
