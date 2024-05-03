@@ -84,7 +84,7 @@ public class DashboardView extends Div implements BeforeEnterObserver, HasHeader
                 // Only Assigned Trainees can be viewed
                 case Instructor -> {
                     User other = UserService.getInstance().getUserByID(otherUserID);
-                    if (other.getRole().equals(Role.Trainee) && other.getAssignee().getId().equals(session.getUser().getId())) {
+                    if (other.getRole().equals(Role.Trainee) && other.getAssignees().contains(session.getUser())) {
                         add(createTraineeContent(other));
                     } else {
                         add(new Span("no privilege"));

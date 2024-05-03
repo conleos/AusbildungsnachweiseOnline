@@ -14,6 +14,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -38,6 +39,8 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,21 +135,20 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private static ComponentRenderer<Span, User> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
-    private static final SerializableBiConsumer<ComboBox<User>, User> assigneeComponentUpdater = (comboBox, user) -> {
-        List<User> assignees = UserService.getInstance().getAllUsers();
-        assignees.removeIf(it -> it.getRole() == Role.Trainee);
+    private static final SerializableBiConsumer<MultiSelectComboBox<Long>, User> assigneeComponentUpdater = (comboBox, user) -> {
+        List<Long> assignees = UserService.getInstance().getAllUsers().stream().filter(it -> !it.getRole().equals(Role.Trainee)).map(User::getId).toList();
 
         comboBox.setEnabled(user.getRole().equals(Role.Trainee));
         comboBox.setItems(assignees);
-        comboBox.setItemLabelGenerator(User::getUsername);
-        comboBox.setValue(user.getAssignee());
+        comboBox.setItemLabelGenerator(item -> UserService.getInstance().getUserByID(item).getUsername());
+        comboBox.setValue(user.getAssigneeIds());
         comboBox.addValueChangeListener(event -> {
-            user.setAssignee(event.getValue());
+            user.setAssigneeIds(new ArrayList<>(event.getValue()));
             UserService.getInstance().saveUser(user);
         });
     };
-    private static ComponentRenderer<ComboBox<User>, User> createAssigneeComponentRenderer() {
-        return new ComponentRenderer<>(ComboBox<User>::new, assigneeComponentUpdater);
+    private static ComponentRenderer<MultiSelectComboBox<Long>, User> createAssigneeComponentRenderer() {
+        return new ComponentRenderer<>(MultiSelectComboBox<Long>::new, assigneeComponentUpdater);
     }
     private static final SerializableBiConsumer<DatePicker, User> startDateComponentUpdater = (datePicker, user) -> {
         datePicker.setEnabled(user.getRole().equals(Role.Trainee));

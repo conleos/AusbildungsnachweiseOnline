@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -40,7 +42,7 @@ public class UserService {
     }
 
     public boolean isUserbaseEmpty() {
-        return getAllUserIDs().size() == 0;
+        return getAllUserIDs().isEmpty();
     }
 
     public void saveUser(User user) {
@@ -55,7 +57,7 @@ public class UserService {
         return temp.isEmpty() ? null : temp.getFirst();
     }
     public List<User> getUsersByAssignee(User assignee) {
-        return userRepository.getUsersByAssignee(assignee);
+        return new ArrayList<User>(userRepository.getUsersByAssignee(assignee.getId()).stream().map(this::getUserByID).toList());
     }
 
     public void setNewPassword(String password, Long id) {
