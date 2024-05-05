@@ -46,3 +46,7 @@ vaadin-message-input vaadin-button {
 .current-user-message {
     padding-left: 50px;
 }
+
+.min {
+    margin-top: 50px;
+}

@@ -22,8 +22,9 @@ public class Form {
         LocalDate date;
 
         LocalTime begin;
-        LocalTime end;
 
+        LocalTime end;
+        String pause;
         String description;
 
         KindOfWork kindOfWork;
@@ -36,6 +37,7 @@ public class Form {
             this.date = other.date;
             this.begin = other.begin;
             this.end = other.end;
+            this.pause = other.pause;
             this.description = other.description;
             this.kindOfWork = other.kindOfWork;
         }
@@ -62,6 +64,14 @@ public class Form {
 
         public void setBegin(LocalTime begin) {
             this.begin = begin;
+        }
+
+        public String getPause() {
+            return pause;
+        }
+
+        public void setPause(String pause) {
+            this.pause = pause;
         }
 
         public LocalTime getEnd() {

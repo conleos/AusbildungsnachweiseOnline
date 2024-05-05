@@ -5,13 +5,16 @@ import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -22,6 +25,7 @@ public class DayEntry extends HorizontalLayout {
     TimePicker timeBegin;
     TimePicker timeEnd;
     TextArea area;
+    TextField pause;
 
     Day day;
 
@@ -45,20 +49,19 @@ public class DayEntry extends HorizontalLayout {
         timeEnd.addValueChangeListener(timeChange -> {
 
         });
+        HorizontalLayout pauseLayout = new HorizontalLayout();
+        pause = new TextField("Davon Pause");
+        pause.setWidth("100px");
+        Span min = new Span("min");
+        min.addClassNames("min");
+        pauseLayout.add(pause,min);
         area = new TextArea("Beschreibung");
         area.setWidthFull();
-        Button delBtn = new Button(VaadinIcon.CLOSE.create());
-        delBtn.addClickListener(eventDel -> {
-            Component parent = delBtn.getParent().get();
-            if (parent instanceof HorizontalLayout) {
-                container.remove(parent);
-                entries.remove(parent);
-            }
-        });
-        VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd);
+
+        VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd, pauseLayout);
         block.setWidth("225px");
 
-        add(block, area, delBtn);
+        add(block, area);
         setWidthFull();
 
         if (entry != null) {
@@ -66,6 +69,7 @@ public class DayEntry extends HorizontalLayout {
             area.setValue(entry.getDescription());
             timeBegin.setValue(entry.getBegin());
             timeEnd.setValue(entry.getEnd());
+            pause.setValue(entry.getPause());
         }
 
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
@@ -74,7 +78,7 @@ public class DayEntry extends HorizontalLayout {
             area.setReadOnly(true);
             timeBegin.setReadOnly(true);
             timeEnd.setReadOnly(true);
-            delBtn.setEnabled(false);
+
         }
     }
 
@@ -86,7 +90,7 @@ public class DayEntry extends HorizontalLayout {
         entry.setDescription(area.getValue());
         entry.setBegin(timeBegin.getValue());
         entry.setEnd(timeEnd.getValue());
-
+        entry.setPause(pause.getValue());
         return entry;
     }
 }

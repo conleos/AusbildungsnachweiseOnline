@@ -32,33 +32,31 @@ public class Day {
         //VerticalLayout container = new VerticalLayout();
         container.setWidthFull();
 
-        Button addBtn = new Button("Add", VaadinIcon.PLUS.create());
         VerticalLayout day = new VerticalLayout();
         day.setClassName(Border.ALL);
         TextField timeSum = new TextField();
         timeSum.setLabel("Zeit gesamt:");
 
-        addBtn.addClickListener(event -> {
-            DayEntry dayEntry = new DayEntry(this, container, null, entries);
-            entries.add(dayEntry);
-            container.add(dayEntry);
-        });
 
         // Init the Container with Content from Database
         List<Form.FormEntry> initEntries = form.getEntriesByDate(date);
-        for (Form.FormEntry entry : initEntries) {
-            DayEntry dayEntry = new DayEntry(this, container, entry, entries);
+        if (initEntries.size() != 0) {
+            for (Form.FormEntry entry : initEntries) {
+                DayEntry dayEntryData = new DayEntry(this, container, entry, entries);
+                entries.add(dayEntryData);
+                container.add(dayEntryData);
+            }
+        } else {
+            DayEntry dayEntry = new DayEntry(this, container, null, entries);
             entries.add(dayEntry);
             container.add(dayEntry);
         }
-
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
         if (!session.getSessionRole().equals(Role.Trainee)) {
             timeSum.setReadOnly(true);
-            addBtn.setEnabled(false);
         }
 
-        day.add(new Span(dayLabel), container, addBtn, timeSum);
+        day.add(new Span(dayLabel), container, timeSum);
         day.addClassName("day");
         //if(i%2==0) {
         //    day.addClassNames("grey-background");
