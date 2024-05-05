@@ -44,7 +44,7 @@ public class CreateUserDialog extends Dialog {
         firstName.setWidthFull();
         TextField lastName = new TextField("Last Name");
         lastName.setWidthFull();
-        TextField birthday = new TextField("Birthday");
+        DatePicker birthday = new DatePicker("Birthday");
         birthday.setWidthFull();
         TextField email = new TextField("Email");
         email.setWidthFull();
@@ -71,7 +71,7 @@ public class CreateUserDialog extends Dialog {
         dialogLayout.add(username, password, firstName, lastName, birthday, email, roleSelect, assigneeSelect, startTimeSelector);
 
         Button saveButton = new Button("Create", e -> {
-            User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue(), birthday.getValue());
+            User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue(), birthday.getValue().toString());
             user.setEmail(email.getValue());
             user.setAssignees(new ArrayList<>(assigneeSelect.getValue()));
             user.setStartDate(startTimeSelector.getValue());
