@@ -4,6 +4,7 @@ import com.conleos.common.Role;
 import com.conleos.data.service.UserService;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class User {
     String firstName;
     @Column(name = "lastname")
     String lastName;
+    @Column(name = "birthday")
+    String birthday;
     @Column(name = "email")
     String email;
 
@@ -35,12 +38,13 @@ public class User {
     @Column(name = "startDate")
     LocalDate startDate;
 
-    public User(String username, String passwordHash, Role role, String firstName, String lastName) {
+    public User(String username, String passwordHash, Role role, String firstName, String lastName, String birthday) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthday = birthday;
     }
 
     protected User() {

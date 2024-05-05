@@ -21,7 +21,7 @@ public class UserService {
 
         // By default, if there is no User an Admin user is created!
         if (isUserbaseEmpty()) {
-            User admin = new User("admin", PasswordHasher.hash("1234"), Role.Admin, "John", "Doe");
+            User admin = new User("admin", PasswordHasher.hash("1234"), Role.Admin, "John", "Doe","1995-08-07");
             admin.setEmail("admin@mail.com");
             saveUser(admin);
         }
