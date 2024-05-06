@@ -33,8 +33,8 @@ public class Day {
 
         VerticalLayout day = new VerticalLayout();
         day.setClassName(Border.ALL);
-        TextField timeSum = new TextField();
-        timeSum.setLabel("Zeit gesamt:");
+
+
 
 
         // Init the Container with Content from Database
@@ -51,11 +51,8 @@ public class Day {
             container.add(dayEntry);
         }
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-        if (!session.getSessionRole().equals(Role.Trainee)) {
-            timeSum.setReadOnly(true);
-        }
 
-        day.add(new Span(dayLabel), container, timeSum);
+        day.add(new Span(dayLabel), container);
         day.addClassName("day");
         return day;
     }
