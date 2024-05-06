@@ -111,11 +111,10 @@ class FormCard extends ListItem {
                 Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
         div.setHeight("160px");
 
-
         div.add(createCalendar(date, formNumber));
-        HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString(""+formNumber).darker().darker());
+        HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString("" + formNumber).darker().darker());
         HtmlColor backgroundColor2 = HtmlColor.from(backgroundColor.toAWTColor().darker());
-        div.getStyle().set("background-image", "repeating-linear-gradient(45deg, "+backgroundColor+", "+backgroundColor+" 10px, "+backgroundColor2+" 10px, "+backgroundColor2+" 20px)");
+        div.getStyle().set("background-image", "repeating-linear-gradient(45deg, " + backgroundColor + ", " + backgroundColor + " 10px, " + backgroundColor2 + " 10px, " + backgroundColor2 + " 20px)");
 
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, LumoUtility.FontWeight.SEMIBOLD);
@@ -154,7 +153,7 @@ class FormCard extends ListItem {
         // MONTH YEAR
         Span monthYear = new Span(beginDate.getMonth().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale()) + " " + beginDate.getYear());
         monthYear.getElement().getThemeList().add("badge contrast");
-        monthYear.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString(""+formNumber)).toString());
+        monthYear.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString("" + formNumber)).toString());
         layout.add(monthYear);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setSpacing(false);
@@ -173,7 +172,7 @@ class FormCard extends ListItem {
                 Span day = new Span("00");
                 day.getElement().getThemeList().add("badge contrast");
 
-                Color color = ColorGenerator.fromRandomString(""+formNumber);
+                Color color = ColorGenerator.fromRandomString("" + formNumber);
 
                 if (iterDate.isBefore(firstDayOfMonth) || iterDate.isAfter(lastDayOfMonth)) {
                     color = color.darker().darker();
@@ -181,7 +180,6 @@ class FormCard extends ListItem {
                 } else {
                     day.setText(String.valueOf(iterDayOfTheMonth++));
                 }
-
 
                 if (iterDate.isEqual(beginDate) || iterDate.isEqual(endDate) || (iterDate.isAfter(beginDate) && iterDate.isBefore(endDate))) {
                     color = Color.WHITE;
@@ -197,7 +195,6 @@ class FormCard extends ListItem {
             }
             layout.add(container);
         }
-
 
 
         return layout;
