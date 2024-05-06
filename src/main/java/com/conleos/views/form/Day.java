@@ -29,7 +29,6 @@ public class Day {
 
     public VerticalLayout createFormContentForDay(Form form, int i) {
         String dayLabel = getLocalDayName();
-        //VerticalLayout container = new VerticalLayout();
         container.setWidthFull();
 
         VerticalLayout day = new VerticalLayout();
@@ -40,7 +39,7 @@ public class Day {
 
         // Init the Container with Content from Database
         List<Form.FormEntry> initEntries = form.getEntriesByDate(date);
-        if (initEntries.size() != 0) {
+        if (!initEntries.isEmpty()) {
             for (Form.FormEntry entry : initEntries) {
                 DayEntry dayEntryData = new DayEntry(this, container, entry, entries);
                 entries.add(dayEntryData);
@@ -58,9 +57,6 @@ public class Day {
 
         day.add(new Span(dayLabel), container, timeSum);
         day.addClassName("day");
-        //if(i%2==0) {
-        //    day.addClassNames("grey-background");
-        //}
         return day;
     }
 
