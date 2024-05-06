@@ -13,8 +13,7 @@ public class FormUtil {
         }
         Span badge = new Span();
         switch (form.getStatus()) {
-            case InProgress -> badge.getElement().setAttribute("theme", "badge");
-            case InReview -> badge.getElement().setAttribute("theme", "badge contrast");
+            case InProgress, InReview -> badge.getElement().setAttribute("theme", "badge");
             case Signed -> badge.getElement().setAttribute("theme", "badge success");
             case Rejected -> badge.getElement().setAttribute("theme", "badge error");
         }

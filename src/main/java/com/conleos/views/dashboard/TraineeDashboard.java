@@ -23,9 +23,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TraineeDashboard extends Main implements HasComponents, HasStyle {
 
@@ -117,14 +119,13 @@ class FormCard extends ListItem {
 
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, LumoUtility.FontWeight.SEMIBOLD);
-        header.setText(date.toString());
+        header.setText(DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(date));
 
         Span subtitle = new Span();
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
         subtitle.setText("#" + formNumber);
 
-        Paragraph description = new Paragraph(
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
+        Paragraph description = new Paragraph("");
         description.addClassName(Margin.Vertical.MEDIUM);
 
         Span badge = FormUtil.createFormBadge(FormService.getInstance().getFormByDateAndUser(date, trainee));
