@@ -6,6 +6,7 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.views.admin.AdminView;
+import com.conleos.views.dashboard.DashboardView;
 import com.conleos.views.home.HomeView;
 import com.conleos.views.profile.PreferencesView;
 import com.conleos.views.profile.ProfileView;
@@ -71,6 +72,7 @@ public class MainLayout extends AppLayout {
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
         nav.addItem(new SideNavItem("Home", HomeView.class, LineAwesomeIcon.GLOBE_SOLID.create()));
+        nav.addItem(new SideNavItem("Dashboard", DashboardView.class, LineAwesomeIcon.CHART_PIE_SOLID.create()));
         if (session.getSessionRole().equals(Role.Admin)) {
             nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
         }
