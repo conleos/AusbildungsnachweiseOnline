@@ -26,7 +26,7 @@ public class Form {
         LocalTime end;
         String pause;
         String description;
-
+        Double totalTime;
         KindOfWork kindOfWork;
 
         public FormEntry() {
@@ -38,6 +38,7 @@ public class Form {
             this.begin = other.begin;
             this.end = other.end;
             this.pause = other.pause;
+            this.totalTime = other.totalTime;
             this.description = other.description;
             this.kindOfWork = other.kindOfWork;
         }
@@ -72,6 +73,14 @@ public class Form {
 
         public void setPause(String pause) {
             this.pause = pause;
+        }
+
+        public Double getTotalTime() {
+            return totalTime;
+        }
+
+        public void setTotalTime(Double totalTime) {
+            this.totalTime = totalTime;
         }
 
         public LocalTime getEnd() {
