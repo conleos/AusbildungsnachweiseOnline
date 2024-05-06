@@ -2,7 +2,9 @@ package com.conleos.views.dashboard;
 
 import com.conleos.common.ColorGenerator;
 import com.conleos.common.HtmlColor;
+import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
+import com.conleos.data.service.FormService;
 import com.conleos.data.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -102,15 +104,15 @@ class UserCard extends ListItem {
 
         Span subtitle = new Span();
         subtitle.addClassNames(LumoUtility.FontSize.SMALL, LumoUtility.TextColor.SECONDARY);
-        subtitle.setText("Card subtitle");
+        subtitle.setText("Click to view all Forms.");
 
-        Paragraph description = new Paragraph(
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
+        Paragraph description = new Paragraph("");
         description.addClassName(LumoUtility.Margin.Vertical.MEDIUM);
 
+        final int formsInReviewCount = FormService.getInstance().getFormsByOwner(trainee).stream().filter(form -> form.getStatus().equals(FormStatus.InReview)).toList().size();
         Span badge = new Span();
-        badge.getElement().setAttribute("theme", "badge");
-        badge.setText("Label");
+        badge.getElement().setAttribute("theme", formsInReviewCount > 0 ? "badge" : "badge success");
+        badge.setText(formsInReviewCount > 0 ? (formsInReviewCount + " Reviews left") : "No Reviews left.");
 
         add(div, header, subtitle, description, badge);
 
