@@ -50,3 +50,13 @@ vaadin-message-input vaadin-button {
 .min {
     margin-top: 50px;
 }
+
+.background-red input {
+    background: darkred;
+    color: white;
+}
+
+.background-green input {
+    background: darkgreen;
+    color: white;
+}

@@ -52,6 +52,17 @@ public class DayEntry extends HorizontalLayout {
         HorizontalLayout pauseLayout = new HorizontalLayout();
         pause = new TextField("Davon Pause");
         pause.setWidth("100px");
+        pause.addValueChangeListener(p -> {
+            int current = Integer.parseInt(p.getValue());
+            if (current<30) {
+                pause.removeClassName("background-green");
+                pause.addClassName("background-red");
+            }
+            else {
+                pause.removeClassName("background-red");
+                pause.addClassName("background-green");
+            }
+        });
         Span min = new Span("min");
         min.addClassNames("min");
         pauseLayout.add(pause,min);
