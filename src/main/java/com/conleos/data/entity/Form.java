@@ -26,7 +26,7 @@ public class Form {
         LocalTime end;
         String pause;
         String description;
-        Double totalTime;
+        String totalTime;
         KindOfWork kindOfWork;
 
         public FormEntry() {
@@ -75,11 +75,11 @@ public class Form {
             this.pause = pause;
         }
 
-        public Double getTotalTime() {
+        public String getTotalTime() {
             return totalTime;
         }
 
-        public void setTotalTime(Double totalTime) {
+        public void setTotalTime(String totalTime) {
             this.totalTime = totalTime;
         }
 
