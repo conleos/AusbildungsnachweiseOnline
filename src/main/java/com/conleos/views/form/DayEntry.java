@@ -3,6 +3,7 @@ package com.conleos.views.form;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -29,7 +30,8 @@ public class DayEntry extends VerticalLayout {
     TextField pause;
     Boolean errorBreak = false;
     Day day;
-    Double totalTime = 0.0;
+    String totalTime = "";
+    int totalMinutes;
     /*
      * FormEntry is optional
      * */
@@ -39,7 +41,10 @@ public class DayEntry extends VerticalLayout {
         select.setLabel("Art");
         select.setItems(KindOfWork.values());
         select.setValue(KindOfWork.PracticalWork);
-
+        select.addValueChangeListener(c -> {
+           changeTotalTime();
+           changePause();
+        });
         timeBegin = new TimePicker("Von -");
         timeBegin.setStep(Duration.ofMinutes(15));
         timeEnd = new TimePicker("- Bis");
@@ -50,7 +55,7 @@ public class DayEntry extends VerticalLayout {
         timeSum = new TextField();
         timeSum.setReadOnly(true);
         timeSum.setLabel("Zeit gesamt:");
-        Span hours = new Span("h");
+        Span hours = new Span("Stunden,Minuten");
         hours.addClassNames("min");
         totalTimeLayout.add(timeSum,hours);
         timeBegin.addValueChangeListener(timeChange -> {
@@ -65,28 +70,7 @@ public class DayEntry extends VerticalLayout {
         pause.addClassName("background-red");
         pause.setWidth("100px");
         pause.addValueChangeListener(p -> {
-            try {
-                int current = Integer.parseInt(p.getValue());
-                if (current<30) {
-                    pause.removeClassName("background-green");
-                    pause.addClassName("background-red");
-                    changeTotalTimeColor();
-                }
-                else {
-                    pause.removeClassName("background-red");
-                    pause.addClassName("background-green");
-                    changeTotalTime();
-                }
-            } catch (RuntimeException e) {
-                System.out.println(e.toString());
-                if (!errorBreak) {
-                    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
-                    noInt.open();
-                    errorBreak = true;
-                }
-            }
-
-
+            changePause();
         });
         Span min = new Span("min");
         min.addClassNames("min");
@@ -136,23 +120,78 @@ public class DayEntry extends VerticalLayout {
     }
 
     void changeTotalTime() {
-        LocalTime timeB = timeBegin.getValue();
-        LocalTime timeE = timeEnd.getValue();
-        Duration totalTimeDuration = Duration.between(timeB,timeE);
-        totalTime = (double) totalTimeDuration.toMinutes()/60;
-        BigDecimal round = BigDecimal.valueOf(totalTime).setScale(2, RoundingMode.HALF_UP);
-        totalTime = round.doubleValue();
-        timeSum.setValue(String.valueOf(totalTime));
-        changeTotalTimeColor();
+        if (select.getValue() == KindOfWork.PracticalWork) {
+            LocalTime timeB = timeBegin.getValue();
+            LocalTime timeE = timeEnd.getValue();
+            Duration totalTimeDuration = Duration.between(timeB, timeE);
+            totalMinutes = (int) totalTimeDuration.toMinutes();
+            int hours = totalMinutes/60;
+            int lastMinutes = totalMinutes;
+            String zero = "";
+            while (lastMinutes>60) {
+                lastMinutes = lastMinutes-60;
+            }
+            if (lastMinutes==60) {
+                lastMinutes=0;
+                zero = "0";
+            }
+            totalTime = String.valueOf(hours);
+            timeSum.setValue(totalTime + ":" + lastMinutes + zero);
+            changeTotalTimeColor();
+        } else if (select.getValue() == KindOfWork.Schooling) {
+            timeSum.setValue("7:58");
+            changeTotalTimeColor();
+        } else {
+            timeSum.setValue("0");
+            changeTotalTimeColor();
+        }
     }
 
     void changeTotalTimeColor() {
-        if (totalTime<8.5 || totalTime - Double.parseDouble(pause.getValue())/60 < 8) {
+        if (select.getValue() == KindOfWork.PracticalWork) {
+            if (totalMinutes < 510 || totalMinutes - Double.parseDouble(pause.getValue())<480) {
+                timeSum.removeClassName("background-green");
+                timeSum.addClassName("background-red");
+            } else {
+                timeSum.removeClassName("background-red");
+                timeSum.addClassName("background-green");
+            }
+        } else if (select.getValue() == KindOfWork.Schooling) {
             timeSum.removeClassName("background-green");
-            timeSum.addClassName("background-red");
-        } else {
             timeSum.removeClassName("background-red");
-            timeSum.addClassName("background-green");
+        } else {
+            timeSum.removeClassName("background-green");
+            timeSum.removeClassName("background-red");
+        }
+    }
+
+    void changePause () {
+        if (select.getValue() == KindOfWork.PracticalWork) {
+            pause.setReadOnly(false);
+            try {
+                int current = Integer.parseInt(pause.getValue());
+                if (current < 30) {
+                    pause.removeClassName("background-green");
+                    pause.addClassName("background-red");
+                    changeTotalTimeColor();
+                } else {
+                    pause.removeClassName("background-red");
+                    pause.addClassName("background-green");
+                    changeTotalTime();
+                }
+            } catch (RuntimeException e) {
+                System.out.println(e.toString());
+                if (!errorBreak) {
+                    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
+                    noInt.open();
+                    errorBreak = true;
+                }
+            }
+        } else {
+            pause.removeClassName("background-green");
+            pause.removeClassName("background-red");
+            pause.setValue("0");
+            pause.setReadOnly(true);
         }
     }
 }
