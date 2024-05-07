@@ -3,7 +3,6 @@ package com.conleos.views.form;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
-import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,9 +12,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
@@ -125,6 +121,7 @@ public class DayEntry extends VerticalLayout {
             LocalTime timeE = timeEnd.getValue();
             Duration totalTimeDuration = Duration.between(timeB, timeE);
             totalMinutes = (int) totalTimeDuration.toMinutes();
+            totalMinutes -= Integer.parseInt(pause.getValue());
             int hours = totalMinutes/60;
             int lastMinutes = totalMinutes;
             String zero = "";
@@ -136,7 +133,12 @@ public class DayEntry extends VerticalLayout {
                 zero = "0";
             }
             totalTime = String.valueOf(hours);
-            timeSum.setValue(totalTime + ":" + lastMinutes + zero);
+            if (lastMinutes<10 && lastMinutes>0) {
+                timeSum.setValue(totalTime + ":0" + lastMinutes + zero);
+            }
+            else {
+                timeSum.setValue(totalTime + ":" + lastMinutes + zero);
+            }
             changeTotalTimeColor();
         } else if (select.getValue() == KindOfWork.Schooling) {
             timeSum.setValue("7:58");
