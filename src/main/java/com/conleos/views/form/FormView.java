@@ -14,6 +14,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
@@ -46,12 +47,27 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
-        for (int i = 0; i < 5; i++) {
-            Day day = new Day(form.getMondayDate().plusDays(i));
-            days.add(day);
-            Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
-            tab.setTooltipText(day.getDate().toString());
-            tabSheet.add(tab, day.createFormContentForDay(form, i));
+        if(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Instructor)){
+            for (int i = 0; i < 5; i++) {
+                Day day = new Day(form.getMondayDate().plusDays(i));
+                days.add(day);
+            }
+            Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span("Entries"));
+            tab.setTooltipText("Entries");
+            VerticalLayout component = new VerticalLayout();
+            for (int i = 0; i < 5; i++) {
+                component.add(days.get(i).createFormContentForDay(form, i));
+            }
+            tabSheet.add(tab, component);
+        }
+        else {
+            for (int i = 0; i < 5; i++) {
+                Day day = new Day(form.getMondayDate().plusDays(i));
+                days.add(day);
+                Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
+                tab.setTooltipText(day.getDate().toString());
+                tabSheet.add(tab, day.createFormContentForDay(form, i));
+            }
         }
         CommentView comment = new CommentView(form);
         tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span("Chat")), comment.getChatLayout());
