@@ -3,6 +3,7 @@ package com.conleos.views.form;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
+import com.conleos.views.admin.CreateErrorNotification;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,7 +28,8 @@ public class DayEntry extends VerticalLayout {
     TextField timeSum;
     TextArea area;
     TextField pause;
-    Boolean errorBreak = false;
+    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
+    CreateErrorNotification error;
     Day day;
     String totalTime = "";
     int totalMinutes;
@@ -189,6 +191,8 @@ public class DayEntry extends VerticalLayout {
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
+                        error = new CreateErrorNotification("Pausenzeit muss mindestens " + old + " Minuten betragen");
+                        error.open();
                     changeTotalTime();
                 } else {
                     pause.removeClassName("background-red");
@@ -197,11 +201,7 @@ public class DayEntry extends VerticalLayout {
                 }
             } catch (RuntimeException e) {
                 System.out.println(e.toString());
-                if (!errorBreak) {
-                    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
                     noInt.open();
-                    errorBreak = true;
-                }
             }
         } else {
             pause.removeClassName("background-green");
