@@ -13,7 +13,10 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
+import java.util.Date;
 import java.util.List;
 
 public class DayEntry extends VerticalLayout {
@@ -171,8 +174,19 @@ public class DayEntry extends VerticalLayout {
         if (select.getValue() == KindOfWork.PracticalWork) {
             pause.setReadOnly(false);
             try {
+                Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
+                LocalDate birthday = LocalDate.parse(session.getUser().getBirthday());
+                LocalDate today = LocalDate.now();
+                Period period = Period.between(birthday,today);
+                boolean adult = period.getYears() >= 18;
+                int old;
+                if (adult) {
+                    old = 30;
+                } else {
+                    old = 45;
+                }
                 int current = Integer.parseInt(pause.getValue());
-                if (current < 30) {
+                if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
                     changeTotalTime();

@@ -111,6 +111,13 @@ public class User {
         return getFirstName() + " " + getLastName();
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     public List<User> getAssignees() {
         return new ArrayList<>(assigneeIDs.stream().map(aLong -> UserService.getInstance().getUserByID(aLong)).toList());
     }
