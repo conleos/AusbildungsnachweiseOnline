@@ -50,7 +50,7 @@ public class DayEntry extends VerticalLayout {
         HorizontalLayout totalTimeLayout = new HorizontalLayout();
         timeSum = new TextField();
         timeSum.setReadOnly(true);
-        timeSum.setLabel("Zeit gesamt:");
+        timeSum.setLabel("Arbeitszeit:");
         Span hours = new Span("Stunden,Minuten");
         hours.addClassNames("min");
         totalTimeLayout.add(timeSum,hours);
@@ -121,9 +121,9 @@ public class DayEntry extends VerticalLayout {
             LocalTime timeE = timeEnd.getValue();
             Duration totalTimeDuration = Duration.between(timeB, timeE);
             totalMinutes = (int) totalTimeDuration.toMinutes();
-            totalMinutes -= Integer.parseInt(pause.getValue());
-            int hours = totalMinutes/60;
-            int lastMinutes = totalMinutes;
+            int totalMinutesNoPause = totalMinutes - Integer.parseInt(pause.getValue());
+            int hours = totalMinutesNoPause/60;
+            int lastMinutes = totalMinutesNoPause;
             String zero = "";
             while (lastMinutes>60) {
                 lastMinutes = lastMinutes-60;
@@ -151,7 +151,7 @@ public class DayEntry extends VerticalLayout {
 
     void changeTotalTimeColor() {
         if (select.getValue() == KindOfWork.PracticalWork) {
-            if (totalMinutes < 510 || totalMinutes - Double.parseDouble(pause.getValue())<480) {
+            if (totalMinutes < 480 || totalMinutes - Double.parseDouble(pause.getValue())<480) {
                 timeSum.removeClassName("background-green");
                 timeSum.addClassName("background-red");
             } else {
@@ -175,7 +175,7 @@ public class DayEntry extends VerticalLayout {
                 if (current < 30) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
-                    changeTotalTimeColor();
+                    changeTotalTime();
                 } else {
                     pause.removeClassName("background-red");
                     pause.addClassName("background-green");
