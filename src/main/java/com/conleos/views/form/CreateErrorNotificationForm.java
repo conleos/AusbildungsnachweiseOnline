@@ -12,9 +12,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class CreateErrorNotificationForm extends Notification {
 
-    public CreateErrorNotificationForm(String s) {
+    public CreateErrorNotificationForm(String str) {
         addThemeVariants(NotificationVariant.LUMO_ERROR);
-        Div text = new Div(new Text(s));
+        Div text = new Div(new Text(str));
         Button closeButton = new Button(new Icon("lumo", "cross"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.setAriaLabel("Close");
