@@ -17,7 +17,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.Date;
 import java.util.List;
 
 public class DayEntry extends VerticalLayout {
@@ -36,7 +35,7 @@ public class DayEntry extends VerticalLayout {
     /*
      * FormEntry is optional
      * */
-    public DayEntry(Day day, VerticalLayout container, Form.FormEntry entry, List<DayEntry> entries) {
+    public DayEntry(Day day, Form.FormEntry entry) {
         this.day = day;
         select = new Select<>();
         select.setLabel("Art");
@@ -90,11 +89,13 @@ public class DayEntry extends VerticalLayout {
 
 
         if (entry != null) {
-            select.setValue(entry.getKindOfWork());
-            area.setValue(entry.getDescription());
-            timeBegin.setValue(entry.getBegin());
-            timeEnd.setValue(entry.getEnd());
-            pause.setValue(entry.getPause());
+            if (entry.getKindOfWork() != null) {
+                select.setValue(entry.getKindOfWork());
+                area.setValue(entry.getDescription());
+                timeBegin.setValue(entry.getBegin());
+                timeEnd.setValue(entry.getEnd());
+                pause.setValue(entry.getPause());
+            }
         }
 
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
@@ -110,7 +111,6 @@ public class DayEntry extends VerticalLayout {
     public Form.FormEntry createFormEntry(Form form) {
         Form.FormEntry entry = new Form.FormEntry();
 
-        entry.setDate(day.date);
         entry.setKindOfWork(select.getValue());
         entry.setDescription(area.getValue());
         entry.setBegin(timeBegin.getValue());

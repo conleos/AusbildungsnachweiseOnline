@@ -3,11 +3,15 @@ package com.conleos.data.entity;
 import com.conleos.data.service.UserService;
 import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Entity
 public class Form {
@@ -19,28 +23,27 @@ public class Form {
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
-        LocalDate date;
+        LocalTime begin = LocalTime.NOON;
 
-        LocalTime begin;
-
-        LocalTime end;
-        String pause;
-        String description;
-        String totalTime;
-        KindOfWork kindOfWork;
+        LocalTime end = LocalTime.MIDNIGHT;
+        String pause = "0";
+        String description = "";
+        String totalTime = "0";
+        KindOfWork kindOfWork = KindOfWork.PracticalWork;
 
         public FormEntry() {
-
         }
 
         public FormEntry(FormEntry other) {
-            this.date = other.date;
-            this.begin = other.begin;
-            this.end = other.end;
-            this.pause = other.pause;
-            this.totalTime = other.totalTime;
-            this.description = other.description;
-            this.kindOfWork = other.kindOfWork;
+            if (other != null) {
+                // Do not copy ID
+                this.begin = other.begin;
+                this.end = other.end;
+                this.pause = other.pause;
+                this.totalTime = other.totalTime;
+                this.description = other.description;
+                this.kindOfWork = other.kindOfWork;
+            }
         }
 
         public void setId(Long id) {
@@ -49,14 +52,6 @@ public class Form {
 
         public Long getId() {
             return id;
-        }
-
-        public LocalDate getDate() {
-            return date;
-        }
-
-        public void setDate(LocalDate date) {
-            this.date = date;
         }
 
         public LocalTime getBegin() {
@@ -119,8 +114,20 @@ public class Form {
 
     LocalDate mondayOfThatWeek;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    List<FormEntry> entries;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry monday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry tuesday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry wednesday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry thursday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry friday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry saturday = new FormEntry();
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    FormEntry sunday = new FormEntry();
 
     FormStatus status = FormStatus.InProgress;
 
@@ -163,38 +170,93 @@ public class Form {
         this.status = status;
     }
 
-    public List<FormEntry> getEntries() {
-        return entries;
+    public FormEntry getEntryByDate(LocalDate date) {
+        return getEntryByDayOffset((int) DAYS.between(mondayOfThatWeek, date));
     }
 
-    public void setEntries(List<FormEntry> entries) {
-        this.entries = entries;
-    }
-
-    public void addEntry(FormEntry entry) {
-        this.entries.add(entry);
-    }
-
-    public void removeAllEntries() {
-        this.entries.clear();
-    }
-
-    public void addEntries(List<FormEntry> entries) {
-        for (FormEntry entry : entries) {
-            addEntry(entry);
-        }
-    }
-
-    public List<FormEntry> getEntriesByDate(LocalDate date) {
-        List<FormEntry> result = new ArrayList<>();
-
-        for (FormEntry entry : entries) {
-            if (entry.getDate().equals(date)) {
-                result.add(entry);
+    private FormEntry getEntryByDayOffset(int dayOffset) {
+        switch (dayOffset) {
+            case 0 -> {
+                return monday;
+            }
+            case 1 -> {
+                return tuesday;
+            }
+            case 2 -> {
+                return wednesday;
+            }
+            case 3 -> {
+                return thursday;
+            }
+            case 4 -> {
+                return friday;
+            }
+            case 5 -> {
+                return saturday;
+            }
+            case 6 -> {
+                return sunday;
+            }
+            default -> {
+                return null;
             }
         }
+    }
 
-        return result;
+    public FormEntry getMonday() {
+        return monday;
+    }
+
+    public void setMonday(FormEntry monday) {
+        this.monday = monday;
+    }
+
+    public FormEntry getTuesday() {
+        return tuesday;
+    }
+
+    public void setTuesday(FormEntry tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    public FormEntry getWednesday() {
+        return wednesday;
+    }
+
+    public void setWednesday(FormEntry wednesday) {
+        this.wednesday = wednesday;
+    }
+
+    public FormEntry getThursday() {
+        return thursday;
+    }
+
+    public void setThursday(FormEntry thursday) {
+        this.thursday = thursday;
+    }
+
+    public FormEntry getFriday() {
+        return friday;
+    }
+
+    public void setFriday(FormEntry friday) {
+        this.friday = friday;
+    }
+
+    public FormEntry getSaturday() {
+        return saturday;
+    }
+
+    public void setSaturday(FormEntry saturday) {
+        this.saturday = saturday;
+    }
+
+    public FormEntry getSunday() {
+        return sunday;
+    }
+
+    public void setSunday(FormEntry sunday) {
+        this.sunday = sunday;
     }
 
     public User getUserWhoSignedOrRejected() {

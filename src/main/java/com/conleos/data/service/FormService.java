@@ -36,13 +36,22 @@ public class FormService {
     }
 
     public void saveForm(Form form) {
-        List<Form.FormEntry> temp = form.getEntries();
-        form.setEntries(new ArrayList<>());
+        Form.FormEntry monday = new Form.FormEntry(form.getMonday()); form.setMonday(null);
+        Form.FormEntry tuesday = new Form.FormEntry(form.getTuesday()); form.setTuesday(null);
+        Form.FormEntry wednesday = new Form.FormEntry(form.getWednesday()); form.setWednesday(null);
+        Form.FormEntry thursday = new Form.FormEntry(form.getThursday()); form.setThursday(null);
+        Form.FormEntry friday = new Form.FormEntry(form.getFriday()); form.setFriday(null);
+        Form.FormEntry saturday = new Form.FormEntry(form.getSaturday()); form.setSaturday(null);
+        Form.FormEntry sunday = new Form.FormEntry(form.getSunday()); form.setSunday(null);
         formRepository.saveAndFlush(form);
 
-        for (Form.FormEntry entry : temp) {
-            form.getEntries().add(new Form.FormEntry(entry));
-        }
+        form.setMonday(monday);
+        form.setTuesday(tuesday);
+        form.setWednesday(wednesday);
+        form.setThursday(thursday);
+        form.setFriday(friday);
+        form.setSaturday(saturday);
+        form.setSunday(sunday);
         formRepository.saveAndFlush(form);
     }
 

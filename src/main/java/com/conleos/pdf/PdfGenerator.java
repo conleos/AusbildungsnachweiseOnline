@@ -16,6 +16,7 @@ import com.vaadin.flow.component.UI;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,9 +73,10 @@ public class PdfGenerator {
 
         document.add(new Paragraph(" "));
 
+        // TODO: Refactor
         for (int day = 0; day < 7; day++) {
             LocalDate date = form.getMondayDate().plusDays(day);
-            List<Form.FormEntry> entries = form.getEntriesByDate(date);
+            List<Form.FormEntry> entries = new ArrayList<>(); // FIXME: This is temporary
 
             if (entries.isEmpty()) {
                 continue;

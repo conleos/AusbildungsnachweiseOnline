@@ -46,7 +46,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             Day day = new Day(form.getMondayDate().plusDays(i));
             days.add(day);
             Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
@@ -60,30 +60,16 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         saveButton = new Button("Save", VaadinIcon.DISC.create());
         saveButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
         saveButton.addClickListener(save -> {
-            List<Form.FormEntry> newForm = daysToList(days);
-            if (!sameTimeSlot(newForm) && beginAndEndTimeRight(newForm)) {
-                List<Form.FormEntry> oldForm = formToList(form);
-
-                form.removeAllEntries();
-                for (Day day : days) {
-                    form.addEntries(day.getEntries(form));
-                }
-
-                if (entriesChanged(oldForm, newForm)) {
-                    if (!form.getStatus().equals(FormStatus.InProgress)) {
-                        form.setStatus(FormStatus.InReview);
-                    }
-                    FormService.getInstance().saveForm(form);
-                    Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
-                } else {
-                    FormService.getInstance().saveForm(form);
-                    Notification.show("No changes occured", 4000, Notification.Position.BOTTOM_START);
-                }
-            } else if (!beginAndEndTimeRight(newForm)) {
-                Notification.show("The end-time cannot be before the begin-time", 4000, Notification.Position.BOTTOM_START);
-            } else {
-                Notification.show("Some Timeslots are double used", 4000, Notification.Position.BOTTOM_START);
-            }
+            form.setMonday(days.get(0).getEntry(form));
+            form.setTuesday(days.get(1).getEntry(form));
+            form.setWednesday(days.get(2).getEntry(form));
+            form.setThursday(days.get(3).getEntry(form));
+            form.setFriday(days.get(4).getEntry(form));
+            form.setSaturday(days.get(5).getEntry(form));
+            form.setSunday(days.get(6).getEntry(form));
+            form.setStatus(FormStatus.InProgress);
+            FormService.getInstance().saveForm(form);
+            Notification.show("Your current changes have been saved.", 4000, Notification.Position.BOTTOM_START);
         });
 
         if (form.getStatus().equals(FormStatus.InProgress) || form.getStatus().equals(FormStatus.Rejected)) {
@@ -196,92 +182,4 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         return content.toArray(new Component[0]);
     }
 
-
-    //Methods for Save function
-
-    /**
-     * @param days
-     * @return input list of Day and returns it as a list of FormEntry
-     */
-    private List<Form.FormEntry> daysToList(List<Day> days) {
-        List<Form.FormEntry> ret = new ArrayList<>();
-        for (Day day : days) {
-            ret.addAll(day.getEntries(form));
-        }
-        return ret;
-    }
-
-    /**
-     * @param of first list of Form.FormEntry
-     * @param nf second list of Form.FormEntry
-     * @return false if lists are identical; true if they differ
-     */
-    private boolean entriesChanged(List<Form.FormEntry> of, List<Form.FormEntry> nf) {
-        boolean changed = false;
-        if (of.size() == nf.size()) {
-            for (int fo = 0; fo < of.size(); fo++) {
-                if (compareForm(of, nf, fo)) {
-                    changed = true;
-                }
-            }
-        } else {
-            changed = true;
-        }
-        return changed;
-    }
-
-    /**
-     * @param form
-     * @return input a form and returns it as a list
-     */
-    private List<Form.FormEntry> formToList(Form form) {
-        return new ArrayList<>(form.getEntries());
-    }
-
-    /**
-     * @param forms
-     * @return false if the beginning is after the end or vice versa; true if all the times are set correct
-     */
-    private boolean beginAndEndTimeRight(List<Form.FormEntry> forms) {
-        for (Form.FormEntry formEntry : forms) {
-            if (formEntry.getEnd().isBefore(formEntry.getBegin())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param forms
-     * @return true if there are double entries at a certain timeslot; false if not
-     */
-    private boolean sameTimeSlot(List<Form.FormEntry> forms) {
-        for (int i = 0; i < forms.size(); i++) {
-            for (int j = i + 1; j < forms.size(); j++) {
-                if (forms.get(i).getDate().isEqual(forms.get(j).getDate())) {
-                    if (
-                            (forms.get(i).getBegin().equals(forms.get(j).getBegin()) || forms.get(i).getEnd().equals(forms.get(j).getEnd())) ||
-                                    (forms.get(i).getEnd().isBefore(forms.get(j).getEnd()) && forms.get(i).getEnd().isAfter(forms.get(j).getBegin())) ||
-                                    (forms.get(i).getBegin().isAfter(forms.get(j).getBegin()) && forms.get(i).getBegin().isBefore(forms.get(j).getEnd()))
-                    ) return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param of      first list of Form.FormEntry
-     * @param nf      second list of Form.FormEntry
-     * @param current current step in both lists
-     * @return HELP METHOD; false if lists are identical; true if they differ
-     */
-    // TODO: Maybe it should return true if they are identical ?
-    private boolean compareForm(List<Form.FormEntry> of, List<Form.FormEntry> nf, int current) {
-        return !of.get(current).getDate().isEqual(nf.get(current).getDate()) ||
-                (!of.get(current).getBegin().equals(nf.get(current).getBegin())) ||
-                (!of.get(current).getEnd().equals(nf.get(current).getEnd())) ||
-                (!of.get(current).getDescription().contentEquals(nf.get(current).getDescription())) ||
-                (of.get(current).getKindOfWork().compareTo(nf.get(current).getKindOfWork()) != 0);
-    }
 }
