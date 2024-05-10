@@ -20,7 +20,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.List;
 
 public class DayEntry extends VerticalLayout {
 
@@ -33,7 +32,6 @@ public class DayEntry extends VerticalLayout {
     CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
     CreateErrorNotification error;
     Day day;
-    String totalTime = "";
     int totalMinutes;
 
     /*
@@ -59,23 +57,15 @@ public class DayEntry extends VerticalLayout {
         timeSum = new TextField();
         timeSum.setReadOnly(true);
         timeSum.setLabel("Arbeitszeit:");
-        Span hours = new Span("Stunden,Minuten");
-        hours.addClassNames("min");
-        totalTimeLayout.add(timeSum, hours);
-        timeBegin.addValueChangeListener(timeChange -> {
-            changeTotalTime();
-        });
-        timeEnd.addValueChangeListener(timeChange -> {
-            changeTotalTime();
-        });
+        totalTimeLayout.add(timeSum);
+        timeBegin.addValueChangeListener(timeChange -> changeTotalTime());
+        timeEnd.addValueChangeListener(timeChange -> changeTotalTime());
         HorizontalLayout pauseLayout = new HorizontalLayout();
         pause = new NumberField("Davon Pause");
         pause.setValue(0.0);
         pause.addClassName("background-red");
         pause.setWidth("100px");
-        pause.addValueChangeListener(p -> {
-            changePause();
-        });
+        pause.addValueChangeListener(p -> changePause());
         Span min = new Span("min");
         min.addClassNames("min");
         pauseLayout.add(pause, min);
