@@ -177,7 +177,7 @@ public class DayEntry extends VerticalLayout {
             pause.setReadOnly(false);
             try {
                 Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
-                LocalDate birthday = LocalDate.parse(session.getUser().getBirthday());
+                LocalDate birthday = session.getUser().getBirthday();
                 LocalDate today = LocalDate.now();
                 Period period = Period.between(birthday,today);
                 boolean adult = period.getYears() >= 18;
