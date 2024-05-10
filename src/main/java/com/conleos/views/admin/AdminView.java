@@ -9,6 +9,8 @@ import com.conleos.data.service.UserService;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -27,6 +29,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @PageTitle("Admin")
@@ -37,15 +40,17 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private CreateUserDialog createUserDialog;
     private Long gridUserId;
     private String gridUserRole;
-    private final CreateErrorNotification otherAdminPassword = new CreateErrorNotification("You can't change password of another admin!");
-    private final CreateErrorNotification noUserChosen = new CreateErrorNotification("No user chosen!");
+    private Locale locale = UI.getCurrent().getLocale();
+    private final CreateErrorNotification otherAdminPassword = new CreateErrorNotification(getTranslation("view.admin.error.password", locale));
+    private final CreateErrorNotification noUserChosen = new CreateErrorNotification(getTranslation("view.admin.error.user", locale));
+
 
     public AdminView(UserService service) {
         addClassName("data-grid-view");
         setSizeFull();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
         if (!session.getSessionRole().equals(Role.Admin)) {
-            add(new Span("Access denied!"));
+            add(new Span(getTranslation("view.admin.span.open", locale)));
             return;
         }
         createUserDialog = new CreateUserDialog();
@@ -57,17 +62,17 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         Grid<User> grid = new Grid<>(User.class, false);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_COLUMN_BORDERS);
         grid.setHeight("100%");
-        grid.addColumn(createInfoRenderer()).setHeader("Info")
+        grid.addColumn(createInfoRenderer()).setHeader(getTranslation("view.admin.grid.info", locale))
                 .setAutoWidth(true).setFlexGrow(0);
-        grid.addColumn(User::getUsername).setHeader("Username")
+        grid.addColumn(User::getUsername).setHeader(getTranslation("view.admin.grid.username", locale))
                 .setAutoWidth(true);
         /*grid.addColumn(User::getPasswordHash).setHeader("Password Hash")
                 .setAutoWidth(true);*/
-        grid.addColumn(createStatusComponentRenderer()).setHeader("Role")
+        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("view.admin.grid.role", locale))
                 .setAutoWidth(true);
-        grid.addColumn(createAssigneeComponentRenderer()).setHeader("Assigned to")
+        grid.addColumn(createAssigneeComponentRenderer()).setHeader(getTranslation("view.admin.grid.assignedTo", locale))
                 .setAutoWidth(true);
-        grid.addColumn(createStartDateComponentRenderer()).setHeader("Begin of Work")
+        grid.addColumn(createStartDateComponentRenderer()).setHeader(getTranslation("view.admin.grid.beginOfWork", locale))
                 .setAutoWidth(true);
         grid.setItems(users);
         add(grid);

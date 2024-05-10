@@ -5,6 +5,7 @@ import com.conleos.common.HtmlColor;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
+import com.conleos.i18n.TranslationProvider;
 import com.conleos.views.admin.AdminView;
 import com.conleos.views.dashboard.DashboardView;
 import com.conleos.views.home.HomeView;
@@ -29,6 +30,8 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
+import java.util.Locale;
+
 /**
  * The main view is a top-level placeholder for other views.
  */
@@ -36,8 +39,12 @@ public class MainLayout extends AppLayout {
 
     private H2 viewTitle;
     private HorizontalLayout viewHeaderContainer;
+    private TranslationProvider translationProvider;
+    private Locale locale = UI.getCurrent().getLocale();
+    private SideNav nav;
 
-    public MainLayout() {
+    public MainLayout(TranslationProvider translationProvider) {
+        this.translationProvider = translationProvider;
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
@@ -58,7 +65,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1("Ausbildungsnachweise Online");
+        H1 appName = new H1(getTranslation("view.main.appName", locale));
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
@@ -68,16 +75,16 @@ public class MainLayout extends AppLayout {
     }
 
     private SideNav createNavigation() {
-        SideNav nav = new SideNav();
+        nav = new SideNav();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
-        nav.addItem(new SideNavItem("Home", HomeView.class, LineAwesomeIcon.GLOBE_SOLID.create()));
+        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.home", locale), HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
         nav.addItem(new SideNavItem("Dashboard", DashboardView.class, LineAwesomeIcon.CHART_PIE_SOLID.create()));
         if (session.getSessionRole().equals(Role.Admin)) {
-            nav.addItem(new SideNavItem("Admin", AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
+            nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.admin", locale), AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
         }
-        nav.addItem(new SideNavItem("Profile", ProfileView.class, LineAwesomeIcon.USER.create()));
-        nav.addItem(new SideNavItem("Preferences", PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
+        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.profile", locale), ProfileView.class, LineAwesomeIcon.USER.create()));
+        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.preference", locale), PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
 
         return nav;
     }
@@ -100,15 +107,15 @@ public class MainLayout extends AppLayout {
         MenuBar menu = new MenuBar();
         menu.setOpenOnHover(true);
         SubMenu subMenu = menu.addItem(container).getSubMenu();
-        subMenu.addItem("Profile", event -> {
+        subMenu.addItem(getTranslation("view.main.subMenu.label.profile", locale), event -> {
             UI.getCurrent().navigate(ProfileView.class);
         });
-        subMenu.addItem("Account");
-        subMenu.addItem("Preferences", event -> {
+        subMenu.addItem(getTranslation("view.main.subMenu.label.account", locale));
+        subMenu.addItem(getTranslation("view.main.subMenu.label.preference", locale), event -> {
             UI.getCurrent().navigate(PreferencesView.class);
         });
         subMenu.add(new Hr());
-        subMenu.addItem("Sign out", event -> {
+        subMenu.addItem(getTranslation("view.main.subMenu.label.signOut", locale), event -> {
             Session.logOut(VaadinSession.getCurrent());
             UI.getCurrent().getPage().reload();
         });
@@ -125,7 +132,7 @@ public class MainLayout extends AppLayout {
 
         viewHeaderContainer.removeAll();
         if (getContent() instanceof HasHeaderContent) {
-            viewHeaderContainer.add(((HasHeaderContent) getContent()).createHeaderContent());
+            viewHeaderContainer.add(((HasHeaderContent)getContent()).createHeaderContent());
         }
 
     }
@@ -134,4 +141,5 @@ public class MainLayout extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
+
 }
