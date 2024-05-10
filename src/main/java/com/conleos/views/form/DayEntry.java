@@ -122,17 +122,9 @@ public class DayEntry extends VerticalLayout {
     }
 
     void changeTotalTime() {
-        if (select.getValue() == KindOfWork.PracticalWork) {
-            int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue());
-            timeSum.setValue(FormUtil.getLabelFromTotalTime(totalMinutesNoPause));
-            changeTotalTimeColor();
-        } else if (select.getValue() == KindOfWork.Schooling) {
-            timeSum.setValue("7:58");
-            changeTotalTimeColor();
-        } else {
-            timeSum.setValue("0");
-            changeTotalTimeColor();
-        }
+        int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
+        timeSum.setValue(FormUtil.getLabelFromTotalTime(totalMinutesNoPause));
+        changeTotalTimeColor();
     }
 
     void changeTotalTimeColor() {
