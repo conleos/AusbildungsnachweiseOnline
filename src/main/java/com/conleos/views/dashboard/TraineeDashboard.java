@@ -80,6 +80,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
             itemContainer.add(card);
         }
     }
+
     private void constructUI(User trainee) {
         addClassNames("dashboard-view");
         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
@@ -110,7 +111,10 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
 
 class FormCard extends ListItem {
 
+    private Form form;
+
     public FormCard(LocalDate date, User trainee, int formNumber) {
+        form = FormService.getInstance().getFormByDateAndUser(date, trainee);
         addClassNames(LumoUtility.Background.CONTRAST_5, Display.FLEX, LumoUtility.FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 LumoUtility.BorderRadius.LARGE);
 
@@ -142,13 +146,16 @@ class FormCard extends ListItem {
         add(div, header, subtitle, description, badge);
 
         addClickListener(listItemClickEvent -> {
-            Form form = FormService.getInstance().getFormByDateAndUser(date, trainee);
             if (form == null) {
                 form = new Form(trainee, date);
             }
             FormService.getInstance().saveForm(form);
             UI.getCurrent().navigate("/form/" + form.getId());
         });
+    }
+
+    public Form getForm() {
+        return form;
     }
 
     private Component createCalendar(LocalDate beginDate, int formNumber) {
