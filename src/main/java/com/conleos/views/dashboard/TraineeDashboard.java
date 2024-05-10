@@ -33,6 +33,8 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
 
     private OrderedList itemContainer;
 
+    private DashboardFormFilter filter;
+
     public TraineeDashboard(ArrayList<Component> headerComponents, User trainee) {
 
         headerComponents.add(new DateBasedNavigator(trainee, LocalDate.now()));
@@ -54,7 +56,16 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
             return;
         }
 
-        constructUI();
+        constructUI(trainee);
+
+        generateFormCards(trainee);
+    }
+
+    private void generateFormCards(User trainee) {
+        itemContainer.removeAll();
+
+        LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate beginOfWork = trainee.getStartDate().with(DayOfWeek.MONDAY);
 
         List<FormCard> cards = new ArrayList<>();
         int formNumber = 1;
@@ -62,15 +73,14 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
             cards.add(new FormCard(It, trainee, formNumber++));
         }
 
-        // TODO: Sorting and filtering of cards right here
+        // Sorting and filtering of cards right here
+        filter.filterAndSortFormCards(cards);
 
         for (FormCard card : cards) {
             itemContainer.add(card);
         }
-
     }
-
-    private void constructUI() {
+    private void constructUI(User trainee) {
         addClassNames("dashboard-view");
         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
 
@@ -84,15 +94,15 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
         description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
 
-        Select<String> sortBy = new Select<>();
-        sortBy.setLabel("Sort by");
-        sortBy.setItems("Needs your action", "Newest first", "Oldest first");
-        sortBy.setValue("Needs your action");
-
         itemContainer = new OrderedList();
         itemContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);
 
-        container.add(headerContainer, sortBy);
+        filter = new DashboardFormFilter();
+        filter.getApplyFiltersButton().addClickListener(event -> {
+            generateFormCards(trainee);
+        });
+
+        container.add(headerContainer, filter.getButton(), filter.getDialog());
         add(container, itemContainer);
     }
 
