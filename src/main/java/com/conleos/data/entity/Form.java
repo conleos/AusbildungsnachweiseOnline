@@ -26,7 +26,7 @@ public class Form {
         LocalTime begin = LocalTime.NOON;
 
         LocalTime end = LocalTime.MIDNIGHT;
-        String pause = "0";
+        int pauseInMinutes = 0;
         String description = "";
         String totalTime = "0";
         KindOfWork kindOfWork = KindOfWork.PracticalWork;
@@ -39,7 +39,7 @@ public class Form {
                 // Do not copy ID
                 this.begin = other.begin;
                 this.end = other.end;
-                this.pause = other.pause;
+                this.pauseInMinutes = other.pauseInMinutes;
                 this.totalTime = other.totalTime;
                 this.description = other.description;
                 this.kindOfWork = other.kindOfWork;
@@ -62,12 +62,12 @@ public class Form {
             this.begin = begin;
         }
 
-        public String getPause() {
-            return pause;
+        public int getPause() {
+            return pauseInMinutes;
         }
 
-        public void setPause(String pause) {
-            this.pause = pause;
+        public void setPause(int pause) {
+            this.pauseInMinutes = pause;
         }
 
         public String getTotalTime() {

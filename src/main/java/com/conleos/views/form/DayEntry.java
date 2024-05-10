@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
@@ -26,7 +27,7 @@ public class DayEntry extends VerticalLayout {
     TimePicker timeEnd;
     TextField timeSum;
     TextArea area;
-    TextField pause;
+    NumberField pause;
     CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
     CreateErrorNotification error;
     Day day;
@@ -65,8 +66,8 @@ public class DayEntry extends VerticalLayout {
             changeTotalTime();
         });
         HorizontalLayout pauseLayout = new HorizontalLayout();
-        pause = new TextField("Davon Pause");
-        pause.setValue("0");
+        pause = new NumberField("Davon Pause");
+        pause.setValue(0.0);
         pause.addClassName("background-red");
         pause.setWidth("100px");
         pause.addValueChangeListener(p -> {
@@ -94,7 +95,7 @@ public class DayEntry extends VerticalLayout {
                 area.setValue(entry.getDescription());
                 timeBegin.setValue(entry.getBegin());
                 timeEnd.setValue(entry.getEnd());
-                pause.setValue(entry.getPause());
+                pause.setValue((double)entry.getPause());
             }
         }
 
@@ -115,7 +116,7 @@ public class DayEntry extends VerticalLayout {
         entry.setDescription(area.getValue());
         entry.setBegin(timeBegin.getValue());
         entry.setEnd(timeEnd.getValue());
-        entry.setPause(pause.getValue());
+        entry.setPause(pause.getValue().intValue());
         entry.setTotalTime(totalTime);
         return entry;
     }
@@ -126,7 +127,7 @@ public class DayEntry extends VerticalLayout {
             LocalTime timeE = timeEnd.getValue();
             Duration totalTimeDuration = Duration.between(timeB, timeE);
             totalMinutes = (int) totalTimeDuration.toMinutes();
-            int totalMinutesNoPause = totalMinutes - Integer.parseInt(pause.getValue());
+            int totalMinutesNoPause = totalMinutes - pause.getValue().intValue();
             int hours = totalMinutesNoPause/60;
             int lastMinutes = totalMinutesNoPause;
             String zero = "";
@@ -156,7 +157,7 @@ public class DayEntry extends VerticalLayout {
 
     void changeTotalTimeColor() {
         if (select.getValue() == KindOfWork.PracticalWork) {
-            if (totalMinutes < 480 || totalMinutes - Double.parseDouble(pause.getValue())<480) {
+            if (totalMinutes < 480 || totalMinutes - pause.getValue() < 480) {
                 timeSum.removeClassName("background-green");
                 timeSum.addClassName("background-red");
             } else {
@@ -182,7 +183,7 @@ public class DayEntry extends VerticalLayout {
                 Period period = Period.between(birthday,today);
                 final boolean adult = period.getYears() >= 18;
                 int old = adult ? 30 : 45;
-                int current = Integer.parseInt(pause.getValue());
+                int current = pause.getValue().intValue();
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
@@ -201,7 +202,7 @@ public class DayEntry extends VerticalLayout {
         } else {
             pause.removeClassName("background-green");
             pause.removeClassName("background-red");
-            pause.setValue("0");
+            pause.setValue(0.0);
             pause.setReadOnly(true);
         }
     }
