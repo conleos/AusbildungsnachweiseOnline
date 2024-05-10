@@ -1,5 +1,6 @@
 package com.conleos.views.form;
 
+import com.conleos.common.FormUtil;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
@@ -117,34 +118,13 @@ public class DayEntry extends VerticalLayout {
         entry.setBegin(timeBegin.getValue());
         entry.setEnd(timeEnd.getValue());
         entry.setPause(pause.getValue().intValue());
-        entry.setTotalTime(totalTime);
         return entry;
     }
 
     void changeTotalTime() {
         if (select.getValue() == KindOfWork.PracticalWork) {
-            LocalTime timeB = timeBegin.getValue();
-            LocalTime timeE = timeEnd.getValue();
-            Duration totalTimeDuration = Duration.between(timeB, timeE);
-            totalMinutes = (int) totalTimeDuration.toMinutes();
-            int totalMinutesNoPause = totalMinutes - pause.getValue().intValue();
-            int hours = totalMinutesNoPause/60;
-            int lastMinutes = totalMinutesNoPause;
-            String zero = "";
-            while (lastMinutes>60) {
-                lastMinutes = lastMinutes-60;
-            }
-            if (lastMinutes==60) {
-                lastMinutes=0;
-                zero = "0";
-            }
-            totalTime = String.valueOf(hours);
-            if (lastMinutes<10 && lastMinutes>0) {
-                timeSum.setValue(totalTime + ":0" + lastMinutes + zero);
-            }
-            else {
-                timeSum.setValue(totalTime + ":" + lastMinutes + zero);
-            }
+            int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue());
+            timeSum.setValue(FormUtil.getLabelFromTotalTime(totalMinutesNoPause));
             changeTotalTimeColor();
         } else if (select.getValue() == KindOfWork.Schooling) {
             timeSum.setValue("7:58");

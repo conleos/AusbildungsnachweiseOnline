@@ -3,6 +3,10 @@ package com.conleos.common;
 import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.html.Span;
 
+import java.time.LocalTime;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 public class FormUtil {
     private FormUtil() {
     }
@@ -26,6 +30,14 @@ public class FormUtil {
         }
 
         return badge;
+    }
+
+    public static int getTotalMinutesFromEntry(LocalTime begin, LocalTime end, int pauseInMinutes) {
+        return (int) Math.max(MINUTES.between(begin, end) - pauseInMinutes, 0);
+    }
+
+    public static String getLabelFromTotalTime(int timeInMinutes) {
+        return String.format("%d:%02d", timeInMinutes / 60, timeInMinutes % 60);
     }
 
 }

@@ -28,7 +28,6 @@ public class Form {
         LocalTime end = LocalTime.MIDNIGHT;
         int pauseInMinutes = 0;
         String description = "";
-        String totalTime = "0";
         KindOfWork kindOfWork = KindOfWork.PracticalWork;
 
         public FormEntry() {
@@ -40,7 +39,6 @@ public class Form {
                 this.begin = other.begin;
                 this.end = other.end;
                 this.pauseInMinutes = other.pauseInMinutes;
-                this.totalTime = other.totalTime;
                 this.description = other.description;
                 this.kindOfWork = other.kindOfWork;
             }
@@ -68,14 +66,6 @@ public class Form {
 
         public void setPause(int pause) {
             this.pauseInMinutes = pause;
-        }
-
-        public String getTotalTime() {
-            return totalTime;
-        }
-
-        public void setTotalTime(String totalTime) {
-            this.totalTime = totalTime;
         }
 
         public LocalTime getEnd() {
