@@ -1,7 +1,12 @@
 package com.conleos.common;
 
 import com.conleos.data.entity.Form;
+import com.conleos.views.form.KindOfWork;
 import com.vaadin.flow.component.html.Span;
+
+import java.time.LocalTime;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class FormUtil {
     private FormUtil() {
@@ -26,6 +31,20 @@ public class FormUtil {
         }
 
         return badge;
+    }
+
+    public static int getTotalMinutesFromEntry(LocalTime begin, LocalTime end, int pauseInMinutes, KindOfWork kindOfWork) {
+        if (kindOfWork.equals(KindOfWork.PracticalWork)) {
+            return (int) Math.max(MINUTES.between(begin, end) - pauseInMinutes, 0);
+        } else if (kindOfWork.equals(KindOfWork.Schooling)) {
+            return 7 * 60 + 58;
+        } else {
+            return 0;
+        }
+    }
+
+    public static String getLabelFromTotalTime(int timeInMinutes) {
+        return String.format("%d:%02d", timeInMinutes / 60, timeInMinutes % 60);
     }
 
 }
