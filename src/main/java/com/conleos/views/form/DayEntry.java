@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -34,6 +35,7 @@ public class DayEntry extends VerticalLayout {
     Day day;
     String totalTime = "";
     int totalMinutes;
+
     /*
      * FormEntry is optional
      * */
@@ -44,8 +46,8 @@ public class DayEntry extends VerticalLayout {
         select.setItems(KindOfWork.values());
         select.setValue(KindOfWork.PracticalWork);
         select.addValueChangeListener(c -> {
-           changeTotalTime();
-           changePause();
+            changeTotalTime();
+            changePause();
         });
         timeBegin = new TimePicker("Von -");
         timeBegin.setStep(Duration.ofMinutes(15));
@@ -59,7 +61,7 @@ public class DayEntry extends VerticalLayout {
         timeSum.setLabel("Arbeitszeit:");
         Span hours = new Span("Stunden,Minuten");
         hours.addClassNames("min");
-        totalTimeLayout.add(timeSum,hours);
+        totalTimeLayout.add(timeSum, hours);
         timeBegin.addValueChangeListener(timeChange -> {
             changeTotalTime();
         });
@@ -76,7 +78,7 @@ public class DayEntry extends VerticalLayout {
         });
         Span min = new Span("min");
         min.addClassNames("min");
-        pauseLayout.add(pause,min);
+        pauseLayout.add(pause, min);
         area = new TextArea("Beschreibung");
         area.setWidthFull();
 
@@ -96,7 +98,7 @@ public class DayEntry extends VerticalLayout {
                 area.setValue(entry.getDescription());
                 timeBegin.setValue(entry.getBegin());
                 timeEnd.setValue(entry.getEnd());
-                pause.setValue((double)entry.getPause());
+                pause.setValue((double) entry.getPause());
             }
         }
 
@@ -145,22 +147,22 @@ public class DayEntry extends VerticalLayout {
         }
     }
 
-    void changePause () {
+    void changePause() {
         if (select.getValue() == KindOfWork.PracticalWork) {
             pause.setReadOnly(false);
             try {
                 Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
                 LocalDate birthday = session.getUser().getBirthday();
                 LocalDate today = LocalDate.now();
-                Period period = Period.between(birthday,today);
+                Period period = Period.between(birthday, today);
                 final boolean adult = period.getYears() >= 18;
                 int old = adult ? 30 : 45;
                 int current = pause.getValue().intValue();
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
-                        error = new CreateErrorNotification("Pausenzeit muss mindestens " + old + " Minuten betragen");
-                        error.open();
+                    error = new CreateErrorNotification("Pausenzeit muss mindestens " + old + " Minuten betragen");
+                    error.open();
                     changeTotalTime();
                 } else {
                     pause.removeClassName("background-red");
@@ -169,7 +171,7 @@ public class DayEntry extends VerticalLayout {
                 }
             } catch (RuntimeException e) {
                 System.out.println(e.toString());
-                    noInt.open();
+                noInt.open();
             }
         } else {
             pause.removeClassName("background-green");
