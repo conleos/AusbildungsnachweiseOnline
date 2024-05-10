@@ -180,13 +180,8 @@ public class DayEntry extends VerticalLayout {
                 LocalDate birthday = session.getUser().getBirthday();
                 LocalDate today = LocalDate.now();
                 Period period = Period.between(birthday,today);
-                boolean adult = period.getYears() >= 18;
-                int old;
-                if (adult) {
-                    old = 30;
-                } else {
-                    old = 45;
-                }
+                final boolean adult = period.getYears() >= 18;
+                int old = adult ? 30 : 45;
                 int current = Integer.parseInt(pause.getValue());
                 if (current < old) {
                     pause.removeClassName("background-green");
