@@ -28,7 +28,7 @@ public class User {
     @Column(name = "lastname")
     String lastName;
     @Column(name = "birthday")
-    String birthday;
+    LocalDate birthday;
     @Column(name = "email")
     String email;
 
@@ -38,7 +38,7 @@ public class User {
     @Column(name = "startDate")
     LocalDate startDate;
 
-    public User(String username, String passwordHash, Role role, String firstName, String lastName, String birthday) {
+    public User(String username, String passwordHash, Role role, String firstName, String lastName, LocalDate birthday) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
@@ -111,10 +111,10 @@ public class User {
         return getFirstName() + " " + getLastName();
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

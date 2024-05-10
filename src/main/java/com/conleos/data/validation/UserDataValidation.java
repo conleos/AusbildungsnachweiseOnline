@@ -3,6 +3,8 @@ package com.conleos.data.validation;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
 
+import java.time.LocalDate;
+
 public class UserDataValidation {
 
     public static class Result {
@@ -37,6 +39,13 @@ public class UserDataValidation {
 
         if (user.getRole() == null) {
             return new Result("A Role should be selected!");
+        }
+
+        if (user.getBirthday() == null) {
+            return new Result("Birthday should not be empty!");
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            return new Result("Birthday is invalid!");
         }
 
         return new Result();
