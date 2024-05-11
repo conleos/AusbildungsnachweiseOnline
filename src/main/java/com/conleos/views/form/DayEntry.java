@@ -121,7 +121,6 @@ public class DayEntry extends VerticalLayout {
     void changeTotalTimeColor() {
         if (select.getValue() == KindOfWork.PracticalWork) {
             int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
-            System.out.println(totalMinutesNoPause);
             if (totalMinutesNoPause < 480) {
                 timeSum.removeClassName("background-green");
                 timeSum.addClassName("background-red");
