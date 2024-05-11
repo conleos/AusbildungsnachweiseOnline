@@ -32,7 +32,6 @@ public class DayEntry extends VerticalLayout {
     CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
     CreateErrorNotification error;
     Day day;
-    int totalMinutes;
 
     /*
      * FormEntry is optional
@@ -121,7 +120,9 @@ public class DayEntry extends VerticalLayout {
 
     void changeTotalTimeColor() {
         if (select.getValue() == KindOfWork.PracticalWork) {
-            if (totalMinutes < 480 || totalMinutes - pause.getValue() < 480) {
+            int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
+            System.out.println(totalMinutesNoPause);
+            if (totalMinutesNoPause < 480) {
                 timeSum.removeClassName("background-green");
                 timeSum.addClassName("background-red");
             } else {
