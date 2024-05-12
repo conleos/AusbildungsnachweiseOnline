@@ -33,7 +33,7 @@ public class ColorGenerator {
                 color = new Color(255,66,76);
                 break;
             case Signed:
-                color = new Color(104,255,164);
+                color = new Color(99,225,99);
                 break;
         }
         return color;

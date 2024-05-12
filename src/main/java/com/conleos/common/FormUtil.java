@@ -4,6 +4,7 @@ import com.conleos.data.entity.Form;
 import com.conleos.views.form.KindOfWork;
 import com.vaadin.flow.component.html.Span;
 
+import java.awt.*;
 import java.time.LocalTime;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -29,7 +30,8 @@ public class FormUtil {
             case Signed -> badge.setText("Signed");
             case Rejected -> badge.setText("Rejected");
         }
-
+        badge.getStyle().set("background-color",  HtmlColor.from(ColorGenerator.statusColor(form.getStatus())).toString());
+        badge.addClassNames("text-white");
         return badge;
     }
 

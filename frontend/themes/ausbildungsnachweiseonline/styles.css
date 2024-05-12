@@ -60,3 +60,7 @@ vaadin-message-input vaadin-button {
     background: darkgreen;
     color: white;
 }
+
+.text-white {
+    color: white !important;
+}
