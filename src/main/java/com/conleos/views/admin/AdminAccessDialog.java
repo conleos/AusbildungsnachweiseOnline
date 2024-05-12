@@ -1,16 +1,10 @@
 package com.conleos.views.admin;
 
 import com.conleos.common.PasswordHasher;
-import com.conleos.common.Role;
 import com.conleos.core.Session;
-import com.conleos.data.entity.User;
-import com.conleos.data.service.UserService;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -21,20 +15,14 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.VaadinSession;
 
-import java.time.LocalDate;
-import java.util.List;
-
-public class CreateAdminAccessDialog extends Dialog {
+public class AdminAccessDialog extends Dialog {
 
     Long gridUserId;
-    private final CreateAdminChangePwDialog changePwDialog;
 
-    public CreateAdminAccessDialog(Long i) {
-        this.gridUserId = i;
-        changePwDialog = new CreateAdminChangePwDialog(gridUserId);
+    public AdminAccessDialog(Long userID, Dialog dialogToBeOpened) {
+        this.gridUserId = userID;
         H2 changeHeader = new H2("Admin Access");
         Text sure = new Text("Please enter your Admin Password");
         PasswordField adminPasswordField = new PasswordField("Password");
@@ -44,12 +32,11 @@ public class CreateAdminAccessDialog extends Dialog {
         Button submitButton = new Button("Submit");
         submitButton.addClickListener(clickEvent -> {
             if (PasswordHasher.hash(adminPasswordField.getValue()).equals(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getPasswordHash())) {
-                changePwDialog.open();
+                dialogToBeOpened.open();
                 close();
             }
         });
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                ButtonVariant.LUMO_ERROR);
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         submitButton.getStyle().set("margin-right", "auto");
         getFooter().add(submitButton);
         Button cancelButton = new Button("Cancel", (e) -> close());
