@@ -116,7 +116,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                 signButton = new Button("Signed", VaadinIcon.CHECK.create());
                 signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
-                signButton.setTooltipText("Signed by " + form.getUserWhoSignedOrRejected().getFullName());
+                User userWhoSignedOrRejected = form.getUserWhoSignedOrRejected();
+                signButton.setTooltipText("Signed by " + (userWhoSignedOrRejected != null ? userWhoSignedOrRejected.getFullName() : "Unkown"));
             } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
                 signButton = new Button("Revoke", VaadinIcon.BACKWARDS.create());
                 createRejectionButton(form, user, signButton);

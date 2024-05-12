@@ -147,6 +147,7 @@ public class User {
     }
 
     public List<Long> getAssigneeIds() {
+        assigneeIDs.removeIf(id -> UserService.getInstance().getUserByID(id) == null);
         return this.assigneeIDs;
     }
 
