@@ -68,4 +68,12 @@ public class FormService {
         List<Form> temp = formRepository.getFormsByDateAndUser(date, user);
         return temp.isEmpty() ? null : temp.getFirst();
     }
+
+    public void deleteFormsOfUser(User user) {
+        List<Form> forms = getFormsByOwner(user);
+        for (Form form : forms) {
+            CommentService.getInstance().deleteCommentsByForm(form.getId());
+            formRepository.delete(form);
+        }
+    }
 }

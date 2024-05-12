@@ -65,4 +65,13 @@ public class UserService {
     public void setNewPassword(String password, Long id) {
         userRepository.setNewPassword(password, id);
     }
+
+    public void deleteUserAccountByID(Long id) {
+        User user = getUserByID(id);
+        if (user != null) {
+            // TODO: Unassign Instructors from Trainees
+            FormService.getInstance().deleteFormsOfUser(user);
+            userRepository.delete(user);
+        }
+    }
 }

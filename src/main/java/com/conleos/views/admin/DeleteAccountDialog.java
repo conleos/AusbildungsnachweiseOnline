@@ -3,10 +3,12 @@ package com.conleos.views.admin;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,10 +25,11 @@ public class DeleteAccountDialog extends Dialog {
         VerticalLayout layout = new VerticalLayout();
         layout.add(changeHeader, text, validateField);
         add(layout);
-        Button deleteButton = new Button("DELETE");
+        Button deleteButton = new Button("DELETE", VaadinIcon.TRASH.create());
         deleteButton.addClickListener(clickEvent -> {
             if (account.getUsername().equals(validateField.getValue())) {
-                close();
+                UserService.getInstance().deleteUserAccountByID(account.getId());
+                UI.getCurrent().getPage().reload();
             } else {
                 Notification.show("Enter Username to validate!", 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
