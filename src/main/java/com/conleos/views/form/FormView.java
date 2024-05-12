@@ -185,6 +185,10 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
             content.add(rejectButton);
         }
 
+        if (!Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee)) {
+            content.add(new InstructorFormNextButton(form));
+        }
+
         return content.toArray(new Component[0]);
     }
 
