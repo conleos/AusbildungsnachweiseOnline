@@ -175,7 +175,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
         content.add(new DateBasedNavigator(form));
 
-        if (saveButton != null) {
+        if (saveButton != null && Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee)) {
             content.add(saveButton);
         }
         if (signButton != null) {
