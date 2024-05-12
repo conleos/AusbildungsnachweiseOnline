@@ -23,10 +23,10 @@ public class Form {
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
-        LocalTime begin = LocalTime.NOON;
+        LocalTime begin = LocalTime.of(8, 0);
 
-        LocalTime end = LocalTime.MIDNIGHT;
-        int pauseInMinutes = 0;
+        LocalTime end = LocalTime.of(17, 0);
+        int pauseInMinutes = 45;
         String description = "";
         KindOfWork kindOfWork = KindOfWork.PracticalWork;
 
