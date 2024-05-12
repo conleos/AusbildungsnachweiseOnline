@@ -2,8 +2,12 @@ package com.conleos.views.form;
 
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
+import com.conleos.data.service.FormService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.notification.Notification;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /*
@@ -24,11 +28,25 @@ public class DateBasedNavigator extends DatePicker {
     }
 
     private void init(User trainee, LocalDate date) {
-        setValue(date);
+        setValue(null);
         setLabel("Navigate by Date");
         addValueChangeListener(event -> {
-            // TODO: Missing Implementation
+            navigate(trainee, event.getValue());
         });
+    }
+
+    private void navigate(User trainee, LocalDate date) {
+        LocalDate beginOfWeek = date.with(DayOfWeek.MONDAY);
+
+        Form form = FormService.getInstance().getFormByDateAndUser(beginOfWeek, trainee);
+        if (form == null) {
+            Notification.show("Could not navigate to Form.", 4000, Notification.Position.BOTTOM_START);
+        } else {
+            // We need to trigger a Page Reload
+            UI.getCurrent().access(() -> UI.getCurrent().navigate("/"));
+            UI.getCurrent().access(() -> UI.getCurrent().navigate("/form/" + form.getId()));
+        }
+
     }
 
 }
