@@ -69,7 +69,14 @@ public class UserService {
     public void deleteUserAccountByID(Long id) {
         User user = getUserByID(id);
         if (user != null) {
-            // TODO: Unassign Instructors from Trainees
+            // Unassign Instructors from Trainees
+            List<User> trainees = getUsersByAssignee(user);
+            for (User trainee : trainees) {
+                var temp = trainee.getAssignees();
+                temp.remove(user);
+                trainee.setAssignees(temp);
+            }
+
             FormService.getInstance().deleteFormsOfUser(user);
             userRepository.delete(user);
         }
