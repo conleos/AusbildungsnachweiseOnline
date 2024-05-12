@@ -46,13 +46,19 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
-        for (int i = 0; i < 7; i++) {
-            Day day = new Day(form.getMondayDate().plusDays(i));
-            days.add(day);
-            Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
-            tab.setTooltipText(day.getDate().toString());
-            tabSheet.add(tab, day.createFormContentForDay(form, i));
+
+        if (Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee)) {
+            for (int i = 0; i < 7; i++) {
+                Day day = new Day(form.getMondayDate().plusDays(i));
+                days.add(day);
+                Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
+                tab.setTooltipText(day.getDate().toString());
+                tabSheet.add(tab, day.createFormContentForDay(form, i));
+            }
+        } else {
+            tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span("Übersicht")), FormOverview.createContent(form));
         }
+
         CommentView comment = new CommentView(form);
         tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span("Chat")), comment.getChatLayout());
         add(tabSheet);
