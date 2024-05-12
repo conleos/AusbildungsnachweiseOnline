@@ -21,6 +21,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 import java.awt.*;
+import java.lang.invoke.VolatileCallSite;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -125,9 +126,17 @@ class FormCard extends ListItem {
                 Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
         div.setHeight("160px");
 
-        div.add(createCalendar(date, formNumber));
-        HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString("" + formNumber).darker().darker());
-        HtmlColor backgroundColor2 = HtmlColor.from(backgroundColor.toAWTColor().darker());
+        div.add(createCalendar(date, formNumber, form));
+        HtmlColor backgroundColor;
+        HtmlColor backgroundColor2;
+        if (form!=null) {
+            backgroundColor = HtmlColor.from(ColorGenerator.statusColor(form.getStatus()).darker().darker());
+            backgroundColor2 = HtmlColor.from(ColorGenerator.statusColor(form.getStatus()).darker());
+        }
+        else {
+            backgroundColor = HtmlColor.from(Color.GRAY.darker().darker());
+            backgroundColor2 = HtmlColor.from(Color.GRAY.darker());
+        }
         div.getStyle().set("background-image", "repeating-linear-gradient(45deg, " + backgroundColor + ", " + backgroundColor + " 10px, " + backgroundColor2 + " 10px, " + backgroundColor2 + " 20px)");
 
         Span header = new Span();
@@ -158,7 +167,7 @@ class FormCard extends ListItem {
         return form;
     }
 
-    private Component createCalendar(LocalDate beginDate, int formNumber) {
+    private Component createCalendar(LocalDate beginDate, int formNumber, Form form) {
         LocalDate endDate = beginDate.plusDays(6);
         VerticalLayout layout = new VerticalLayout();
 
@@ -170,7 +179,11 @@ class FormCard extends ListItem {
         // MONTH YEAR
         Span monthYear = new Span(beginDate.getMonth().getDisplayName(TextStyle.FULL, UI.getCurrent().getLocale()) + " " + beginDate.getYear());
         monthYear.getElement().getThemeList().add("badge contrast");
-        monthYear.getStyle().set("background-color", HtmlColor.from(ColorGenerator.fromRandomString("" + formNumber)).toString());
+        if (form == null) {
+            monthYear.getStyle().set("background-color", HtmlColor.from(Color.GRAY).toString());
+        } else {
+            monthYear.getStyle().set("background-color",  HtmlColor.from(ColorGenerator.statusColor(form.getStatus())).toString());
+        }
         layout.add(monthYear);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setSpacing(false);
@@ -188,9 +201,10 @@ class FormCard extends ListItem {
             for (int j = 0; j < 7; j++) {
                 Span day = new Span("00");
                 day.getElement().getThemeList().add("badge contrast");
-
-                Color color = ColorGenerator.fromRandomString("" + formNumber);
-
+                Color color = Color.GRAY;
+                if (form != null) {
+                    color = ColorGenerator.statusColor(form.getStatus());
+                }
                 if (iterDate.isBefore(firstDayOfMonth) || iterDate.isAfter(lastDayOfMonth)) {
                     color = color.darker().darker();
                     day.setText("  ");
