@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Comment {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,9 +17,8 @@ public class Comment {
     @Column(name = "comment")
     String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "userId_FK", referencedColumnName = "id")
-    User userId;
+    @Column(name = "userId_FK")
+    Long userId;
 
     @Column(name = "time")
     String time;
@@ -35,7 +35,7 @@ public class Comment {
         return comment;
     }
 
-    public User getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -55,7 +55,7 @@ public class Comment {
         this.comment = comment;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
