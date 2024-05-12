@@ -23,7 +23,6 @@ public class FormUtil {
             case Signed -> badge.getElement().setAttribute("theme", "badge success");
             case Rejected -> badge.getElement().setAttribute("theme", "badge error");
         }
-
         switch (form.getStatus()) {
             case InProgress -> badge.setText("In Progress");
             case InReview -> badge.setText("In Review");

@@ -16,12 +16,9 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
-
 import java.awt.*;
-import java.lang.invoke.VolatileCallSite;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -85,10 +82,8 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
     private void constructUI(User trainee) {
         addClassNames("dashboard-view");
         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
-
         HorizontalLayout container = new HorizontalLayout();
         container.addClassNames(AlignItems.CENTER, JustifyContent.BETWEEN);
-
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("Dashboard");
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
@@ -118,9 +113,7 @@ class FormCard extends ListItem {
         form = FormService.getInstance().getFormByDateAndUser(date, trainee);
         addClassNames(LumoUtility.Background.CONTRAST_5, Display.FLEX, LumoUtility.FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 LumoUtility.BorderRadius.LARGE);
-
         getStyle().set("cursor", "pointer");
-
         Div div = new Div();
         div.addClassNames(LumoUtility.Background.CONTRAST_20, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
                 Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
@@ -170,10 +163,8 @@ class FormCard extends ListItem {
     private Component createCalendar(LocalDate beginDate, int formNumber, Form form) {
         LocalDate endDate = beginDate.plusDays(6);
         VerticalLayout layout = new VerticalLayout();
-
         LocalDate firstDayOfMonth = beginDate.withDayOfMonth(1);
         LocalDate lastDayOfMonth = beginDate.withDayOfMonth(beginDate.getMonth().length(beginDate.isLeapYear()));
-
         LocalDate firstMondayOfCalendar = firstDayOfMonth.with(DayOfWeek.MONDAY);
 
         // MONTH YEAR
@@ -188,7 +179,6 @@ class FormCard extends ListItem {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setSpacing(false);
         layout.getStyle().set("margin", "1px");
-
         LocalDate iterDate = firstMondayOfCalendar;
         int iterDayOfTheMonth = 1;
 
@@ -197,7 +187,6 @@ class FormCard extends ListItem {
             container.setAlignItems(FlexComponent.Alignment.CENTER);
             container.setSpacing(false);
             container.getStyle().set("margin", "1px");
-
             for (int j = 0; j < 7; j++) {
                 Span day = new Span("00");
                 day.getElement().getThemeList().add("badge contrast");
@@ -211,23 +200,17 @@ class FormCard extends ListItem {
                 } else {
                     day.setText(String.valueOf(iterDayOfTheMonth++));
                 }
-
                 if (iterDate.isEqual(beginDate) || iterDate.isEqual(endDate) || (iterDate.isAfter(beginDate) && iterDate.isBefore(endDate))) {
                     color = Color.WHITE;
                 }
-
                 day.getStyle().set("background-color", HtmlColor.from(color).toString());
-
                 day.setWidth("18px");
                 day.setHeight("18px");
                 container.add(day);
-
                 iterDate = iterDate.plusDays(1);
             }
             layout.add(container);
         }
-
-
         return layout;
     }
 
