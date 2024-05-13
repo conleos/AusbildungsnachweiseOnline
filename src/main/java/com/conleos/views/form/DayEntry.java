@@ -5,6 +5,7 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.conleos.views.admin.CreateErrorNotification;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,6 +21,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
+import java.util.Locale;
 
 public class DayEntry extends VerticalLayout {
 
@@ -29,7 +31,8 @@ public class DayEntry extends VerticalLayout {
     TextField timeSum;
     TextArea area;
     NumberField pause;
-    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm("Bitte gib einen gültigen Zahlenwert für die Pause ein.");
+    private Locale locale = UI.getCurrent().getLocale();
+    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm(getTranslation("view.dayEntry.error.notification", locale));
     CreateErrorNotification error;
     Day day;
 
@@ -39,36 +42,36 @@ public class DayEntry extends VerticalLayout {
     public DayEntry(Day day, Form.FormEntry entry) {
         this.day = day;
         select = new Select<>();
-        select.setLabel("Art");
+        select.setLabel(getTranslation("view.dayEntry.selectLabel.art", locale));
         select.setItems(KindOfWork.values());
         select.setValue(KindOfWork.PracticalWork);
         select.addValueChangeListener(c -> {
             changeTotalTime();
             changePause();
         });
-        timeBegin = new TimePicker("Von -");
+        timeBegin = new TimePicker(getTranslation("view.dayEntry.beginTime", locale));
         timeBegin.setStep(Duration.ofMinutes(15));
-        timeEnd = new TimePicker("- Bis");
+        timeEnd = new TimePicker(getTranslation("view.dayEntry.endTime", locale));
         timeEnd.setStep(Duration.ofMinutes(15));
         timeBegin.setValue(LocalTime.of(8, 0));
         timeEnd.setValue(LocalTime.of(16, 30));
         HorizontalLayout totalTimeLayout = new HorizontalLayout();
         timeSum = new TextField();
         timeSum.setReadOnly(true);
-        timeSum.setLabel("Arbeitszeit:");
+        timeSum.setLabel(getTranslation("view.dayEntry.sumTime", locale));
         totalTimeLayout.add(timeSum);
         timeBegin.addValueChangeListener(timeChange -> changeTotalTime());
         timeEnd.addValueChangeListener(timeChange -> changeTotalTime());
         HorizontalLayout pauseLayout = new HorizontalLayout();
-        pause = new NumberField("Davon Pause");
+        pause = new NumberField(getTranslation("view.dayEntry.pause", locale));
         pause.setValue(0.0);
         pause.addClassName("background-red");
-        pause.setWidth("100px");
+        pause.setWidth("150px");
         pause.addValueChangeListener(p -> changePause());
         Span min = new Span("min");
         min.addClassNames("min");
         pauseLayout.add(pause, min);
-        area = new TextArea("Beschreibung");
+        area = new TextArea(getTranslation("view.dayEntry.area", locale));
         area.setWidthFull();
 
         VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd, pauseLayout);
@@ -151,7 +154,7 @@ public class DayEntry extends VerticalLayout {
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
-                    error = new CreateErrorNotification("Pausenzeit muss mindestens " + old + " Minuten betragen");
+                    error = new CreateErrorNotification(getTranslation("view.dayEntry.pause.error1", locale) + old + getTranslation("view.dayEntry.pause.error2", locale));
                     error.open();
                     changeTotalTime();
                 } else {

@@ -8,7 +8,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
-@PageTitle("Home")
+@PageTitle("view.home.pageTitle")
 @Route(value = "home", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 

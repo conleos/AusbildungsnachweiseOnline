@@ -15,7 +15,7 @@ import com.vaadin.flow.component.html.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@PageTitle("Dashboard")
+@PageTitle("view.dashboard.pageTitle")
 @Route(value = "dashboard", layout = MainLayout.class)
 public class DashboardView extends Div implements BeforeEnterObserver, HasHeaderContent {
 
@@ -45,7 +45,7 @@ public class DashboardView extends Div implements BeforeEnterObserver, HasHeader
         long otherUserID = -1;
         if (userParams != null && userParams.size() == 1) {
             try {
-                otherUserID = Long.parseLong(userParams.get(0));
+                otherUserID = Long.parseLong(userParams.getFirst());
             } catch (Exception ignored) {
             }
         }

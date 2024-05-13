@@ -41,7 +41,6 @@ public class MainLayout extends AppLayout {
     private HorizontalLayout viewHeaderContainer;
     private TranslationProvider translationProvider;
     private Locale locale = UI.getCurrent().getLocale();
-    private SideNav nav;
 
     public MainLayout(TranslationProvider translationProvider) {
         this.translationProvider = translationProvider;
@@ -65,7 +64,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1(getTranslation("view.main.appName", locale));
+        H1 appName = new H1(translationProvider.getTranslation("view.main.appName", locale));
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
@@ -75,16 +74,16 @@ public class MainLayout extends AppLayout {
     }
 
     private SideNav createNavigation() {
-        nav = new SideNav();
+        SideNav nav = new SideNav();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
-        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.home", locale), HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
+        nav.addItem(new SideNavItem(translationProvider.getTranslation("view.main.sideNav.label.home", locale), HomeView.class,   LineAwesomeIcon.GLOBE_SOLID.create()));
         nav.addItem(new SideNavItem("Dashboard", DashboardView.class, LineAwesomeIcon.CHART_PIE_SOLID.create()));
         if (session.getSessionRole().equals(Role.Admin)) {
-            nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.admin", locale), AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
+            nav.addItem(new SideNavItem(translationProvider.getTranslation("view.main.sideNav.label.admin", locale), AdminView.class, LineAwesomeIcon.HAMMER_SOLID.create()));
         }
-        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.profile", locale), ProfileView.class, LineAwesomeIcon.USER.create()));
-        nav.addItem(new SideNavItem(getTranslation("view.main.sideNav.label.preference", locale), PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
+        nav.addItem(new SideNavItem(translationProvider.getTranslation("view.main.sideNav.label.profile", locale), ProfileView.class, LineAwesomeIcon.USER.create()));
+        nav.addItem(new SideNavItem(translationProvider.getTranslation("view.main.sideNav.label.preference", locale), PreferencesView.class, LineAwesomeIcon.COG_SOLID.create()));
 
         return nav;
     }
@@ -107,15 +106,15 @@ public class MainLayout extends AppLayout {
         MenuBar menu = new MenuBar();
         menu.setOpenOnHover(true);
         SubMenu subMenu = menu.addItem(container).getSubMenu();
-        subMenu.addItem(getTranslation("view.main.subMenu.label.profile", locale), event -> {
+        subMenu.addItem(translationProvider.getTranslation("view.main.subMenu.label.profile", locale), event -> {
             UI.getCurrent().navigate(ProfileView.class);
         });
-        subMenu.addItem(getTranslation("view.main.subMenu.label.account", locale));
-        subMenu.addItem(getTranslation("view.main.subMenu.label.preference", locale), event -> {
+        subMenu.addItem(translationProvider.getTranslation("view.main.subMenu.label.account", locale));
+        subMenu.addItem(translationProvider.getTranslation("view.main.subMenu.label.preference", locale), event -> {
             UI.getCurrent().navigate(PreferencesView.class);
         });
         subMenu.add(new Hr());
-        subMenu.addItem(getTranslation("view.main.subMenu.label.signOut", locale), event -> {
+        subMenu.addItem(translationProvider.getTranslation("view.main.subMenu.label.signOut", locale), event -> {
             Session.logOut(VaadinSession.getCurrent());
             UI.getCurrent().getPage().reload();
         });
@@ -139,7 +138,11 @@ public class MainLayout extends AppLayout {
 
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
+        if (title != null) {
+            return translationProvider.getTranslation(title.value(), locale);
+        } else {
+            return "";
+        }
     }
 
 }

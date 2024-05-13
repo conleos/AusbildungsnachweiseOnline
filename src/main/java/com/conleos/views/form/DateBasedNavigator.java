@@ -9,12 +9,15 @@ import com.vaadin.flow.component.notification.Notification;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Locale;
 
 /*
  * This DatePicker is used to navigate to specific Form by picking a date.
  * An EventListener will automatically reroute the client.
  * */
 public class DateBasedNavigator extends DatePicker {
+
+    private Locale locale = UI.getCurrent().getLocale();
 
 
     public DateBasedNavigator(Form form) {
@@ -29,7 +32,7 @@ public class DateBasedNavigator extends DatePicker {
 
     private void init(User trainee, LocalDate date) {
         setValue(null);
-        setLabel("Navigate by Date");
+        setLabel(getTranslation("view.dateBasedNavigator.label", locale));
         addValueChangeListener(event -> {
             navigate(trainee, event.getValue());
         });

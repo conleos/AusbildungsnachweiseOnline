@@ -23,19 +23,18 @@ import com.vaadin.flow.server.VaadinSession;
 
 import java.util.Locale;
 
-@PageTitle("Edit your profile")
+@PageTitle("view.profile.pageTitle")
 @Route(value = "profile", layout = MainLayout.class)
 public class ProfileView extends VerticalLayout{
 
-    private Locale locale = UI.getCurrent().getLocale();;
     private TranslationProvider translationProvider;
+    private Locale locale = UI.getCurrent().getLocale();;
 
     public ProfileView(UserService service,TranslationProvider translationProvider) {
         this.translationProvider = translationProvider;
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
         add(createContent(session.getUser()));
-
     }
 
     private Component createContent(User user) {
@@ -47,10 +46,10 @@ public class ProfileView extends VerticalLayout{
         lastName.setEnabled(false);
         Dialog dialog = new Dialog();
         H2 changeHeader = new H2(translationProvider.getTranslation("view.profile.button.changePassword", locale));
-        Text sure = new Text(translationProvider.getTranslation("view.profile.textsure", locale));
+        Text sure = new Text(translationProvider.getTranslation("view.profile.textSure", locale));
         PasswordField oldPasswordField = new PasswordField(translationProvider.getTranslation("view.profile.label.oldPassword", locale));
         PasswordField newPasswordField = new PasswordField(translationProvider.getTranslation("view.profile.label.newPassword", locale));
-        Text wrong = new Text(translationProvider.getTranslation("view.profile.textwrong", locale));
+        Text wrong = new Text(translationProvider.getTranslation("view.profile.textWrong", locale));
         VerticalLayout input = new VerticalLayout();
         input.add(changeHeader,sure,oldPasswordField,newPasswordField);
         dialog.add(input);

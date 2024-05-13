@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-@PageTitle("Admin")
+@PageTitle("view.admin.pageTitle")
 @Route(value = "admin", layout = MainLayout.class)
 @RouteAlias(value = "manage", layout = MainLayout.class)
 public class AdminView extends VerticalLayout implements HasHeaderContent {
@@ -165,8 +165,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     public Component[] createHeaderContent() {
         Component[] headerComponents = new Component[3];
 
-        Button newUser = new Button("Add a new User", e -> createUserDialog.open());
-        Button changePassword = new Button("Change Password", VaadinIcon.PENCIL.create());
+        Button newUser = new Button(getTranslation("view.admin.button.newUser", locale), e -> createUserDialog.open());
+        Button changePassword = new Button(getTranslation("view.admin.button.change", locale), VaadinIcon.PENCIL.create());
         changePassword.addClickListener(event -> {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
                 AdminAccessDialog access = new AdminAccessDialog(gridUserId, new AdminChangePasswordDialog(gridUserId));
@@ -178,14 +178,14 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             }
         });
 
-        Button deleteAccount = new Button("Delete Account", VaadinIcon.TRASH.create());
+        Button deleteAccount = new Button(getTranslation("view.admin.button.delete", locale), VaadinIcon.TRASH.create());
         deleteAccount.addClickListener(event -> {
             if (gridUserId != null) {
                 if (!Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getId().equals(gridUserId)) {
                     AdminAccessDialog access = new AdminAccessDialog(gridUserId, new DeleteAccountDialog(gridUserId));
                     access.open();
                 } else {
-                    Notification.show("Cannot delete your Account!", 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    Notification.show(getTranslation("view.admin.button.notification", locale), 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
                 }
             } else {
                 noUserChosenNotification.open();

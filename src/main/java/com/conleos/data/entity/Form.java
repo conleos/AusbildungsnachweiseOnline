@@ -3,13 +3,10 @@ package com.conleos.data.entity;
 import com.conleos.data.service.UserService;
 import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
 
-import java.time.Duration;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 

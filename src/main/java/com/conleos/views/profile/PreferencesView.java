@@ -19,26 +19,28 @@ import jakarta.servlet.http.Cookie;
 import java.util.Locale;
 import java.util.Objects;
 
-@PageTitle("Edit your preferences")
+@PageTitle("view.preference.pageTitle")
 @Route(value = "preferences", layout = MainLayout.class)
 public class PreferencesView extends VerticalLayout {
+
 
     private static TranslationProvider translationProvider;
     private Locale locale = UI.getCurrent().getLocale();
     ComboBox<Locale> langBox;
     ComboBox<String> themeBox;
 
+
     public PreferencesView(UserService service, TranslationProvider translationProvider) {
         this.translationProvider = translationProvider;
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
 
         add(createContent(session.getUser()));
-
     }
+
 
     private Component createContent(User user) {
 
-        langBox = new ComboBox<>(getTranslation("view.preference.comboBox.label.language", locale));
+        langBox = new ComboBox<>(translationProvider.getTranslation("view.preference.comboBox.label.language", locale));
         langBox.setItems(translationProvider.getProvidedLocales());
         langBox.setItemLabelGenerator(l -> getTranslation(l.getLanguage()));
         langBox.setValue(locale);
@@ -48,17 +50,18 @@ public class PreferencesView extends VerticalLayout {
         });
 
         themeBox = new ComboBox<>(translationProvider.getTranslation("view.preference.comboBox.label.theme", locale));
-        themeBox.setItems(new String[]{"☀\uFE0F Bright", "\uD83C\uDF19 Dark"});
+        themeBox.setItems(new String[]{"☀\uFE0F"+translationProvider.getTranslation("view.preference.comboBox.label.brightTheme", locale), "\uD83C\uDF19"+translationProvider.getTranslation("view.preference.comboBox.label.darkTheme", locale)});
         if(UI.getCurrent().getElement().getThemeList().isEmpty()){
-            UI.getCurrent().getElement().getThemeList().add("☀\uFE0F Bright");
+            UI.getCurrent().getElement().getThemeList().add("☀\uFE0F"+translationProvider.getTranslation("view.preference.comboBox.label.brightTheme", locale));
         }
-        themeBox.setValue(UI.getCurrent().getElement().getThemeList().stream().toList().get(0) + " " + UI.getCurrent().getElement().getThemeList().stream().toList().get(1));
+        themeBox.setValue(UI.getCurrent().getElement().getThemeList().stream().toList().getFirst()) ;
         themeBox.addValueChangeListener(e -> {
-            setTheme(Objects.equals(e.getValue(), "\uD83C\uDF19 Dark"));
+            setTheme(Objects.equals(e.getValue(), "\uD83C\uDF19"+translationProvider.getTranslation("view.preference.comboBox.label.darkTheme", locale)));
         });
-
         return new VerticalLayout(langBox, themeBox);
     }
+
+
 
     /**
      * function to switch theme(darkmode on off)
@@ -70,15 +73,16 @@ public class PreferencesView extends VerticalLayout {
 
         if(dark){
             UI.getCurrent().getElement().getThemeList().remove("☀\uFE0F");
-            UI.getCurrent().getElement().getThemeList().remove("Bright");
-            UI.getCurrent().getElement().getThemeList().add("\uD83C\uDF19 Dark");
+            UI.getCurrent().getElement().getThemeList().remove(translationProvider.getTranslation("view.preference.comboBox.label.brightTheme", locale));
+            UI.getCurrent().getElement().getThemeList().add("\uD83C\uDF19"+translationProvider.getTranslation("view.preference.comboBox.label.darkTheme", locale));
         }
         else {
             UI.getCurrent().getElement().getThemeList().remove("\uD83C\uDF19");
-            UI.getCurrent().getElement().getThemeList().remove("Dark");
-            UI.getCurrent().getElement().getThemeList().add("☀\uFE0F Bright");
+            UI.getCurrent().getElement().getThemeList().remove(translationProvider.getTranslation("view.preference.comboBox.label.darkTheme", locale));
+            UI.getCurrent().getElement().getThemeList().add("☀\uFE0F"+translationProvider.getTranslation("view.preference.comboBox.label.brightTheme", locale));
         }
     }
+
 
     private void changeLocalPreference(Locale locale) {
         getUI().get().setLocale(locale);
