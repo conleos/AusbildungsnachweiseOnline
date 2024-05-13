@@ -165,7 +165,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     public Component[] createHeaderContent() {
         Component[] headerComponents = new Component[3];
 
-        Button newUser = new Button(getTranslation("view.admin.button.newUser", locale), e -> createUserDialog.open());
+        Button newUser = new Button(getTranslation("view.admin.button.newUser", locale), VaadinIcon.USER.create(), e -> createUserDialog.open());
         Button changePassword = new Button(getTranslation("view.admin.button.change", locale), VaadinIcon.PENCIL.create());
         changePassword.addClickListener(event -> {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
