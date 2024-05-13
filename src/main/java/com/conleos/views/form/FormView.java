@@ -24,6 +24,7 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +49,9 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
     private void createContent(Form form) {
         this.form = form;
+
+        Span weekInfo = new Span("Woche ab Montag, dem " + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
+        add(weekInfo);
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
