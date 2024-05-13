@@ -9,7 +9,6 @@ import com.conleos.data.service.UserService;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
@@ -17,6 +16,9 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
@@ -41,8 +43,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private Long gridUserId;
     private String gridUserRole;
     private Locale locale = UI.getCurrent().getLocale();
-    private final CreateErrorNotification otherAdminPassword = new CreateErrorNotification(getTranslation("view.admin.error.password", locale));
-    private final CreateErrorNotification noUserChosen = new CreateErrorNotification(getTranslation("view.admin.error.user", locale));
+    private final CreateErrorNotification otherAdminPasswordError = new CreateErrorNotification(getTranslation("view.admin.error.password", locale));
+    private final CreateErrorNotification noUserChosenNotification = new CreateErrorNotification(getTranslation("view.admin.error.user", locale));
 
 
     public AdminView(UserService service) {
@@ -77,8 +79,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         grid.setItems(users);
         add(grid);
         grid.addSelectionListener(selection -> {
-            noUserChosen.close();
-            otherAdminPassword.close();
+            noUserChosenNotification.close();
+            otherAdminPasswordError.close();
             Optional<User> optionalUser = selection.getFirstSelectedItem();
             if (optionalUser.isPresent()) {
                 gridUserId = optionalUser.get().getId();
@@ -161,21 +163,38 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
 
     @Override
     public Component[] createHeaderContent() {
-        Component[] headerComponents = new Component[2];
+        Component[] headerComponents = new Component[3];
+
         Button newUser = new Button("Add a new User", e -> createUserDialog.open());
-        Button changePassword = new Button("Change Password");
+        Button changePassword = new Button("Change Password", VaadinIcon.PENCIL.create());
         changePassword.addClickListener(event -> {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
-                CreateAdminAccessDialog access = new CreateAdminAccessDialog(gridUserId);
+                AdminAccessDialog access = new AdminAccessDialog(gridUserId, new AdminChangePasswordDialog(gridUserId));
                 access.open();
             } else if (gridUserId != null && gridUserRole.equals("Admin")) {
-                otherAdminPassword.open();
+                otherAdminPasswordError.open();
             } else {
-                noUserChosen.open();
+                noUserChosenNotification.open();
             }
         });
+
+        Button deleteAccount = new Button("Delete Account", VaadinIcon.TRASH.create());
+        deleteAccount.addClickListener(event -> {
+            if (gridUserId != null) {
+                if (!Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getId().equals(gridUserId)) {
+                    AdminAccessDialog access = new AdminAccessDialog(gridUserId, new DeleteAccountDialog(gridUserId));
+                    access.open();
+                } else {
+                    Notification.show("Cannot delete your Account!", 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                }
+            } else {
+                noUserChosenNotification.open();
+            }
+        });
+
         headerComponents[0] = newUser;
         headerComponents[1] = changePassword;
+        headerComponents[2] = deleteAccount;
         return headerComponents;
     }
 }

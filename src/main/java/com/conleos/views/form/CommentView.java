@@ -15,6 +15,7 @@ import com.conleos.data.entity.Comment;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.CommentRepository;
 import com.conleos.data.service.CommentService;
+import com.conleos.data.service.UserService;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.messages.MessageList;
@@ -48,7 +49,7 @@ public class CommentView extends Div {
             Comment comment = new Comment();
             comment.setForm(form);
             comment.setTime(newMessage.getTime().toString());
-            comment.setUserId(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser());
+            comment.setUserId(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getId());
             comment.setComment(newMessage.getText());
             CommentService.getInstance().saveComment(comment);
             list.setItems(items);
@@ -58,9 +59,9 @@ public class CommentView extends Div {
 
         if (!comments.isEmpty()) {
             List<MessageListItem> oldItems = new ArrayList<>();
-            for (Comment c : comments) {
-                MessageListItem message = new MessageListItem(c.getComment(), Instant.parse(c.getTime()), c.getUserId().getFullName());
-
+            for (Comment comment : comments) {
+                User author = UserService.getInstance().getUserByID(comment.getUserId());
+                MessageListItem message = new MessageListItem(comment.getComment(), Instant.parse(comment.getTime()), author != null ? author.getFullName() : "Unkown");
 
                 if (message.getUserName().equals(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getFullName())) {
                     message.addClassNames("current-user-message");
