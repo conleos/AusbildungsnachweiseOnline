@@ -15,6 +15,7 @@ import com.vaadin.flow.component.UI;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,36 +70,36 @@ public class PdfGenerator {
         User user = form.getOwner();
         document.add(new Paragraph("Dieses Dokument wurde maschinell erzeugt."));
         document.add(new Paragraph("Name: " + user.getLastName() + " Vorname: " + user.getFirstName()));
-        document.add(new Paragraph("Ausbildungsnachweis Nr. " + number + " Woche vom " + form.getMondayDate() + " bis " + form.getMondayDate().plusDays(6)));
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN);
+        document.add(new Paragraph("Ausbildungsnachweis Nr. " + number + " Woche vom " + formatter.format(form.getMondayDate()) + " bis " + formatter.format(form.getMondayDate().plusDays(6))));
 
         document.add(new Paragraph(" "));
 
-        // TODO: Refactor
-        for (int day = 0; day < 7; day++) {
-            LocalDate date = form.getMondayDate().plusDays(day);
-            List<Form.FormEntry> entries = new ArrayList<>(); // FIXME: This is temporary
+        generateFormEntry(document, form, form.getMonday(), form.getMondayDate().plusDays(0));
+        generateFormEntry(document, form, form.getTuesday(), form.getMondayDate().plusDays(1));
+        generateFormEntry(document, form, form.getWednesday(), form.getMondayDate().plusDays(2));
+        generateFormEntry(document, form, form.getThursday(), form.getMondayDate().plusDays(3));
+        generateFormEntry(document, form, form.getFriday(), form.getMondayDate().plusDays(4));
+        generateFormEntry(document, form, form.getSaturday(), form.getMondayDate().plusDays(5));
+        generateFormEntry(document, form, form.getSunday(), form.getMondayDate().plusDays(6));
 
-            if (entries.isEmpty()) {
-                continue;
-            }
+    }
 
-            String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.GERMANY);
-            dayLabel += ", " + date.toString();
-            Paragraph paragraph = new Paragraph(dayLabel);
-            paragraph.setAlignment(Element.ALIGN_RIGHT);
-            document.add(paragraph);
-            document.add(new Paragraph(" "));
+    private static void generateFormEntry(Document document, Form form, Form.FormEntry entry, LocalDate date) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN);
 
-            for (Form.FormEntry entry : entries) {
-                PdfPTable table = new PdfPTable(2);
-                table.addCell(createCell(entry.getDescription(), Element.ALIGN_CENTER));
-                table.addCell(createCell(entry.getKindOfWork().toString(), Element.ALIGN_CENTER));
-                document.add(table);
-            }
-            document.add(new Paragraph(" "));
+        String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.GERMANY);
+        dayLabel += ", " + formatter.format(date);
+        Paragraph paragraph = new Paragraph(dayLabel);
+        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        document.add(paragraph);
+        document.add(new Paragraph(" "));
 
-        }
-
+        PdfPTable table = new PdfPTable(2);
+        table.addCell(createCell(entry.getDescription(), Element.ALIGN_CENTER));
+        table.addCell(createCell(entry.getKindOfWork().toString(), Element.ALIGN_CENTER));
+        document.add(table);
+        document.add(new Paragraph(" "));
     }
 
     private static PdfPCell createCell(String text, int alignment) {
