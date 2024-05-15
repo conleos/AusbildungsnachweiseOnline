@@ -15,9 +15,11 @@ public class Day {
     LocalDate date;
     DayEntry entry;
     VerticalLayout container = new VerticalLayout();
+    FormView formView;
 
-    public Day(LocalDate date) {
+    public Day(LocalDate date, FormView formView) {
         this.date = date;
+        this.formView = formView;
     }
 
     public VerticalLayout createFormContentForDay(Form form, int dayOffset) {
@@ -30,10 +32,10 @@ public class Day {
         // Init the Container with Content from Database
         Form.FormEntry entry = form.getEntryByDate(date);
         if (entry != null) {
-            this.entry = new DayEntry(this, entry);
+            this.entry = new DayEntry(this, entry, formView);
             container.add(this.entry);
         } else {
-            this.entry = new DayEntry(this, null);
+            this.entry = new DayEntry(this, null, formView);
             container.add(this.entry);
         }
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());

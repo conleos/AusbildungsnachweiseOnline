@@ -38,7 +38,7 @@ public class FormUtil {
         if (kindOfWork.equals(KindOfWork.PracticalWork)) {
             return (int) Math.max(MINUTES.between(begin, end) - pauseInMinutes, 0);
         } else if (kindOfWork.equals(KindOfWork.Schooling)) {
-            return 7 * 60 + 58;
+            return 7 * 60 + 48;
         } else {
             return 0;
         }

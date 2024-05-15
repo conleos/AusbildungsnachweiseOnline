@@ -36,38 +36,35 @@ public class DayEntry extends VerticalLayout {
     CreateErrorNotification error;
     Day day;
 
+    int totalTime;
+    FormView formView;
+
     /*
      * FormEntry is optional
      * */
-    public DayEntry(Day day, Form.FormEntry entry) {
+    public DayEntry(Day day, Form.FormEntry entry, FormView formView) {
+        this.formView = formView;
         this.day = day;
         select = new Select<>();
         select.setLabel(getTranslation("view.dayEntry.selectLabel.art", locale));
         select.setItems(KindOfWork.values());
         select.setValue(KindOfWork.PracticalWork);
-        select.addValueChangeListener(c -> {
-            changeTotalTime();
-            changePause();
-        });
         timeBegin = new TimePicker(getTranslation("view.dayEntry.beginTime", locale));
         timeBegin.setStep(Duration.ofMinutes(15));
         timeEnd = new TimePicker(getTranslation("view.dayEntry.endTime", locale));
         timeEnd.setStep(Duration.ofMinutes(15));
-        timeBegin.setValue(LocalTime.of(8, 0));
-        timeEnd.setValue(LocalTime.of(16, 30));
+        timeBegin.setValue(LocalTime.of(0, 0));
+        timeEnd.setValue(LocalTime.of(0, 0));
         HorizontalLayout totalTimeLayout = new HorizontalLayout();
         timeSum = new TextField();
         timeSum.setReadOnly(true);
         timeSum.setLabel(getTranslation("view.dayEntry.sumTime", locale));
         totalTimeLayout.add(timeSum);
-        timeBegin.addValueChangeListener(timeChange -> changeTotalTime());
-        timeEnd.addValueChangeListener(timeChange -> changeTotalTime());
         HorizontalLayout pauseLayout = new HorizontalLayout();
         pause = new NumberField(getTranslation("view.dayEntry.pause", locale));
         pause.setValue(0.0);
         pause.addClassName("background-red");
         pause.setWidth("150px");
-        pause.addValueChangeListener(p -> changePause());
         Span min = new Span("min");
         min.addClassNames("min");
         pauseLayout.add(pause, min);
@@ -80,7 +77,6 @@ public class DayEntry extends VerticalLayout {
 
         HorizontalLayout h = new HorizontalLayout(block, area);
         h.setWidthFull();
-        changeTotalTime();
         add(h, totalTimeLayout);
 
 
@@ -102,6 +98,25 @@ public class DayEntry extends VerticalLayout {
             timeEnd.setReadOnly(true);
 
         }
+        changeTotalTime();
+        changePause(true);
+        select.addValueChangeListener(c -> {
+            changeTotalTime();
+            changePause(false);
+            formView.update();
+        });
+        timeBegin.addValueChangeListener(timeChange -> {
+            changeTotalTime();
+            formView.update();
+        });
+        timeEnd.addValueChangeListener(timeChange -> {
+            changeTotalTime();
+            formView.update();
+        });
+        pause.addValueChangeListener(p -> {
+            changePause(false);
+            formView.update();
+        });
     }
 
     public Form.FormEntry createFormEntry(Form form) {
@@ -117,30 +132,11 @@ public class DayEntry extends VerticalLayout {
 
     void changeTotalTime() {
         int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
+        totalTime = totalMinutesNoPause;
         timeSum.setValue(FormUtil.getLabelFromTotalTime(totalMinutesNoPause));
-        changeTotalTimeColor();
     }
 
-    void changeTotalTimeColor() {
-        if (select.getValue() == KindOfWork.PracticalWork) {
-            int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
-            if (totalMinutesNoPause < 480) {
-                timeSum.removeClassName("background-green");
-                timeSum.addClassName("background-red");
-            } else {
-                timeSum.removeClassName("background-red");
-                timeSum.addClassName("background-green");
-            }
-        } else if (select.getValue() == KindOfWork.Schooling) {
-            timeSum.removeClassName("background-green");
-            timeSum.removeClassName("background-red");
-        } else {
-            timeSum.removeClassName("background-green");
-            timeSum.removeClassName("background-red");
-        }
-    }
-
-    void changePause() {
+    void changePause(Boolean constructor) {
         if (select.getValue() == KindOfWork.PracticalWork) {
             pause.setReadOnly(false);
             try {
@@ -154,8 +150,10 @@ public class DayEntry extends VerticalLayout {
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
-                    error = new CreateErrorNotification(getTranslation("view.dayEntry.pause.error1", locale) + old + getTranslation("view.dayEntry.pause.error2", locale));
-                    error.open();
+                    if (constructor == false) {
+                        error = new CreateErrorNotification(getTranslation("view.dayEntry.pause.error1", locale) + " "+ old + " " + getTranslation("view.dayEntry.pause.error2", locale));
+                        error.open();
+                    }
                     changeTotalTime();
                 } else {
                     pause.removeClassName("background-red");
