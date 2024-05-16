@@ -26,7 +26,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 @PageTitle("view.form.pageTitle")
@@ -41,6 +40,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     private Button rejectButton;
     private static TranslationProvider translationProvider;
     private Locale locale = UI.getCurrent().getLocale();
+    Span weekTime;
 
     public FormView(TranslationProvider translationProvider) {
         this.translationProvider = translationProvider;
@@ -51,18 +51,20 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         this.form = form;
 
         Span weekInfo = new Span("Woche ab Montag, dem " + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
-        add(weekInfo);
+        weekTime = new Span("In dieser Woche bereits gearbeitet: " + "0" + " h");
+        add(weekInfo,weekTime);
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
 
         if (Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee)) {
             for (int i = 0; i < 7; i++) {
-                Day day = new Day(form.getMondayDate().plusDays(i));
+                Day day = new Day(form.getMondayDate().plusDays(i),this);
                 days.add(day);
                 Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
                 tab.setTooltipText(day.getDate().toString());
                 tabSheet.add(tab, day.createFormContentForDay(form, i));
+                update();
             }
         } else {
             tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span("Übersicht")), FormOverview.createContent(form));
@@ -201,6 +203,14 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         }
 
         return content.toArray(new Component[0]);
+    }
+
+    public void update() {
+        double newTime = 0;
+        for (Day day : days) {
+            newTime += day.entry.totalTime/60.0;
+        }
+        weekTime.setText("In dieser Woche bereits gearbeitet: " + newTime + " h");
     }
 
 }
