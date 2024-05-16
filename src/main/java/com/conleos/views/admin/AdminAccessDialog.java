@@ -27,7 +27,7 @@ public class AdminAccessDialog extends Dialog {
 
     public AdminAccessDialog(Long userID, Dialog dialogToBeOpened) {
         this.gridUserId = userID;
-        H2 changeHeader = new H2(getTranslation("view.adminAccess.label.changeHeader", locale));
+        H2 changeHeader = new H2(getTranslation("view.adminAccess.label.adminAccess", locale));
         Text sure = new Text(getTranslation("view.adminAccess.label.textSure", locale));
         PasswordField adminPasswordField = new PasswordField(getTranslation("view.adminAccess.label.password", locale));
         VerticalLayout input = new VerticalLayout();

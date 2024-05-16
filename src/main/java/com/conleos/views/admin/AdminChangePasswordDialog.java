@@ -21,7 +21,7 @@ public class AdminChangePasswordDialog extends Dialog {
     public AdminChangePasswordDialog(Long userID) {
         this.gridUserId = userID;
 
-        H2 changeHeader = new H2(getTranslation("view.adminChangePw.changeHeader", locale));
+        H2 changeHeader = new H2(getTranslation("view.adminChangePw.changePassword", locale));
         Text text = new Text(getTranslation("view.adminChangePw.textSure", locale));
         PasswordField newPasswordField = new PasswordField(getTranslation("view.adminChangePw.newPassword", locale));
         VerticalLayout layout = new VerticalLayout();
