@@ -1,5 +1,6 @@
 package com.conleos.views.dashboard;
 
+import com.conleos.common.Role;
 import com.conleos.data.entity.FormStatus;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -23,7 +24,16 @@ public class DashboardFormFilter extends VerticalLayout {
     private boolean hideRejectedForms = false;
     private Locale locale = UI.getCurrent().getLocale();
 
-    public DashboardFormFilter() {
+    public DashboardFormFilter(Role roleOfViewer) {
+        if (roleOfViewer.equals(Role.Trainee)) {
+            hideSignedForms = true;
+            hideInReviewForms = true;
+        } else {
+            hideInProgressForms = true;
+            hideSignedForms = true;
+            hideRejectedForms = true;
+        }
+
         button = new Button(getTranslation("view.dashboardFilter.button.filter", locale), VaadinIcon.FILTER.create());
         button.addClickListener(event -> dialog.open());
         dialog = new Dialog(getTranslation("view.dashboardFilter.button.filter.label", locale));

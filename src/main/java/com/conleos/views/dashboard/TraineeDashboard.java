@@ -3,6 +3,7 @@ package com.conleos.views.dashboard;
 import com.conleos.common.ColorGenerator;
 import com.conleos.common.FormUtil;
 import com.conleos.common.HtmlColor;
+import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import java.awt.*;
@@ -94,7 +96,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
         itemContainer = new OrderedList();
         itemContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);
 
-        filter = new DashboardFormFilter();
+        filter = new DashboardFormFilter(Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole());
         filter.getApplyFiltersButton().addClickListener(event -> {
             generateFormCards(trainee);
         });
