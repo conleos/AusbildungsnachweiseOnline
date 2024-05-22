@@ -3,6 +3,7 @@ package com.conleos.views.form;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,9 +18,6 @@ import java.util.Locale;
  * */
 public class DateBasedNavigator extends DatePicker {
 
-    private Locale locale = UI.getCurrent().getLocale();
-
-
     public DateBasedNavigator(Form form) {
         if (form != null) {
             init(form.getOwner(), form.getMondayDate());
@@ -32,7 +30,7 @@ public class DateBasedNavigator extends DatePicker {
 
     private void init(User trainee, LocalDate date) {
         setValue(null);
-        setLabel(getTranslation("view.dateBasedNavigator.label", locale));
+        setLabel(Lang.translate("view.dateBasedNavigator.label"));
         addValueChangeListener(event -> {
             navigate(trainee, event.getValue());
         });

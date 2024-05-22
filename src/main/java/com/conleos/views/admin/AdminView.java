@@ -6,6 +6,7 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.conleos.i18n.Lang;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -43,9 +44,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     private EditGlobalSettingsDialog editSettingsDialog;
     private Long gridUserId;
     private String gridUserRole;
-    private Locale locale = UI.getCurrent().getLocale();
-    private final CreateErrorNotification otherAdminPasswordError = new CreateErrorNotification(getTranslation("view.admin.error.passwordOtherAdmin", locale));
-    private final CreateErrorNotification noUserChosenNotification = new CreateErrorNotification(getTranslation("view.admin.error.NoUserSelected", locale));
+    private final CreateErrorNotification otherAdminPasswordError = new CreateErrorNotification(Lang.translate("view.admin.error.passwordOtherAdmin"));
+    private final CreateErrorNotification noUserChosenNotification = new CreateErrorNotification(Lang.translate("view.admin.error.NoUserSelected"));
 
 
     public AdminView(UserService service) {
@@ -53,7 +53,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         setSizeFull();
         Session session = Session.getSessionFromVaadinSession(VaadinSession.getCurrent());
         if (!session.getSessionRole().equals(Role.Admin)) {
-            add(new Span(getTranslation("view.admin.span.open", locale)));
+            add(new Span(Lang.translate("view.admin.span.open")));
             return;
         }
         createUserDialog = new CreateUserDialog();
@@ -66,17 +66,17 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
         Grid<User> grid = new Grid<>(User.class, false);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_COLUMN_BORDERS);
         grid.setHeight("100%");
-        grid.addColumn(createInfoRenderer()).setHeader(getTranslation("view.admin.grid.info", locale))
+        grid.addColumn(createInfoRenderer()).setHeader(Lang.translate("view.admin.grid.info"))
                 .setAutoWidth(true).setFlexGrow(0);
-        grid.addColumn(User::getUsername).setHeader(getTranslation("view.admin.grid.username", locale))
+        grid.addColumn(User::getUsername).setHeader(Lang.translate("view.admin.grid.username"))
                 .setAutoWidth(true);
         /*grid.addColumn(User::getPasswordHash).setHeader("Password Hash")
                 .setAutoWidth(true);*/
-        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("view.admin.grid.role", locale))
+        grid.addColumn(createStatusComponentRenderer()).setHeader(Lang.translate("view.admin.grid.role"))
                 .setAutoWidth(true);
-        grid.addColumn(createAssigneeComponentRenderer()).setHeader(getTranslation("view.admin.grid.assignedTo", locale))
+        grid.addColumn(createAssigneeComponentRenderer()).setHeader(Lang.translate("view.admin.grid.assignedTo"))
                 .setAutoWidth(true);
-        grid.addColumn(createStartDateComponentRenderer()).setHeader(getTranslation("view.admin.grid.beginOfWork", locale))
+        grid.addColumn(createStartDateComponentRenderer()).setHeader(Lang.translate("view.admin.grid.beginOfWork"))
                 .setAutoWidth(true);
         grid.setItems(users);
         add(grid);
@@ -167,9 +167,9 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
     public Component[] createHeaderContent() {
         Component[] headerComponents = new Component[4];
 
-        Button newUser = new Button(getTranslation("view.admin.button.newUser", locale), VaadinIcon.USER.create(), e -> createUserDialog.open());
+        Button newUser = new Button(Lang.translate("view.admin.button.newUser"), VaadinIcon.USER.create(), e -> createUserDialog.open());
 
-        Button changePassword = new Button(getTranslation("view.admin.button.changePassword", locale), VaadinIcon.PENCIL.create());
+        Button changePassword = new Button(Lang.translate("view.admin.button.changePassword"), VaadinIcon.PENCIL.create());
         changePassword.addClickListener(event -> {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
                 AdminAccessDialog access = new AdminAccessDialog(gridUserId, new AdminChangePasswordDialog(gridUserId));
@@ -181,21 +181,21 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             }
         });
 
-        Button deleteAccount = new Button(getTranslation("view.admin.button.deleteAccount", locale), VaadinIcon.TRASH.create());
+        Button deleteAccount = new Button(Lang.translate("view.admin.button.deleteAccount"), VaadinIcon.TRASH.create());
         deleteAccount.addClickListener(event -> {
             if (gridUserId != null) {
                 if (!Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser().getId().equals(gridUserId)) {
                     AdminAccessDialog access = new AdminAccessDialog(gridUserId, new DeleteAccountDialog(gridUserId));
                     access.open();
                 } else {
-                    Notification.show(getTranslation("view.admin.button.notification.cannotDeleteYourOwnAccount", locale), 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    Notification.show(Lang.translate("view.admin.button.notification.cannotDeleteYourOwnAccount"), 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
                 }
             } else {
                 noUserChosenNotification.open();
             }
         });
 
-        Button editSettings = new Button(getTranslation("view.admin.button.editSettings", locale), VaadinIcon.COG.create(), e -> editSettingsDialog.open());
+        Button editSettings = new Button(Lang.translate("view.admin.button.editSettings"), VaadinIcon.COG.create(), e -> editSettingsDialog.open());
 
         headerComponents[0] = newUser;
         headerComponents[1] = changePassword;

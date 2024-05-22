@@ -6,6 +6,7 @@ import com.conleos.data.entity.Form;
 import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.conleos.i18n.Lang;
 import com.conleos.i18n.TranslationProvider;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
@@ -38,14 +39,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     private Button saveButton;
     private Button signButton;
     private Button rejectButton;
-    private static TranslationProvider translationProvider;
-    private Locale locale = UI.getCurrent().getLocale();
     Span weekTime;
-
-    public FormView(TranslationProvider translationProvider) {
-        this.translationProvider = translationProvider;
-
-    }
 
     private void createContent(Form form) {
         this.form = form;
@@ -71,10 +65,10 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         }
 
         CommentView comment = new CommentView(form);
-        tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span(translationProvider.getTranslation("view.form.tab.span.label", locale))), comment.getChatLayout());
+        tabSheet.add(new Tab(VaadinIcon.CHAT.create(), new Span(Lang.translate("view.form.tab.span.label"))), comment.getChatLayout());
         add(tabSheet);
 
-        saveButton = new Button(translationProvider.getTranslation("view.form.button.save", locale), VaadinIcon.DISC.create());
+        saveButton = new Button(Lang.translate("view.form.button.save"), VaadinIcon.DISC.create());
         saveButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
         saveButton.addClickListener(save -> {
             form.setMonday(days.get(0).getEntry(form));
@@ -86,11 +80,11 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
             form.setSunday(days.get(6).getEntry(form));
             form.setStatus(FormStatus.InProgress);
             FormService.getInstance().saveForm(form);
-            Notification.show(translationProvider.getTranslation("view.form.button.save.notification", locale), 4000, Notification.Position.BOTTOM_START);
+            Notification.show(Lang.translate("view.form.button.save.notification"), 4000, Notification.Position.BOTTOM_START);
         });
 
         if (form.getStatus().equals(FormStatus.InProgress) || form.getStatus().equals(FormStatus.Rejected)) {
-            signButton = new Button(translationProvider.getTranslation("view.form.button.sign", locale), VaadinIcon.PENCIL.create());
+            signButton = new Button(Lang.translate("view.form.button.sign"), VaadinIcon.PENCIL.create());
             signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
             signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
             signButton.addClickListener(save -> {
@@ -105,12 +99,12 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         } else if (form.getStatus().equals(FormStatus.InReview)) {
             User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
             if (user.getRole().equals(Role.Trainee)) {
-                signButton = new Button(translationProvider.getTranslation("view.form.signButton.review", locale), VaadinIcon.HOURGLASS.create());
+                signButton = new Button(Lang.translate("view.form.signButton.review"), VaadinIcon.HOURGLASS.create());
                 signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
                 signButton.setEnabled(false);
             } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
-                signButton = new Button(translationProvider.getTranslation("view.form.signButton.sign", locale), VaadinIcon.PENCIL.create());
+                signButton = new Button(Lang.translate("view.form.signButton.sign"), VaadinIcon.PENCIL.create());
                 signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
                 signButton.addClickListener(save -> {
@@ -119,20 +113,20 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                     FormService.getInstance().saveForm(form);
                     UI.getCurrent().getPage().reload();
                 });
-                rejectButton = new Button(translationProvider.getTranslation("view.form.signButton.reject", locale), VaadinIcon.STOP.create());
+                rejectButton = new Button(Lang.translate("view.form.signButton.reject"), VaadinIcon.STOP.create());
                 createRejectionButton(form, user, rejectButton);
             }
         } else if (form.getStatus().equals(FormStatus.Signed)) {
             User user = Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getUser();
             if (user.getRole().equals(Role.Trainee)) {
-                signButton = new Button(translationProvider.getTranslation("view.form.signButton.signed", locale), VaadinIcon.CHECK.create());
+                signButton = new Button(Lang.translate("view.form.signButton.signed"), VaadinIcon.CHECK.create());
                 signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
                 User userWhoSignedOrRejected = form.getUserWhoSignedOrRejected();
                 signButton.setTooltipText("Signed by " + (userWhoSignedOrRejected != null ? userWhoSignedOrRejected.getFullName() : "Unkown"));
-                signButton.setTooltipText(translationProvider.getTranslation("view.form.signButton.signed.toolTip", locale) + form.getUserWhoSignedOrRejected().getFullName());
+                signButton.setTooltipText(Lang.translate("view.form.signButton.signed.toolTip") + form.getUserWhoSignedOrRejected().getFullName());
             } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
-                signButton = new Button(translationProvider.getTranslation("view.form.signButton.revoke", locale), VaadinIcon.BACKWARDS.create());
+                signButton = new Button(Lang.translate("view.form.signButton.revoke"), VaadinIcon.BACKWARDS.create());
                 createRejectionButton(form, user, signButton);
             }
         }

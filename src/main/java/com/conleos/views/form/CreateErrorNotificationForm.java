@@ -1,5 +1,6 @@
 package com.conleos.views.form;
 
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -15,14 +16,12 @@ import java.util.Locale;
 
 public class CreateErrorNotificationForm extends Notification {
 
-    private Locale locale = UI.getCurrent().getLocale();
-
     public CreateErrorNotificationForm(String str) {
         addThemeVariants(NotificationVariant.LUMO_ERROR);
         Div text = new Div(new Text(str));
         Button closeButton = new Button(new Icon("lumo", "cross"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel(getTranslation("view.errorNotification.button.close", locale));
+        closeButton.setAriaLabel(Lang.translate("view.errorNotification.button.close"));
         closeButton.addClickListener(e -> {
             close();
         });

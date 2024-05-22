@@ -7,6 +7,7 @@ import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
 import com.conleos.data.service.UserService;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -38,7 +39,6 @@ import java.util.Locale;
 public class InstructorDashboard extends Main implements HasComponents, HasStyle {
 
     private OrderedList itemContainer;
-    private Locale locale = UI.getCurrent().getLocale();
 
 
     public InstructorDashboard(ArrayList<Component> headerComponents, User instructor) {
@@ -60,7 +60,7 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
         // New notification if review is requested
         UI.getCurrent().access(() -> {
             if (finalFound) {
-                Notification notification = Notification.show(getTranslation("view.instructor.notification", locale));
+                Notification notification = Notification.show(Lang.translate("view.instructor.notification"));
                 notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
                 notification.setPosition(Notification.Position.BOTTOM_CENTER);
             }

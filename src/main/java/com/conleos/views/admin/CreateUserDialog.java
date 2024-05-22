@@ -25,10 +25,8 @@ import java.util.Locale;
 
 public class CreateUserDialog extends Dialog {
 
-    private Locale locale = UI.getCurrent().getLocale();
-
     public CreateUserDialog() {
-        setHeaderTitle(getTranslation("view.createUser.headerTitle", locale));
+        setHeaderTitle(Lang.translate("view.createUser.headerTitle"));
 
         List<User> assignees = UserService.getInstance().getAllUsers();
         assignees.removeIf(user -> user.getRole() == Role.Trainee);
@@ -39,31 +37,31 @@ public class CreateUserDialog extends Dialog {
         dialogLayout.setWidthFull();
         add(dialogLayout);
 
-        TextField username = new TextField(getTranslation("view.createUser.label.username", locale));
+        TextField username = new TextField(Lang.translate("view.createUser.label.username"));
         username.setWidthFull();
-        PasswordField password = new PasswordField(getTranslation("view.createUser.label.password", locale));
+        PasswordField password = new PasswordField(Lang.translate("view.createUser.label.password"));
         password.setWidthFull();
-        TextField firstName = new TextField(getTranslation("view.createUser.label.firstname", locale));
+        TextField firstName = new TextField(Lang.translate("view.createUser.label.firstname"));
         firstName.setWidthFull();
-        TextField lastName = new TextField(getTranslation("view.createUser.label.lastname", locale));
+        TextField lastName = new TextField(Lang.translate("view.createUser.label.lastname"));
         lastName.setWidthFull();
-        DatePicker birthday = new DatePicker(getTranslation("view.createUser.label.birthday", locale));
+        DatePicker birthday = new DatePicker(Lang.translate("view.createUser.label.birthday"));
         birthday.setWidthFull();
-        TextField email = new TextField(getTranslation("view.createUser.label.email", locale));
+        TextField email = new TextField(Lang.translate("view.createUser.label.email"));
         email.setWidthFull();
 
-        MultiSelectComboBox<User> assigneeSelect = new MultiSelectComboBox<>(getTranslation("view.createUser.MultiSelectComboBox.label.assignedTo", locale));
-        assigneeSelect.setPlaceholder(getTranslation("view.createUser.MultiSelectComboBox.label.setPlace", locale));
+        MultiSelectComboBox<User> assigneeSelect = new MultiSelectComboBox<>(Lang.translate("view.createUser.MultiSelectComboBox.label.assignedTo"));
+        assigneeSelect.setPlaceholder(Lang.translate("view.createUser.MultiSelectComboBox.label.setPlace"));
         assigneeSelect.setItems(assignees);
         assigneeSelect.setItemLabelGenerator(User::getUsername);
         assigneeSelect.setEnabled(false);
 
-        DatePicker startTimeSelector = new DatePicker(getTranslation("view.createUser.timeSelector.label", locale));
+        DatePicker startTimeSelector = new DatePicker(Lang.translate("view.createUser.timeSelector.label"));
         startTimeSelector.setValue(LocalDate.now());
         startTimeSelector.setEnabled(false);
 
-        ComboBox<Role> roleSelect = new ComboBox<>(getTranslation("view.createUser.comboBox.label.roleSelect", locale));
-        roleSelect.setPlaceholder(getTranslation("view.createUser.comboBox.label.setPlace", locale));
+        ComboBox<Role> roleSelect = new ComboBox<>(Lang.translate("view.createUser.comboBox.label.roleSelect"));
+        roleSelect.setPlaceholder(getTranslation("view.createUser.comboBox.label.setPlace"));
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
         roleSelect.addValueChangeListener(event -> {
@@ -73,7 +71,7 @@ public class CreateUserDialog extends Dialog {
 
         dialogLayout.add(username, password, firstName, lastName, birthday, email, roleSelect, assigneeSelect, startTimeSelector);
 
-        Button saveButton = new Button(getTranslation("view.createUser.button.save", locale), e -> {
+        Button saveButton = new Button(Lang.translate("view.createUser.button.save"), e -> {
             User user = new User(username.getValue(), PasswordHasher.hash(password.getValue()), roleSelect.getValue(), firstName.getValue(), lastName.getValue(), birthday.getValue());
             user.setEmail(email.getValue());
             user.setAssignees(new ArrayList<>(assigneeSelect.getValue()));
