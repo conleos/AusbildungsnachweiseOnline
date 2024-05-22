@@ -52,14 +52,14 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
 
         Span weekInfo = new Span("Woche ab Montag, dem " + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
         weekTime = new Span("In dieser Woche bereits gearbeitet: " + "0" + " h");
-        add(weekInfo,weekTime);
+        add(weekInfo, weekTime);
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
 
         if (Session.getSessionFromVaadinSession(VaadinSession.getCurrent()).getSessionRole().equals(Role.Trainee)) {
             for (int i = 0; i < 7; i++) {
-                Day day = new Day(form.getMondayDate().plusDays(i),this);
+                Day day = new Day(form.getMondayDate().plusDays(i), this);
                 days.add(day);
                 Tab tab = new Tab(VaadinIcon.CALENDAR.create(), new Span(day.getLocalDayName()));
                 tab.setTooltipText(day.getDate().toString());
@@ -209,7 +209,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     public void update() {
         double newTime = 0;
         for (Day day : days) {
-            newTime += day.entry.totalTime/60.0;
+            newTime += day.entry.totalTime / 60.0;
         }
         weekTime.setText("In dieser Woche bereits gearbeitet: " + newTime + " h");
     }

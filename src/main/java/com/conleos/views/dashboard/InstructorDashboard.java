@@ -48,13 +48,13 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
         Boolean found = false;
         for (User trainee : trainees) {
             List<Form> allFormsTrainee = FormService.getInstance().getFormsByOwner(trainee);
-            for (Form form : allFormsTrainee ) {
+            for (Form form : allFormsTrainee) {
                 if (form.getNewAction()) {
                     found = true;
                     break;
                 }
             }
-            itemContainer.add(new UserCard(trainee,found));
+            itemContainer.add(new UserCard(trainee, found));
         }
         Boolean finalFound = found;
         // New notification if review is requested
@@ -99,15 +99,13 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
 class UserCard extends ListItem {
 
     public UserCard(User trainee, Boolean found) {
-        addClassNames(LumoUtility.Background.CONTRAST_5, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.AlignItems.START, LumoUtility.Padding.MEDIUM,
-                LumoUtility.BorderRadius.LARGE);
+        addClassNames(LumoUtility.Background.CONTRAST_5, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.AlignItems.START, LumoUtility.Padding.MEDIUM, LumoUtility.BorderRadius.LARGE);
         addClassNames("form-card");
 
         getStyle().set("cursor", "pointer");
 
         Div div = new Div();
-        div.addClassNames(LumoUtility.Background.CONTRAST_20, LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.JustifyContent.CENTER,
-                LumoUtility.Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
+        div.addClassNames(LumoUtility.Background.CONTRAST_20, LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.JustifyContent.CENTER, LumoUtility.Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
         div.setHeight("160px");
 
         Avatar avatar = new Avatar(trainee.getFullName());
@@ -143,14 +141,14 @@ class UserCard extends ListItem {
         List<Form> allFormsTrainee = FormService.getInstance().getFormsByOwner(trainee);
 
         //New Notification if newAction in form is true
-            if (found) {
-                Div newActions = new Div();
-                newActions.addClassNames("newActionNote");
-                add(newActions);
+        if (found) {
+            Div newActions = new Div();
+            newActions.addClassNames("newActionNote");
+            add(newActions);
         }
 
         addClickListener(listItemClickEvent -> {
-            for (Form form : allFormsTrainee ) {
+            for (Form form : allFormsTrainee) {
                 form.setNewAction(false);
                 FormService.getInstance().saveForm(form);
             }
