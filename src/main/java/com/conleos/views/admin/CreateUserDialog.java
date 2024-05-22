@@ -5,6 +5,7 @@ import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
 import com.conleos.data.validation.UserDataValidation;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -89,7 +90,7 @@ public class CreateUserDialog extends Dialog {
 
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button cancelButton = new Button(getTranslation("view.createUser.button.cancel", locale), e -> close());
+        Button cancelButton = new Button(Lang.cancelButton.toString(), e -> close());
         getFooter().add(cancelButton);
         getFooter().add(saveButton);
     }
