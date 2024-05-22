@@ -90,7 +90,7 @@ public class CreateUserDialog extends Dialog {
 
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button cancelButton = new Button(Lang.cancelButton.toString(), e -> close());
+        Button cancelButton = new Button(Lang.translate("view.createUser.button.cancel"), e -> close());
         getFooter().add(cancelButton);
         getFooter().add(saveButton);
     }
