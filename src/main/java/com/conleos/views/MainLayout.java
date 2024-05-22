@@ -6,7 +6,6 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.i18n.Lang;
-import com.conleos.i18n.TranslationProvider;
 import com.conleos.views.admin.AdminView;
 import com.conleos.views.dashboard.DashboardView;
 import com.conleos.views.home.HomeView;
@@ -31,8 +30,6 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
-import java.util.Locale;
-
 /**
  * The main view is a top-level placeholder for other views.
  */
@@ -41,8 +38,7 @@ public class MainLayout extends AppLayout {
     private H2 viewTitle;
     private HorizontalLayout viewHeaderContainer;
 
-    public MainLayout(TranslationProvider translationProvider) {
-        this.translationProvider = translationProvider;
+    public MainLayout() {
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
