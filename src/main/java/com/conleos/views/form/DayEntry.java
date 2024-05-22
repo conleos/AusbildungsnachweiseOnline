@@ -4,6 +4,7 @@ import com.conleos.common.FormUtil;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
+import com.conleos.i18n.Lang;
 import com.conleos.views.admin.CreateErrorNotification;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
@@ -31,8 +32,7 @@ public class DayEntry extends VerticalLayout {
     TextField timeSum;
     TextArea area;
     NumberField pause;
-    private Locale locale = UI.getCurrent().getLocale();
-    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm(getTranslation("view.dayEntry.error.notification", locale));
+    CreateErrorNotificationForm noInt = new CreateErrorNotificationForm(Lang.translate("view.dayEntry.error.notification"));
     CreateErrorNotification error;
     Day day;
 
@@ -46,29 +46,29 @@ public class DayEntry extends VerticalLayout {
         this.formView = formView;
         this.day = day;
         select = new Select<>();
-        select.setLabel(getTranslation("view.dayEntry.selectLabel.art", locale));
+        select.setLabel(Lang.translate("view.dayEntry.selectLabel.art"));
         select.setItems(KindOfWork.values());
         select.setValue(KindOfWork.PracticalWork);
-        timeBegin = new TimePicker(getTranslation("view.dayEntry.beginTime", locale));
+        timeBegin = new TimePicker(Lang.translate("view.dayEntry.beginTime"));
         timeBegin.setStep(Duration.ofMinutes(15));
-        timeEnd = new TimePicker(getTranslation("view.dayEntry.endTime", locale));
+        timeEnd = new TimePicker(Lang.translate("view.dayEntry.endTime"));
         timeEnd.setStep(Duration.ofMinutes(15));
         timeBegin.setValue(LocalTime.of(0, 0));
         timeEnd.setValue(LocalTime.of(0, 0));
         HorizontalLayout totalTimeLayout = new HorizontalLayout();
         timeSum = new TextField();
         timeSum.setReadOnly(true);
-        timeSum.setLabel(getTranslation("view.dayEntry.sumTime", locale));
+        timeSum.setLabel(Lang.translate("view.dayEntry.sumTime"));
         totalTimeLayout.add(timeSum);
         HorizontalLayout pauseLayout = new HorizontalLayout();
-        pause = new NumberField(getTranslation("view.dayEntry.pause", locale));
+        pause = new NumberField(Lang.translate("view.dayEntry.pause"));
         pause.setValue(0.0);
         pause.addClassName("background-red");
         pause.setWidth("150px");
         Span min = new Span("min");
         min.addClassNames("min");
         pauseLayout.add(pause, min);
-        area = new TextArea(getTranslation("view.dayEntry.area", locale));
+        area = new TextArea(Lang.translate("view.dayEntry.area"));
         area.setWidthFull();
 
         VerticalLayout block = new VerticalLayout(select, timeBegin, timeEnd, pauseLayout);
@@ -150,8 +150,8 @@ public class DayEntry extends VerticalLayout {
                 if (current < old) {
                     pause.removeClassName("background-green");
                     pause.addClassName("background-red");
-                    if (constructor == false) {
-                        error = new CreateErrorNotification(getTranslation("view.dayEntry.pause.error1", locale) + " "+ old + " " + getTranslation("view.dayEntry.pause.error2", locale));
+                    if (!constructor) {
+                        error = new CreateErrorNotification(Lang.translate("view.dayEntry.pause.error1") + " "+ old + " " + Lang.translate("view.dayEntry.pause.error2"));
                         error.open();
                     }
                     changeTotalTime();

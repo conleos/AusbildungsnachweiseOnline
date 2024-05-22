@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 
 public class Day {
+
     LocalDate date;
     DayEntry entry;
     VerticalLayout container = new VerticalLayout();

@@ -2,10 +2,8 @@ package com.conleos.views.form;
 
 import com.conleos.data.entity.Form;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.textfield.TextArea;

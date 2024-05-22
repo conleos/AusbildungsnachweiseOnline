@@ -2,6 +2,7 @@ package com.conleos.views.dashboard;
 
 import com.conleos.common.Role;
 import com.conleos.data.entity.FormStatus;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,7 +23,6 @@ public class DashboardFormFilter extends VerticalLayout {
     private boolean hideInReviewForms = false;
     private boolean hideSignedForms = false;
     private boolean hideRejectedForms = false;
-    private Locale locale = UI.getCurrent().getLocale();
 
     public DashboardFormFilter(Role roleOfViewer) {
         if (roleOfViewer.equals(Role.Trainee)) {
@@ -34,28 +34,28 @@ public class DashboardFormFilter extends VerticalLayout {
             hideRejectedForms = true;
         }
 
-        button = new Button(getTranslation("view.dashboardFilter.button.filter", locale), VaadinIcon.FILTER.create());
+        button = new Button(Lang.translate("view.dashboardFilter.button.filter"), VaadinIcon.FILTER.create());
         button.addClickListener(event -> dialog.open());
-        dialog = new Dialog(getTranslation("view.dashboardFilter.button.filter.label", locale));
+        dialog = new Dialog(Lang.translate("view.dashboardFilter.button.filter.label"));
         dialog.setWidth("45%");
 
-        Checkbox hideInProgressFormsCheckBox = new Checkbox(getTranslation("view.dashboardFilter.hideInProgress", locale));
+        Checkbox hideInProgressFormsCheckBox = new Checkbox(Lang.translate("view.dashboardFilter.hideInProgress"));
         hideInProgressFormsCheckBox.setValue(hideInProgressForms);
         dialog.add(hideInProgressFormsCheckBox);
 
-        Checkbox hideInReviewFormsCheckBox = new Checkbox(getTranslation("view.dashboardFilter.hideInReview", locale));
+        Checkbox hideInReviewFormsCheckBox = new Checkbox(Lang.translate("view.dashboardFilter.hideInReview"));
         hideInReviewFormsCheckBox.setValue(hideInReviewForms);
         dialog.add(hideInReviewFormsCheckBox);
 
-        Checkbox hideSignedFormsCheckBox = new Checkbox(getTranslation("view.dashboardFilter.hideSigned", locale));
+        Checkbox hideSignedFormsCheckBox = new Checkbox(Lang.translate("view.dashboardFilter.hideSigned"));
         hideSignedFormsCheckBox.setValue(hideSignedForms);
         dialog.add(hideSignedFormsCheckBox);
 
-        Checkbox hideRejectedFormsCheckBox = new Checkbox(getTranslation("view.dashboardFilter.hideRejected", locale));
+        Checkbox hideRejectedFormsCheckBox = new Checkbox(Lang.translate("view.dashboardFilter.hideRejected"));
         hideRejectedFormsCheckBox.setValue(hideRejectedForms);
         dialog.add(hideRejectedFormsCheckBox);
 
-        Button cancelButton = new Button(getTranslation("view.dashboardFilter.button.cancel", locale));
+        Button cancelButton = new Button(Lang.translate("view.dashboardFilter.button.cancel"));
         cancelButton.addClickListener(event -> {
             dialog.close();
             hideInProgressFormsCheckBox.setValue(hideInProgressForms);
@@ -63,7 +63,7 @@ public class DashboardFormFilter extends VerticalLayout {
             hideSignedFormsCheckBox.setValue(hideSignedForms);
             hideRejectedFormsCheckBox.setValue(hideRejectedForms);
         });
-        applyFiltersButton = new Button(getTranslation("view.dashboardFilter.button.apply", locale));
+        applyFiltersButton = new Button(Lang.translate("view.dashboardFilter.button.apply"));
         applyFiltersButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         applyFiltersButton.addClickListener(event -> {
             dialog.close();

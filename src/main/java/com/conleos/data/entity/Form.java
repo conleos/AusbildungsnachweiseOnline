@@ -19,9 +19,7 @@ public class Form {
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
-
         LocalTime begin = LocalTime.of(0, 0);
-
         LocalTime end = LocalTime.of(0, 0);
         int pauseInMinutes = 0;
         String description = "";

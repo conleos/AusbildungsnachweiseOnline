@@ -3,22 +3,19 @@ package com.conleos.views.form;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Locale;
 
 /*
  * This DatePicker is used to navigate to specific Form by picking a date.
  * An EventListener will automatically reroute the client.
  * */
 public class DateBasedNavigator extends DatePicker {
-
-    private Locale locale = UI.getCurrent().getLocale();
-
 
     public DateBasedNavigator(Form form) {
         if (form != null) {
@@ -32,7 +29,7 @@ public class DateBasedNavigator extends DatePicker {
 
     private void init(User trainee, LocalDate date) {
         setValue(null);
-        setLabel(getTranslation("view.dateBasedNavigator.label", locale));
+        setLabel(Lang.translate("view.dateBasedNavigator.label"));
         addValueChangeListener(event -> {
             navigate(trainee, event.getValue());
         });
