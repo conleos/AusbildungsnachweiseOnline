@@ -40,6 +40,7 @@ import java.util.Optional;
 public class AdminView extends VerticalLayout implements HasHeaderContent {
 
     private CreateUserDialog createUserDialog;
+    private EditGlobalSettingsDialog editSettingsDialog;
     private Long gridUserId;
     private String gridUserRole;
     private Locale locale = UI.getCurrent().getLocale();
@@ -56,7 +57,8 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             return;
         }
         createUserDialog = new CreateUserDialog();
-        add(createUserDialog);
+        editSettingsDialog = new EditGlobalSettingsDialog();
+        add(createUserDialog, editSettingsDialog);
 
         List<User> users = service.getAllUsers();
 
@@ -163,9 +165,10 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
 
     @Override
     public Component[] createHeaderContent() {
-        Component[] headerComponents = new Component[3];
+        Component[] headerComponents = new Component[4];
 
         Button newUser = new Button(getTranslation("view.admin.button.newUser", locale), VaadinIcon.USER.create(), e -> createUserDialog.open());
+
         Button changePassword = new Button(getTranslation("view.admin.button.changePassword", locale), VaadinIcon.PENCIL.create());
         changePassword.addClickListener(event -> {
             if (gridUserId != null && !gridUserRole.equals("Admin")) {
@@ -192,9 +195,12 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             }
         });
 
+        Button editSettings = new Button(getTranslation("view.admin.button.newUser", locale), VaadinIcon.COG.create(), e -> editSettingsDialog.open());
+
         headerComponents[0] = newUser;
         headerComponents[1] = changePassword;
         headerComponents[2] = deleteAccount;
+        headerComponents[3] = editSettings;
         return headerComponents;
     }
 }
