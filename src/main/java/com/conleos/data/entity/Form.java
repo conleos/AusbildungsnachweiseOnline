@@ -117,6 +117,7 @@ public class Form {
     FormEntry sunday = new FormEntry();
 
     FormStatus status = FormStatus.InProgress;
+    Boolean newAction = false;
 
     Long userWhoSignedOrRejected;
 
@@ -147,6 +148,14 @@ public class Form {
 
     public LocalDate getMondayDate() {
         return mondayOfThatWeek;
+    }
+
+    public Boolean getNewAction() {
+        return newAction;
+    }
+
+    public void setNewAction(Boolean newAction) {
+        this.newAction = newAction;
     }
 
     public FormStatus getStatus() {

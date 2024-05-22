@@ -64,3 +64,17 @@ vaadin-message-input vaadin-button {
 .text-white {
     color: white !important;
 }
+
+.form-card {
+    position: relative;
+}
+
+.newActionNote {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: darkred;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}

@@ -2,6 +2,7 @@ package com.conleos.views.dashboard;
 
 import com.conleos.common.ColorGenerator;
 import com.conleos.common.HtmlColor;
+import com.conleos.data.entity.Form;
 import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
@@ -13,6 +14,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -30,19 +33,38 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class InstructorDashboard extends Main implements HasComponents, HasStyle {
 
     private OrderedList itemContainer;
+    private Locale locale = UI.getCurrent().getLocale();
+
 
     public InstructorDashboard(ArrayList<Component> headerComponents, User instructor) {
         constructUI();
 
         List<User> trainees = UserService.getInstance().getUsersByAssignee(instructor);
-
+        Boolean found = false;
         for (User trainee : trainees) {
-            itemContainer.add(new UserCard(trainee));
+            List<Form> allFormsTrainee = FormService.getInstance().getFormsByOwner(trainee);
+            for (Form form : allFormsTrainee ) {
+                if (form.getNewAction()) {
+                    found = true;
+                    break;
+                }
+            }
+            itemContainer.add(new UserCard(trainee,found));
         }
+        Boolean finalFound = found;
+        // New notification if review is requested
+        UI.getCurrent().access(() -> {
+            if (finalFound) {
+                Notification notification = Notification.show(getTranslation("view.instructor.notification", locale));
+                notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                notification.setPosition(Notification.Position.BOTTOM_CENTER);
+            }
+        });
 
     }
 
@@ -76,9 +98,10 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
 
 class UserCard extends ListItem {
 
-    public UserCard(User trainee) {
+    public UserCard(User trainee, Boolean found) {
         addClassNames(LumoUtility.Background.CONTRAST_5, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.AlignItems.START, LumoUtility.Padding.MEDIUM,
                 LumoUtility.BorderRadius.LARGE);
+        addClassNames("form-card");
 
         getStyle().set("cursor", "pointer");
 
@@ -94,6 +117,7 @@ class UserCard extends ListItem {
 
         div.add(avatar);
         //div.addClassNames("striped-background");
+
         HtmlColor backgroundColor = HtmlColor.from(ColorGenerator.fromRandomString(trainee.getUsername()).darker().darker());
         HtmlColor backgroundColor2 = HtmlColor.from(backgroundColor.toAWTColor().darker());
         div.getStyle().set("background-image", "repeating-linear-gradient(45deg, " + backgroundColor + ", " + backgroundColor + " 10px, " + backgroundColor2 + " 10px, " + backgroundColor2 + " 20px)");
@@ -116,6 +140,22 @@ class UserCard extends ListItem {
 
         add(div, header, subtitle, description, badge);
 
-        addClickListener(listItemClickEvent -> UI.getCurrent().navigate("dashboard?user=" + trainee.getId()));
+        List<Form> allFormsTrainee = FormService.getInstance().getFormsByOwner(trainee);
+
+        //New Notification if newAction in form is true
+            if (found) {
+                Div newActions = new Div();
+                newActions.addClassNames("newActionNote");
+                add(newActions);
+        }
+
+        addClickListener(listItemClickEvent -> {
+            for (Form form : allFormsTrainee ) {
+                form.setNewAction(false);
+                FormService.getInstance().saveForm(form);
+            }
+            UI.getCurrent().navigate("dashboard?user=" + trainee.getId());
+
+        });
     }
 }

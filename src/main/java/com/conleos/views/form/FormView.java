@@ -95,6 +95,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
             signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
             signButton.addClickListener(save -> {
                 saveButton.click();
+                form.setNewAction(true);
                 form.setStatus(FormStatus.InReview);
                 form.setUserWhoSignedOrRejected(null);
                 FormService.getInstance().saveForm(form);
