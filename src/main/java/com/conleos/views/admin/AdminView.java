@@ -195,7 +195,7 @@ public class AdminView extends VerticalLayout implements HasHeaderContent {
             }
         });
 
-        Button editSettings = new Button(getTranslation("view.admin.button.newUser", locale), VaadinIcon.COG.create(), e -> editSettingsDialog.open());
+        Button editSettings = new Button(getTranslation("view.admin.button.editSettings", locale), VaadinIcon.COG.create(), e -> editSettingsDialog.open());
 
         headerComponents[0] = newUser;
         headerComponents[1] = changePassword;

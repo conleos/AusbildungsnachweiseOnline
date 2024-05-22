@@ -1,27 +1,17 @@
 package com.conleos.views.admin;
 
-import com.conleos.common.PasswordHasher;
 import com.conleos.common.Role;
 import com.conleos.data.entity.GlobalSettings;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.GlobalSettingsService;
 import com.conleos.data.service.UserService;
-import com.conleos.data.validation.UserDataValidation;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,7 +21,7 @@ public class EditGlobalSettingsDialog extends Dialog {
 
     public EditGlobalSettingsDialog() {
         GlobalSettings globalSettings = GlobalSettingsService.getGlobalSettings();
-        setHeaderTitle(getTranslation("view.createUser.headerTitle", locale));
+        setHeaderTitle(getTranslation("view.editSettings.headerTitle", locale));
 
         List<User> assignees = UserService.getInstance().getAllUsers();
         assignees.removeIf(user -> user.getRole() == Role.Trainee);
