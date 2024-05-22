@@ -20,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
+
 import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -113,22 +114,19 @@ class FormCard extends ListItem {
 
     public FormCard(LocalDate date, User trainee, int formNumber) {
         form = FormService.getInstance().getFormByDateAndUser(date, trainee);
-        addClassNames(LumoUtility.Background.CONTRAST_5, Display.FLEX, LumoUtility.FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
-                LumoUtility.BorderRadius.LARGE);
+        addClassNames(LumoUtility.Background.CONTRAST_5, Display.FLEX, LumoUtility.FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM, LumoUtility.BorderRadius.LARGE);
         getStyle().set("cursor", "pointer");
         Div div = new Div();
-        div.addClassNames(LumoUtility.Background.CONTRAST_20, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
-                Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
+        div.addClassNames(LumoUtility.Background.CONTRAST_20, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER, Margin.Bottom.MEDIUM, LumoUtility.Overflow.HIDDEN, LumoUtility.BorderRadius.MEDIUM, LumoUtility.Width.FULL);
         div.setHeight("160px");
 
         div.add(createCalendar(date, formNumber, form));
         HtmlColor backgroundColor;
         HtmlColor backgroundColor2;
-        if (form!=null) {
+        if (form != null) {
             backgroundColor = HtmlColor.from(ColorGenerator.statusColor(form.getStatus()).darker().darker());
             backgroundColor2 = HtmlColor.from(ColorGenerator.statusColor(form.getStatus()).darker());
-        }
-        else {
+        } else {
             backgroundColor = HtmlColor.from(Color.GRAY.darker().darker());
             backgroundColor2 = HtmlColor.from(Color.GRAY.darker());
         }
@@ -175,7 +173,7 @@ class FormCard extends ListItem {
         if (form == null) {
             monthYear.getStyle().set("background-color", HtmlColor.from(Color.GRAY).toString());
         } else {
-            monthYear.getStyle().set("background-color",  HtmlColor.from(ColorGenerator.statusColor(form.getStatus())).toString());
+            monthYear.getStyle().set("background-color", HtmlColor.from(ColorGenerator.statusColor(form.getStatus())).toString());
         }
         layout.add(monthYear);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);

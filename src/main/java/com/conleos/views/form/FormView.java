@@ -7,7 +7,6 @@ import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
 import com.conleos.i18n.Lang;
-import com.conleos.i18n.TranslationProvider;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;

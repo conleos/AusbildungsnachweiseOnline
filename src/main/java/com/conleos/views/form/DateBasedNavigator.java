@@ -10,7 +10,6 @@ import com.vaadin.flow.component.notification.Notification;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Locale;
 
 /*
  * This DatePicker is used to navigate to specific Form by picking a date.

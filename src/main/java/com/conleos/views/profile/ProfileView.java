@@ -5,11 +5,9 @@ import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
 import com.conleos.i18n.Lang;
-import com.conleos.i18n.TranslationProvider;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -21,8 +19,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
-
-import java.util.Locale;
 
 @PageTitle("view.profile.pageTitle")
 @Route(value = "profile", layout = MainLayout.class)

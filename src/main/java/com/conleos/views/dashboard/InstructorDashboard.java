@@ -34,7 +34,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class InstructorDashboard extends Main implements HasComponents, HasStyle {
 
