@@ -11,6 +11,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -54,9 +55,18 @@ public class PdfGenerator {
         return baos;
     }
 
+    private static Font font = null;
+
     private static void generateAllFormPages(Document document, User trainee) {
         if (!trainee.getRole().equals(Role.Trainee)) {
             throw new RuntimeException("Role has to be Trainee.");
+        }
+
+        try {
+            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            font = new Font(baseFont, 9, Font.NORMAL);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         List<Form> forms = FormService.getInstance().getFormsByOwner(trainee);
@@ -71,13 +81,13 @@ public class PdfGenerator {
 
     private static void generateSinglePageForm(Document document, Form form, int number) {
         User user = form.getOwner();
-        document.add(new Paragraph("Dieses Dokument wurde maschinell erzeugt."));
-        document.add(new Paragraph("Name: " + user.getLastName() + " Vorname: " + user.getFirstName()));
+        document.add(new Paragraph("Dieses Dokument wurde maschinell erzeugt.", font));
+        document.add(new Paragraph("Name: " + user.getLastName() + " Vorname: " + user.getFirstName(), font));
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN);
-        document.add(new Paragraph("Ausbildungsnachweis Nr. " + number + " Woche vom " + formatter.format(form.getMondayDate()) + " bis " + formatter.format(form.getMondayDate().plusDays(6))));
+        document.add(new Paragraph("Ausbildungsnachweis Nr. " + number + " Woche vom " + formatter.format(form.getMondayDate()) + " bis " + formatter.format(form.getMondayDate().plusDays(6)), font));
 
-        document.add(new Paragraph(" "));
-        document.add(new Paragraph("In dieser Woche gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h"));
+        document.add(new Paragraph(" ", font));
+        document.add(new Paragraph("In dieser Woche gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h", font));
 
         generateFormEntry(document, form, form.getMonday(), form.getMondayDate().plusDays(0));
         generateFormEntry(document, form, form.getTuesday(), form.getMondayDate().plusDays(1));
@@ -88,7 +98,7 @@ public class PdfGenerator {
         generateFormEntry(document, form, form.getSunday(), form.getMondayDate().plusDays(6));
 
         if (form.getUserWhoSignedOrRejected().getFullName() != null && form.getStatus().equals(FormStatus.Signed)) {
-            document.add(new Paragraph("Unterzeichnet von: " + form.getUserWhoSignedOrRejected().getFullName()));
+            document.add(new Paragraph("Unterzeichnet von: " + form.getUserWhoSignedOrRejected().getFullName(), font));
             Image image = null;
             try {
                 image = Image.getInstance(form.getUserWhoSignedOrRejected().getSignatureImage());
@@ -104,28 +114,30 @@ public class PdfGenerator {
     }
 
     private static void generateFormEntry(Document document, Form form, Form.FormEntry entry, LocalDate date) {
+        if (FormUtil.getTotalMinutesFromEntry(entry) <= 0 && (entry.getDescription() == null || entry.getDescription().isEmpty())) {
+            return;
+        }
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN);
 
         String dayLabel = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.GERMANY);
         dayLabel += ", " + formatter.format(date);
-        Paragraph paragraph = new Paragraph(dayLabel);
-        paragraph.setAlignment(Element.ALIGN_RIGHT);
+        final String dayInfo = String.format("Von %s bis %s. Pausenzeit von %d Minuten.   %s", FormUtil.getLabelFromTotalTime(entry.getBegin().get(ChronoField.MINUTE_OF_DAY)), FormUtil.getLabelFromTotalTime(entry.getEnd().get(ChronoField.MINUTE_OF_DAY)), entry.getPause(), entry.getKindOfWork().toString());
+        Paragraph paragraph = new Paragraph(dayInfo + " - " + dayLabel, font);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
         document.add(paragraph);
-        document.add(new Paragraph(" "));
+        document.add(new Paragraph(" ", font));
 
         PdfPTable table = new PdfPTable(1);
         table.addCell(createCell(entry.getDescription()));
         document.add(table);
-        final String dayInfo = String.format("Von %s bis %s. Pausenzeit von %d Minuten.   %s", FormUtil.getLabelFromTotalTime(entry.getBegin().get(ChronoField.MINUTE_OF_DAY)), FormUtil.getLabelFromTotalTime(entry.getEnd().get(ChronoField.MINUTE_OF_DAY)), entry.getPause(), entry.getKindOfWork().toString());
-        document.add(new Paragraph(dayInfo));
-        document.add(new Paragraph(" "));
+        document.add(new Paragraph(" ", font));
     }
 
     private static PdfPCell createCell(String text) {
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        cell.setPhrase(new com.lowagie.text.Phrase(text));
+        cell.setPhrase(new com.lowagie.text.Phrase(text, font));
         cell.setColspan(2);
         return cell;
     }
