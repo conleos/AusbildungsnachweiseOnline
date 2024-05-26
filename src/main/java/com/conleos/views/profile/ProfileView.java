@@ -27,6 +27,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -95,7 +97,7 @@ public class ProfileView extends VerticalLayout{
                 String attachmentName = event.getFileName();
                 try {
                     // The image can be jpg png or gif, but we store it always as png file in this example
-                    BufferedImage inputImage = ImageIO.read(buffer.getInputStream(attachmentName));
+                    BufferedImage inputImage = downscaleImage(ImageIO.read(buffer.getInputStream(attachmentName)), 480, 128);
                     ByteArrayOutputStream pngContent = new ByteArrayOutputStream();
                     ImageIO.write(inputImage, "png", pngContent);
                     user.setSignatureImage(pngContent.toByteArray());
@@ -109,6 +111,36 @@ public class ProfileView extends VerticalLayout{
         }
 
         return layout;
+    }
+
+    private static BufferedImage downscaleImage(BufferedImage originalImage, int maxWidth, int maxHeight) {
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+
+        double scaleFactor = Math.min((double) maxWidth / originalWidth, (double) maxHeight / originalHeight);
+
+        if (scaleFactor >= 1) {
+            return originalImage; // No need to scale if the image is already within the limits
+        }
+
+        int newWidth = (int) (originalWidth * scaleFactor);
+        int newHeight = (int) (originalHeight * scaleFactor);
+
+        BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, originalImage.getType());
+        Graphics2D g2d = scaledImage.createGraphics();
+
+        // Set rendering hints for better quality
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Scale the original image
+        AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
+        g2d.drawRenderedImage(originalImage, at);
+
+        g2d.dispose();
+
+        return scaledImage;
     }
 
     private void createSignImage(User user) {
