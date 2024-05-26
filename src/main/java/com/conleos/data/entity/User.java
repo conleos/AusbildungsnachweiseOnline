@@ -2,8 +2,11 @@ package com.conleos.data.entity;
 
 import com.conleos.common.Role;
 import com.conleos.data.service.UserService;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.server.StreamResource;
 import jakarta.persistence.*;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,6 +40,12 @@ public class User {
     List<Long> assigneeIDs = new ArrayList<>();
     @Column(name = "startDate")
     LocalDate startDate;
+
+    // Instructor data only
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "blobImg", columnDefinition = "BLOB")
+    private byte[] signatureImage;
 
     public User(String username, String passwordHash, Role role, String firstName, String lastName, LocalDate birthday) {
         this.username = username;
@@ -114,6 +123,7 @@ public class User {
     public LocalDate getBirthday() {
         return birthday;
     }
+
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
@@ -154,4 +164,25 @@ public class User {
     public void setAssigneeIds(List<Long> assigneeIDs) {
         this.assigneeIDs = assigneeIDs;
     }
+
+    public byte[] getSignatureImage() {
+        return signatureImage;
+    }
+
+    public void setSignatureImage(byte[] signatureImage) {
+        this.signatureImage = signatureImage;
+    }
+
+    public Image generateSignImage() {
+        if (getSignatureImage() == null) {
+            return null;
+        }
+
+        StreamResource sr = new StreamResource("signature", () -> {
+            return new ByteArrayInputStream(getSignatureImage());
+        });
+        sr.setContentType("image/png");
+        return new Image(sr, "signature");
+    }
+
 }
