@@ -10,7 +10,6 @@ import com.conleos.i18n.Lang;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -32,10 +31,9 @@ import com.vaadin.flow.server.VaadinSession;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
-@PageTitle("view.admin.pageTitle")
+@PageTitle("Admin")
 @Route(value = "admin", layout = MainLayout.class)
 @RouteAlias(value = "manage", layout = MainLayout.class)
 public class AdminView extends VerticalLayout implements HasHeaderContent {

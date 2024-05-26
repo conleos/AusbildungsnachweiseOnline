@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
-@PageTitle("view.form.pageTitle")
+@PageTitle("Nachweis")
 @Route(value = "form", layout = MainLayout.class)
 public class FormView extends VerticalLayout implements HasUrlParameter<Long>, HasHeaderContent {
 

@@ -128,16 +128,11 @@ public class MainLayout extends AppLayout {
         if (getContent() instanceof HasHeaderContent) {
             viewHeaderContainer.add(((HasHeaderContent)getContent()).createHeaderContent());
         }
-
     }
 
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        if (title != null) {
-            return Lang.translate(title.value());
-        } else {
-            return "";
-        }
+        return title == null ? "" : title.value();
     }
 
 }

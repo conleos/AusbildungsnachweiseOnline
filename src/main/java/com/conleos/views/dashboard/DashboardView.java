@@ -15,7 +15,7 @@ import com.vaadin.flow.component.html.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@PageTitle("view.dashboard.pageTitle")
+@PageTitle("Dashboard")
 @Route(value = "dashboard", layout = MainLayout.class)
 public class DashboardView extends Div implements BeforeEnterObserver, HasHeaderContent {
 

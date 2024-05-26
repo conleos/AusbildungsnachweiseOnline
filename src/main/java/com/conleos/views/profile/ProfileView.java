@@ -20,7 +20,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
-@PageTitle("view.profile.pageTitle")
+@PageTitle("Profile")
 @Route(value = "profile", layout = MainLayout.class)
 public class ProfileView extends VerticalLayout{
 

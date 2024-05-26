@@ -19,7 +19,7 @@ import jakarta.servlet.http.Cookie;
 import java.util.Locale;
 import java.util.Objects;
 
-@PageTitle("view.preference.pageTitle")
+@PageTitle("Preference")
 @Route(value = "preferences", layout = MainLayout.class)
 public class PreferencesView extends VerticalLayout {
 
