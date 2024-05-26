@@ -14,14 +14,13 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.vaadin.flow.component.UI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Locale;
 
@@ -114,18 +113,20 @@ public class PdfGenerator {
         document.add(paragraph);
         document.add(new Paragraph(" "));
 
-        PdfPTable table = new PdfPTable(2);
-        table.addCell(createCell(entry.getDescription(), Element.ALIGN_CENTER));
-        table.addCell(createCell(entry.getKindOfWork().toString(), Element.ALIGN_CENTER));
+        PdfPTable table = new PdfPTable(1);
+        table.addCell(createCell(entry.getDescription()));
         document.add(table);
+        final String dayInfo = String.format("Von %s bis %s.    %s", FormUtil.getLabelFromTotalTime(entry.getBegin().get(ChronoField.MINUTE_OF_DAY)), FormUtil.getLabelFromTotalTime(entry.getEnd().get(ChronoField.MINUTE_OF_DAY)), entry.getKindOfWork().toString());
+        document.add(new Paragraph(dayInfo));
         document.add(new Paragraph(" "));
     }
 
-    private static PdfPCell createCell(String text, int alignment) {
+    private static PdfPCell createCell(String text) {
         PdfPCell cell = new PdfPCell();
-        cell.setHorizontalAlignment(alignment);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setPhrase(new com.lowagie.text.Phrase(text));
+        cell.setColspan(2);
         return cell;
     }
 
