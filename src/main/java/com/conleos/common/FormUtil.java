@@ -1,6 +1,7 @@
 package com.conleos.common;
 
 import com.conleos.data.entity.Form;
+import com.conleos.views.form.Day;
 import com.conleos.views.form.KindOfWork;
 import com.vaadin.flow.component.html.Span;
 
@@ -43,9 +44,25 @@ public class FormUtil {
             return 0;
         }
     }
+    public static int getTotalMinutesFromEntry(Form.FormEntry entry) {
+        return getTotalMinutesFromEntry(entry.getBegin(), entry.getEnd(), entry.getPause(), entry.getKindOfWork());
+    }
 
     public static String getLabelFromTotalTime(int timeInMinutes) {
         return String.format("%d:%02d", timeInMinutes / 60, timeInMinutes % 60);
+    }
+    public static String getLabelFromTotalTimeOfForm(Form form) {
+        int minutes = 0;
+
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getMonday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getTuesday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getWednesday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getThursday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getFriday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getSaturday());
+        minutes += FormUtil.getTotalMinutesFromEntry(form.getSunday());
+
+        return getLabelFromTotalTime(minutes);
     }
 
 }

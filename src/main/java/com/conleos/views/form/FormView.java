@@ -1,5 +1,6 @@
 package com.conleos.views.form;
 
+import com.conleos.common.FormUtil;
 import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
@@ -44,7 +45,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         this.form = form;
 
         Span weekInfo = new Span("Woche ab Montag, dem " + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
-        weekTime = new Span("In dieser Woche bereits gearbeitet: " + "0" + " h");
+        weekTime = new Span("In dieser Woche bereits gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h");
         add(weekInfo, weekTime);
 
         TabSheet tabSheet = new TabSheet();
@@ -200,11 +201,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     }
 
     public void update() {
-        double newTime = 0;
-        for (Day day : days) {
-            newTime += day.entry.totalTime / 60.0;
-        }
-        weekTime.setText("In dieser Woche bereits gearbeitet: " + newTime + " h");
+        weekTime.setText("In dieser Woche bereits gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h");
     }
 
 }

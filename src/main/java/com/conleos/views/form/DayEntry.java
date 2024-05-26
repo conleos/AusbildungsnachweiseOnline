@@ -35,9 +35,8 @@ public class DayEntry extends VerticalLayout {
     CreateErrorNotificationForm noInt = new CreateErrorNotificationForm(Lang.translate("view.dayEntry.error.notification"));
     CreateErrorNotification error;
     Day day;
-
-    int totalTime;
     FormView formView;
+    Form.FormEntry formEntry;
 
     /*
      * FormEntry is optional
@@ -45,6 +44,7 @@ public class DayEntry extends VerticalLayout {
     public DayEntry(Day day, Form.FormEntry entry, FormView formView) {
         this.formView = formView;
         this.day = day;
+        this.formEntry = entry;
         select = new Select<>();
         select.setLabel(Lang.translate("view.dayEntry.selectLabel.art"));
         select.setItems(KindOfWork.values());
@@ -131,8 +131,12 @@ public class DayEntry extends VerticalLayout {
     }
 
     void changeTotalTime() {
-        int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(timeBegin.getValue(), timeEnd.getValue(), pause.getValue().intValue(), select.getValue());
-        totalTime = totalMinutesNoPause;
+        formEntry.setBegin(timeBegin.getValue());
+        formEntry.setEnd(timeEnd.getValue());
+        formEntry.setPause(pause.getValue().intValue());
+        formEntry.setKindOfWork(select.getValue());
+        int totalMinutesNoPause = FormUtil.getTotalMinutesFromEntry(formEntry);
+
         timeSum.setValue(FormUtil.getLabelFromTotalTime(totalMinutesNoPause));
     }
 
