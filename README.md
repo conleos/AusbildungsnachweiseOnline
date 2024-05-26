@@ -23,7 +23,7 @@ This will build a JAR file with all the dependencies and front-end resources,
 ready to be deployed. The file can be found in the `target` folder after the build completes.
 
 Once the JAR file is built, you can run it using
-`java -jar target/ausbildungsnachweiseonline-1.0-SNAPSHOT.jar`
+`java -jar target/ausbildungsnachweiseonline.jar`
 
 ## Useful Vaadin links
 
