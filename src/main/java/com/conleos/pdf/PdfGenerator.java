@@ -116,7 +116,7 @@ public class PdfGenerator {
         PdfPTable table = new PdfPTable(1);
         table.addCell(createCell(entry.getDescription()));
         document.add(table);
-        final String dayInfo = String.format("Von %s bis %s.    %s", FormUtil.getLabelFromTotalTime(entry.getBegin().get(ChronoField.MINUTE_OF_DAY)), FormUtil.getLabelFromTotalTime(entry.getEnd().get(ChronoField.MINUTE_OF_DAY)), entry.getKindOfWork().toString());
+        final String dayInfo = String.format("Von %s bis %s. Pausenzeit von %d Minuten.   %s", FormUtil.getLabelFromTotalTime(entry.getBegin().get(ChronoField.MINUTE_OF_DAY)), FormUtil.getLabelFromTotalTime(entry.getEnd().get(ChronoField.MINUTE_OF_DAY)), entry.getPause(), entry.getKindOfWork().toString());
         document.add(new Paragraph(dayInfo));
         document.add(new Paragraph(" "));
     }
