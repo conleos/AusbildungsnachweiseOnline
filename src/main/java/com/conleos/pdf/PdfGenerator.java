@@ -1,9 +1,12 @@
 package com.conleos.pdf;
 
+import com.conleos.common.FormUtil;
 import com.conleos.common.Role;
 import com.conleos.data.entity.Form;
+import com.conleos.data.entity.FormStatus;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.lowagie.text.*;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.PageSize;
@@ -14,6 +17,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.vaadin.flow.component.UI;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -74,6 +78,7 @@ public class PdfGenerator {
         document.add(new Paragraph("Ausbildungsnachweis Nr. " + number + " Woche vom " + formatter.format(form.getMondayDate()) + " bis " + formatter.format(form.getMondayDate().plusDays(6))));
 
         document.add(new Paragraph(" "));
+        document.add(new Paragraph("In dieser Woche gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h"));
 
         generateFormEntry(document, form, form.getMonday(), form.getMondayDate().plusDays(0));
         generateFormEntry(document, form, form.getTuesday(), form.getMondayDate().plusDays(1));
@@ -83,6 +88,20 @@ public class PdfGenerator {
         generateFormEntry(document, form, form.getSaturday(), form.getMondayDate().plusDays(5));
         generateFormEntry(document, form, form.getSunday(), form.getMondayDate().plusDays(6));
 
+        if (form.getUserWhoSignedOrRejected().getFullName() != null && form.getStatus().equals(FormStatus.Signed)) {
+            document.add(new Paragraph("Unterzeichnet von: " + form.getUserWhoSignedOrRejected().getFullName()));
+            Image image = null;
+            try {
+                image = Image.getInstance(form.getUserWhoSignedOrRejected().getSignatureImage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            // Optionally, set image properties
+            image.scaleToFit(200, 200); // Scale the image to fit within 200x200 pixels
+            image.setAlignment(com.lowagie.text.Image.ALIGN_CENTER);
+
+            document.add(image);
+        }
     }
 
     private static void generateFormEntry(Document document, Form form, Form.FormEntry entry, LocalDate date) {
