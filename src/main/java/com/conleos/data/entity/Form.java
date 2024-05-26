@@ -22,6 +22,8 @@ public class Form {
         LocalTime begin = LocalTime.of(0, 0);
         LocalTime end = LocalTime.of(0, 0);
         int pauseInMinutes = 0;
+        @Lob
+        @Column(length = 3000)
         String description = "";
         KindOfWork kindOfWork = KindOfWork.PracticalWork;
 
