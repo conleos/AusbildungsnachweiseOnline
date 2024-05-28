@@ -2,6 +2,8 @@ package com.conleos.data.entity;
 
 import jakarta.persistence.*;
 
+//Entity for Comments in Form
+
 @Entity
 public class Comment {
 

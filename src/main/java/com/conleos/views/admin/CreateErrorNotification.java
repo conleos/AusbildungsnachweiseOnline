@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 
-
 public class CreateErrorNotification extends Notification {
 
     public CreateErrorNotification(String s) {
@@ -20,7 +19,7 @@ public class CreateErrorNotification extends Notification {
         Div text = new Div(new Text(s));
         Button closeButton = new Button(new Icon("lumo", "cross"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel(Lang.translate("view.admin.errorNotification"));
+        closeButton.setAriaLabel("Close");
         closeButton.addClickListener(e -> {
             close();
         });

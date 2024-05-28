@@ -12,9 +12,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.component.html.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+//user dashboard depending on the user role
 
 @PageTitle("Dashboard")
 @Route(value = "dashboard", layout = MainLayout.class)
