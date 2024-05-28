@@ -7,6 +7,7 @@ import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.FormService;
+import com.conleos.i18n.Lang;
 import com.conleos.pdf.PdfDownloadButton;
 import com.conleos.views.form.DateBasedNavigator;
 import com.vaadin.flow.component.Component;
@@ -43,7 +44,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
 
         LocalDate beginOfCurrentWeek = LocalDate.now().with(DayOfWeek.MONDAY);
         if (trainee.getStartDate() == null) {
-            Span span = new Span("Oops! Someone forgot to set your 'Begin of Work' Date!");
+            Span span = new Span(Lang.translate("view.traineeDashboard.span.beginOfWork"));
             span.getElement().getThemeList().add("badge error");
             add(span);
             return;
@@ -51,7 +52,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
         LocalDate beginOfWork = trainee.getStartDate().with(DayOfWeek.MONDAY);
 
         if (beginOfCurrentWeek.isBefore(beginOfWork)) {
-            Span span = new Span("Work begins " + trainee.getStartDate().toString());
+            Span span = new Span(Lang.translate("view.traineeDashboard.span.work") + trainee.getStartDate().toString());
             span.getElement().getThemeList().add("badge error");
             add(span);
             return;
@@ -90,7 +91,7 @@ public class TraineeDashboard extends Main implements HasComponents, HasStyle {
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("Dashboard");
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
-        Paragraph description = new Paragraph("Manage your Forms here.");
+        Paragraph description = new Paragraph(Lang.translate("view.traineeDashboard.head.description"));
         description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
 

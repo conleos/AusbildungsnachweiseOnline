@@ -44,8 +44,8 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     private void createContent(Form form) {
         this.form = form;
 
-        Span weekInfo = new Span("Woche ab Montag, dem " + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
-        weekTime = new Span("In dieser Woche bereits gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h");
+        Span weekInfo = new Span(Lang.translate("view.form.span.weekInfo") + DateTimeFormatter.ofPattern("dd. MMMM uuuu", Locale.GERMAN).format(form.getMondayDate()));
+        weekTime = new Span(Lang.translate("view.form.span.weekTime") + FormUtil.getLabelFromTotalTimeOfForm(form)  + " h");
         add(weekInfo, weekTime);
 
         TabSheet tabSheet = new TabSheet();
@@ -61,7 +61,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                 update();
             }
         } else {
-            tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span("Übersicht")), FormOverview.createContent(form));
+            tabSheet.add(new Tab(VaadinIcon.CALENDAR.create(), new Span(Lang.translate("view.form.tab.span"))), FormOverview.createContent(form));
         }
 
         CommentView comment = new CommentView(form);
@@ -123,7 +123,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                 signButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                 signButton.addClassNames(Margin.AUTO, Margin.Bottom.MEDIUM, Margin.Top.MEDIUM);
                 User userWhoSignedOrRejected = form.getUserWhoSignedOrRejected();
-                signButton.setTooltipText("Signed by " + (userWhoSignedOrRejected != null ? userWhoSignedOrRejected.getFullName() : "Unkown"));
+                signButton.setTooltipText(Lang.translate("view.form.signButton.signed.toolTip") + (userWhoSignedOrRejected != null ? userWhoSignedOrRejected.getFullName() : Lang.translate("view.form.signButton.signed.unknown")));
                 signButton.setTooltipText(Lang.translate("view.form.signButton.signed.toolTip") + form.getUserWhoSignedOrRejected().getFullName());
             } else if (user.getRole().equals(Role.Instructor) || user.getRole().equals(Role.Admin)) {
                 signButton = new Button(Lang.translate("view.form.signButton.revoke"), VaadinIcon.BACKWARDS.create());
@@ -149,7 +149,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
         Form form = FormService.getInstance().getFormByID(parameter);
 
         if (form == null) {
-            add(new Span("Form not found!"));
+            add(new Span(Lang.translate("view.form.setParameter.span.free")));
             return;
         }
 
@@ -161,17 +161,17 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
                 if (form.getOwner().equals(user)) {
                     createContent(form);
                 } else {
-                    add(new Span("access denied!"));
+                    add(new Span(Lang.translate("view.form.setParameter.span.access")));
                 }
             }
             case Instructor -> {
                 if (form.getOwner().getAssignees().contains(user)) {
                     createContent(form);
                 } else {
-                    add(new Span("access denied!"));
+                    add(new Span(Lang.translate("view.form.setParameter.span.access")));
                 }
             }
-            default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
+            default -> throw new IllegalStateException(Lang.translate("view.form.setParameter.span.error") + user.getRole());
         }
 
 
@@ -201,7 +201,7 @@ public class FormView extends VerticalLayout implements HasUrlParameter<Long>, H
     }
 
     public void update() {
-        weekTime.setText("In dieser Woche bereits gearbeitet: " + FormUtil.getLabelFromTotalTimeOfForm(form) + " h");
+        weekTime.setText(Lang.translate("view.form.span.weekTime") + FormUtil.getLabelFromTotalTimeOfForm(form) + " h");
     }
 
 }

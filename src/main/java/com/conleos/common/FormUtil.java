@@ -1,7 +1,7 @@
 package com.conleos.common;
 
 import com.conleos.data.entity.Form;
-import com.conleos.views.form.Day;
+import com.conleos.i18n.Lang;
 import com.conleos.views.form.KindOfWork;
 import com.vaadin.flow.component.html.Span;
 
@@ -16,7 +16,7 @@ public class FormUtil {
 
     public static Span createFormBadge(Form form) {
         if (form == null || form.getStatus() == null) {
-            return new Span("Create Form");
+            return new Span(Lang.translate("view.span"));
         }
         Span badge = new Span();
         switch (form.getStatus()) {
@@ -25,10 +25,10 @@ public class FormUtil {
             case Rejected -> badge.getElement().setAttribute("theme", "badge error");
         }
         switch (form.getStatus()) {
-            case InProgress -> badge.setText("In Progress");
-            case InReview -> badge.setText("In Review");
-            case Signed -> badge.setText("Signed");
-            case Rejected -> badge.setText("Rejected");
+            case InProgress -> badge.setText(Lang.translate("view.formUtil1"));
+            case InReview -> badge.setText(Lang.translate("view.formUtil2"));
+            case Signed -> badge.setText(Lang.translate("view.formUtil3"));
+            case Rejected -> badge.setText(Lang.translate("view.formUtil4"));
         }
         badge.getStyle().set("background-color",  HtmlColor.from(ColorGenerator.statusColor(form.getStatus())).toString());
         badge.addClassNames("text-white");

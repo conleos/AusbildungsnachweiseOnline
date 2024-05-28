@@ -60,7 +60,7 @@ public class CreateUserDialog extends Dialog {
         startTimeSelector.setEnabled(false);
 
         ComboBox<Role> roleSelect = new ComboBox<>(Lang.translate("view.createUser.comboBox.label.roleSelect"));
-        roleSelect.setPlaceholder(getTranslation("view.createUser.comboBox.label.setPlace"));
+        roleSelect.setPlaceholder(Lang.translate("view.createUser.comboBox.label.setPlace"));
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
         roleSelect.addValueChangeListener(event -> {

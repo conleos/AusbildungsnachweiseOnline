@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import java.util.List;
 
+
 public class EditGlobalSettingsDialog extends Dialog {
 
     public EditGlobalSettingsDialog() {
@@ -28,7 +29,7 @@ public class EditGlobalSettingsDialog extends Dialog {
         dialogLayout.setWidthFull();
         add(dialogLayout);
 
-        NumberField hoursField = new NumberField("Hours In a Week");
+        NumberField hoursField = new NumberField(Lang.translate("view.editSettings.hoursField"));
         hoursField.setMin(1.0);
         hoursField.setValue(globalSettings.getHoursInAWeek());
         dialogLayout.add(hoursField);

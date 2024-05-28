@@ -3,6 +3,7 @@ package com.conleos.views.form;
 import com.conleos.data.entity.Form;
 import com.conleos.data.entity.FormStatus;
 import com.conleos.data.service.FormService;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -14,7 +15,7 @@ import java.util.List;
 public class InstructorFormNextButton extends Button {
 
     public InstructorFormNextButton(Form currentForm) {
-        super("Next Form to be reviewed", VaadinIcon.ARROW_RIGHT.create());
+        super(Lang.translate("view.form.nextButton"), VaadinIcon.ARROW_RIGHT.create());
         addClickListener(event -> {
             List<Form> forms = FormService.getInstance().getFormsByOwner(currentForm.getOwner());
             for (Form form : forms) {
@@ -28,7 +29,7 @@ public class InstructorFormNextButton extends Button {
                     return;
                 }
             }
-            Notification.show(currentForm.getOwner().getFullName() + " has no further Forms in review!", 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            Notification.show(currentForm.getOwner().getFullName() + " " + Lang.translate("view.form.nextButton.notification"), 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         });
     }
 

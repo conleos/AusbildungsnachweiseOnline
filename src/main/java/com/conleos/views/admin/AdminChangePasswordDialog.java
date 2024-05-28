@@ -11,7 +11,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 
-import java.util.Locale;
 
 public class AdminChangePasswordDialog extends Dialog {
 

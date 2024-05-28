@@ -40,7 +40,7 @@ public class DateBasedNavigator extends DatePicker {
 
         Form form = FormService.getInstance().getFormByDateAndUser(beginOfWeek, trainee);
         if (form == null) {
-            Notification.show("Could not navigate to Form.", 4000, Notification.Position.BOTTOM_START);
+            Notification.show(Lang.translate("view.dateBasedNavigator.notification"), 4000, Notification.Position.BOTTOM_START);
         } else {
             // We need to trigger a Page Reload
             UI.getCurrent().access(() -> UI.getCurrent().navigate("/"));

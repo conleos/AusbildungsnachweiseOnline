@@ -85,7 +85,7 @@ public class ProfileView extends VerticalLayout{
         VerticalLayout layout = new VerticalLayout(firstName, lastName, dialog, change);
 
         if (!user.getRole().equals(Role.Trainee)) {
-            layout.add(new H3("Signature"));
+            layout.add(new H3(Lang.translate("view.profile.signature")));
             layout.add(imageContainer);
 
             createSignImage(user);
