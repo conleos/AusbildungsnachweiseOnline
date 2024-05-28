@@ -3,16 +3,16 @@ package com.conleos.data.entity;
 import com.conleos.data.service.UserService;
 import com.conleos.views.form.KindOfWork;
 import jakarta.persistence.*;
-
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import static java.time.temporal.ChronoUnit.DAYS;
+
+//Entity for weekly entries in form
 
 @Entity
 public class Form {
 
+    //Entity for daily entries in form
     @Entity
     public static class FormEntry {
 

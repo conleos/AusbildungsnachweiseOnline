@@ -11,6 +11,8 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+//Pass any string for error message.
+
 public class CreateErrorNotificationForm extends Notification {
 
     public CreateErrorNotificationForm(String str) {
