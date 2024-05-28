@@ -3,7 +3,6 @@ package com.conleos.views.form;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.conleos.data.entity.Form;
 import com.conleos.core.Session;
 import com.conleos.data.entity.Comment;

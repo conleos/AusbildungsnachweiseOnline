@@ -6,15 +6,12 @@ import com.conleos.data.entity.User;
 import com.conleos.data.service.GlobalSettingsService;
 import com.conleos.data.service.UserService;
 import com.conleos.i18n.Lang;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
-
 import java.util.List;
-import java.util.Locale;
 
 public class EditGlobalSettingsDialog extends Dialog {
 

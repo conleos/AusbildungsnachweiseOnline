@@ -5,10 +5,11 @@ import com.conleos.common.Role;
 import com.conleos.data.entity.User;
 import com.conleos.data.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+// Use these functions for getting user data or delete user accounts
 
 @Service
 public class UserService {

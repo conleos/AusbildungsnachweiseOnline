@@ -21,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CreateUserDialog extends Dialog {
 

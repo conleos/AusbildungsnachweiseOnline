@@ -5,12 +5,12 @@ import com.conleos.data.service.UserService;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.server.StreamResource;
 import jakarta.persistence.*;
-
 import java.io.ByteArrayInputStream;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+// Entity for creating and loading user data
 
 @Entity
 public class User {
