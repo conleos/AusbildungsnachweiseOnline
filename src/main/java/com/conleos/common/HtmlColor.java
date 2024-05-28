@@ -1,5 +1,7 @@
 package com.conleos.common;
 
+import com.conleos.i18n.Lang;
+
 import java.awt.*;
 
 public class HtmlColor {
@@ -67,7 +69,7 @@ public class HtmlColor {
             green = Integer.parseInt(htmlColor.substring(4, 6), 16);
             blue = Integer.parseInt(htmlColor.substring(6, 8), 16);
         } else {
-            throw new IllegalArgumentException("Invalid HTML color format");
+            throw new IllegalArgumentException(Lang.translate("view.Html.error"));
         }
     }
 

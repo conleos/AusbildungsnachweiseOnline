@@ -4,7 +4,6 @@ import com.conleos.common.PasswordHasher;
 import com.conleos.data.service.UserService;
 import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -12,7 +11,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 
-import java.util.Locale;
 
 public class AdminChangePasswordDialog extends Dialog {
 

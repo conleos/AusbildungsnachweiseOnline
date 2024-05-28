@@ -2,6 +2,7 @@ package com.conleos.views.admin;
 
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.conleos.i18n.Lang;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -19,25 +20,25 @@ public class DeleteAccountDialog extends Dialog {
     public DeleteAccountDialog(Long userID) {
         User account = UserService.getInstance().getUserByID(userID);
 
-        H2 changeHeader = new H2("Delete Account forever.");
-        Text text = new Text(String.format("Are you sure you want to delete '%s' ?", account.getUsername()));
-        TextField validateField = new TextField(String.format("Enter '%s' to confirm", account.getUsername()));
+        H2 changeHeader = new H2(Lang.translate("view.deleteAccount.changeHeader"));
+        Text text = new Text(String.format(Lang.translate("view.deleteAccount.text") + " '%s' ?", account.getUsername()));
+        TextField validateField = new TextField(String.format(Lang.translate("view.deleteAccount.validateField1") + " '%s' " + Lang.translate("view.deleteAccount.validateField2"), account.getUsername()));
         VerticalLayout layout = new VerticalLayout();
         layout.add(changeHeader, text, validateField);
         add(layout);
-        Button deleteButton = new Button("DELETE", VaadinIcon.TRASH.create());
+        Button deleteButton = new Button(Lang.translate("view.deleteAccount.button"), VaadinIcon.TRASH.create());
         deleteButton.addClickListener(clickEvent -> {
             if (account.getUsername().equals(validateField.getValue())) {
                 UserService.getInstance().deleteUserAccountByID(account.getId());
                 UI.getCurrent().getPage().reload();
             } else {
-                Notification.show("Enter Username to validate!", 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                Notification.show(Lang.translate("view.deleteAccount.notification"), 4000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
         });
         deleteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
         deleteButton.getStyle().set("margin-right", "auto");
         getFooter().add(deleteButton);
-        Button cancelButton = new Button("Cancel", (e) -> close());
+        Button cancelButton = new Button(Lang.translate("view.deleteAccount.button.cancel"), (e) -> close());
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         getFooter().add(cancelButton);
     }

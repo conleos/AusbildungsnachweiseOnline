@@ -59,7 +59,7 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
         // New notification if review is requested
         UI.getCurrent().access(() -> {
             if (finalFound) {
-                Notification notification = Notification.show(Lang.translate("view.instructor.notification"));
+                Notification notification = Notification.show(Lang.translate("view.instructorDashboard.notification"));
                 notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
                 notification.setPosition(Notification.Position.BOTTOM_CENTER);
             }
@@ -77,14 +77,14 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("Dashboard");
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
-        Paragraph description = new Paragraph("Manage your assigned Trainees.");
+        Paragraph description = new Paragraph(Lang.translate("view.instructorDashboard.description"));
         description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
 
         Select<String> sortBy = new Select<>();
-        sortBy.setLabel("Sort by");
-        sortBy.setItems("Needs your action", "Newest first", "Oldest first");
-        sortBy.setValue("Needs your action");
+        sortBy.setLabel(Lang.translate("view.instructorDashboard.select.label"));
+        sortBy.setItems(Lang.translate("view.instructorDashboard.select.item1"), Lang.translate("view.instructorDashboard.select.item2"), Lang.translate("view.instructorDashboard.select.item3"));
+        sortBy.setValue(Lang.translate("view.instructorDashboard.select.value"));
 
         itemContainer = new OrderedList();
         itemContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);
@@ -125,7 +125,7 @@ class UserCard extends ListItem {
 
         Span subtitle = new Span();
         subtitle.addClassNames(LumoUtility.FontSize.SMALL, LumoUtility.TextColor.SECONDARY);
-        subtitle.setText("Click to view all Forms.");
+        subtitle.setText(Lang.translate("view.instructorDashboard.span.subtitle"));
 
         Paragraph description = new Paragraph("");
         description.addClassName(LumoUtility.Margin.Vertical.MEDIUM);
@@ -133,7 +133,7 @@ class UserCard extends ListItem {
         final int formsInReviewCount = FormService.getInstance().getFormsByOwner(trainee).stream().filter(form -> form.getStatus().equals(FormStatus.InReview)).toList().size();
         Span badge = new Span();
         badge.getElement().setAttribute("theme", formsInReviewCount > 0 ? "badge" : "badge success");
-        badge.setText(formsInReviewCount > 0 ? (formsInReviewCount + " Reviews left") : "No Reviews left.");
+        badge.setText(formsInReviewCount > 0 ? (formsInReviewCount + " " + Lang.translate("view.instructorDashboard.span.badge")) : Lang.translate("view.instructorDashboard.span.badge1"));
 
         add(div, header, subtitle, description, badge);
 

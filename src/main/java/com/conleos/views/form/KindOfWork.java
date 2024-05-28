@@ -1,15 +1,18 @@
 package com.conleos.views.form;
 
+import com.conleos.i18n.Lang;
+
 public enum KindOfWork {
 
 
-    PracticalWork("Betrieb"),
-    Schooling("Schule"),
-    Vacation("Urlaub"),
-    Illness("Krankschreibung");
+    PracticalWork("kindOfWork.practicalWork"),
+    Schooling("kindOfWork.schooling"),
+    Vacation("kindOfWork.vacation"),
+    Illness("kindOfWork.illness");
 
 
     private String label;
+
     private KindOfWork(String label) {
         this.label = label;
     }
@@ -17,6 +20,6 @@ public enum KindOfWork {
 
     @Override
     public String toString() {
-        return label;
+        return Lang.translate(label);
     }
 }

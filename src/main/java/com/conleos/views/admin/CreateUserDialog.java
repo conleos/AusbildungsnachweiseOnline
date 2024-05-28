@@ -21,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CreateUserDialog extends Dialog {
 
@@ -61,7 +60,7 @@ public class CreateUserDialog extends Dialog {
         startTimeSelector.setEnabled(false);
 
         ComboBox<Role> roleSelect = new ComboBox<>(Lang.translate("view.createUser.comboBox.label.roleSelect"));
-        roleSelect.setPlaceholder(getTranslation("view.createUser.comboBox.label.setPlace"));
+        roleSelect.setPlaceholder(Lang.translate("view.createUser.comboBox.label.setPlace"));
         roleSelect.setItems(Role.values());
         roleSelect.setItemLabelGenerator(Role::toString);
         roleSelect.addValueChangeListener(event -> {

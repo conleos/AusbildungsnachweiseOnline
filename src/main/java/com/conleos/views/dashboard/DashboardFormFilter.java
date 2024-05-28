@@ -3,7 +3,6 @@ package com.conleos.views.dashboard;
 import com.conleos.common.Role;
 import com.conleos.data.entity.FormStatus;
 import com.conleos.i18n.Lang;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -12,7 +11,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import java.util.List;
-import java.util.Locale;
 
 public class DashboardFormFilter extends VerticalLayout {
 

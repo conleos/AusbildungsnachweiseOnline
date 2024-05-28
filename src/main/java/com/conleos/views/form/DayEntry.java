@@ -6,7 +6,6 @@ import com.conleos.core.Session;
 import com.conleos.data.entity.Form;
 import com.conleos.i18n.Lang;
 import com.conleos.views.admin.CreateErrorNotification;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,7 +21,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.Locale;
+
 
 public class DayEntry extends VerticalLayout {
 

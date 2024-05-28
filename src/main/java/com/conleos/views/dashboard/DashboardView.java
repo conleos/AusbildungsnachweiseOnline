@@ -4,6 +4,7 @@ import com.conleos.common.Role;
 import com.conleos.core.Session;
 import com.conleos.data.entity.User;
 import com.conleos.data.service.UserService;
+import com.conleos.i18n.Lang;
 import com.conleos.views.HasHeaderContent;
 import com.conleos.views.MainLayout;
 import com.vaadin.flow.component.Component;
@@ -67,7 +68,7 @@ public class DashboardView extends Div implements BeforeEnterObserver, HasHeader
                 case Admin -> {
                     User other = UserService.getInstance().getUserByID(otherUserID);
                     switch (other.getRole()) {
-                        case Admin -> add(new Span("no content"));
+                        case Admin -> add(new Span(Lang.translate("view.dashboard.role.admin")));
                         case Instructor -> add(createInstructorContent(other));
                         case Trainee -> add(createTraineeContent(other));
                     }
@@ -79,13 +80,13 @@ public class DashboardView extends Div implements BeforeEnterObserver, HasHeader
                     if (other.getRole().equals(Role.Trainee) && other.getAssignees().contains(session.getUser())) {
                         add(createTraineeContent(other));
                     } else {
-                        add(new Span("no privilege"));
+                        add(new Span(Lang.translate("view.dashboard.role.instructor")));
                     }
                 }
 
                 // Only if otherUser is ourselves
                 case Trainee ->
-                        add(session.getUser().getId().equals(otherUserID) ? createTraineeContent(session.getUser()) : new Span("no privilege"));
+                        add(session.getUser().getId().equals(otherUserID) ? createTraineeContent(session.getUser()) : new Span(Lang.translate("view.dashboard.role.trainee")));
             }
         }
 
