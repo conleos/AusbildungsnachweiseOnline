@@ -20,6 +20,6 @@ public enum KindOfWork {
 
     @Override
     public String toString() {
-        return Lang.translate(label);
+        return label;
     }
 }
