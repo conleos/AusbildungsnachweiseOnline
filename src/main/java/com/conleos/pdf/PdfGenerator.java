@@ -98,7 +98,7 @@ public class PdfGenerator {
         generateFormEntry(document, form, form.getSaturday(), form.getMondayDate().plusDays(5));
         generateFormEntry(document, form, form.getSunday(), form.getMondayDate().plusDays(6));
 
-        if (form.getUserWhoSignedOrRejected().getFullName() != null && form.getStatus().equals(FormStatus.Signed)) {
+        if (form.getUserWhoSignedOrRejected() != null && form.getUserWhoSignedOrRejected().getFullName() != null && form.getStatus().equals(FormStatus.Signed)) {
             document.add(new Paragraph("Unterzeichnet von: " + form.getUserWhoSignedOrRejected().getFullName(), font));
             Image image = null;
             try {
