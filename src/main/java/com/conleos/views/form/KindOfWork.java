@@ -1,14 +1,12 @@
 package com.conleos.views.form;
 
-import com.conleos.i18n.Lang;
-
 public enum KindOfWork {
 
 
-    PracticalWork("kindOfWork.practicalWork"),
-    Schooling("kindOfWork.schooling"),
-    Vacation("kindOfWork.vacation"),
-    Illness("kindOfWork.illness");
+    PracticalWork("Betrieb"),
+    Schooling("Schule"),
+    Vacation("Urlaub"),
+    Illness("Krankschreibung");
 
 
     private String label;
