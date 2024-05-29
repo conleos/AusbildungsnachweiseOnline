@@ -53,6 +53,7 @@ public class InstructorDashboard extends Main implements HasComponents, HasStyle
                 }
             }
             itemContainer.add(new UserCard(trainee, found));
+            found = false;
         }
         Boolean finalFound = found;
         // New notification if review is requested
